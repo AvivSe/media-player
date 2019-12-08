@@ -4,6 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build-media-player-gui": "cd ./media-player-gui && npm run build",
+    "build-media-player-rs": "cd ./media-player-rs && npm run build",
+    "build": "npm run build-media-player-rs && npm run build-media-player-gui",
+    "start": "npm run build && npm run start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "aviv segal",
