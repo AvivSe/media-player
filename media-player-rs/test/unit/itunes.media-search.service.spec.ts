@@ -1,9 +1,11 @@
 import { ItunesMediaSearchService } from '../../src/services/itunes.media-search.service';
 
-const itunesMediaSearchService: ItunesMediaSearchService = new ItunesMediaSearchService();
-
-describe('Sample Test', () => {
-  it('should test that result count = 50', () => {
-    expect(itunesMediaSearchService.search({ keywords: '', limit: 0, page: 0 }).resultCount).toBe(50);
+describe('iTunes Media Search Service Test', () => {
+  const itunesMediaSearchService: ItunesMediaSearchService = new ItunesMediaSearchService();
+  it('should test that result count=0 and results=[]', () => {
+    itunesMediaSearchService.search({ keywords: null, limit: null, page: null }).then(({ resultCount, results }) => {
+      expect(resultCount).toBe(0);
+      expect(Array.isArray(results) && results.length === 0).toBeTruthy();
+    });
   });
 });

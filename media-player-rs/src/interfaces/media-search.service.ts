@@ -10,5 +10,5 @@ export interface Response {
 }
 
 export default interface MediaSearchService {
-  search(request: Request): Response;
+  search(request: Request): Promise<Response>;
 }
