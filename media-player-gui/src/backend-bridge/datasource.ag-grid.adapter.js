@@ -1,6 +1,6 @@
 import MediaSearchService from "./media-search.service";
 
-class DatasourceAdapter {
+class DatasourceAgGridAdapter {
   mediaSearchService: MediaSearchService;
   keywords: string;
 
@@ -12,15 +12,12 @@ class DatasourceAdapter {
     this.keywords = keywords;
   }
 
-
   getRows(params) {
     const { request, successCallback, failCallback } = params;
     const {  startRow, endRow } = request;
     const limit = endRow - startRow;
-    console.log(startRow, limit);
     this.mediaSearchService.search({ keywords: this.keywords, offset: startRow, limit }).then(({data}) => {
       if(!!data) {
-        console.log(data.results);
         successCallback(data.results, data.lastRow);
       } else {
         failCallback();
@@ -29,4 +26,4 @@ class DatasourceAdapter {
   }
 }
 
-export default DatasourceAdapter;
+export default DatasourceAgGridAdapter;

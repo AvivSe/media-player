@@ -7,8 +7,8 @@ export class Request {
 // tslint:disable-next-line:max-classes-per-file
 export class Response {
   resultCount: number;
-  results: any[];
   lastRow: number;
+  results: any[];
 }
 
 export default interface MediaSearchService {

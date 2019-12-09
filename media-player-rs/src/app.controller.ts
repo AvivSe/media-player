@@ -16,7 +16,11 @@ export class AppController {
     if (!term) {
       throw new HttpException('Keywords params is required', HttpStatus.BAD_REQUEST);
     }
-    return this.searchService.search({ offset, limit, term });
+    try {
+      return this.searchService.search({ offset, limit, term });
+    } catch (e) {
+      throw new HttpException({ error: 'Something went wrong' }, Number(HttpStatus[e]) || HttpStatus.INTERNAL_SERVER_ERROR)
+    }
   }
 
   @Get('top')

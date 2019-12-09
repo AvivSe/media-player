@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {AgGridReact} from "@ag-grid-community/react";
 import {AllModules} from '@ag-grid-enterprise/all-modules';
 import styled from 'styled-components'
 import '@ag-grid-community/all-modules/dist/styles/ag-grid.css';
 import '../scss/ag-grid.scss'
-import DatasourceAdapter from '../backend-bridge/datasource'
+import DatasourceAgGridAdapter from '../backend-bridge/datasource.ag-grid.adapter'
 import mediaSearchService from "../backend-bridge/media-search.service";
-import {FormControl, FormHelperText, Input, InputLabel} from "@material-ui/core";
-import Button from "./Button";
+import {Input} from "@material-ui/core";
+import TextField from "./TextField";
 
 const AgGridWrapper = styled.div`
   width: 80vw;
@@ -15,7 +15,7 @@ const AgGridWrapper = styled.div`
 `;
 
 const Wrapper = styled.div`
-
+min-width: 500px;
 `;
 
 const defaultColumnDefs = [
@@ -33,34 +33,36 @@ export default () => {
   const [keywords, setKeyword] = useState('');
   const [gridApi, setGridApi] = useState(null);
 
-  const onGridReady = ({columnApi, api}) => {
+  const onGridReady = ({api}) => {
     setGridApi(api);
   };
 
-  const handleSubmit = () => {
-    if(!!gridApi) {
-      gridApi.setServerSideDatasource(new DatasourceAdapter(mediaSearchService, keywords));
+  const handleSubmit = (e) => {
+    console.log(e);
+    if (!!gridApi && !!keywords) {
+      gridApi.setServerSideDatasource(new DatasourceAgGridAdapter(mediaSearchService, keywords));
       gridApi.sizeColumnsToFit();
     }
   };
 
+  const handleChange = e => {
+    setKeyword(e.target.value);
+  };
+
   return (
     <Wrapper>
-      <div>
-        <FormControl>
-          <InputLabel htmlFor="search-input">Search</InputLabel>
-          <Input id="search-input" aria-describedby="search-input-helper-text" value={keywords} onChange={e=>setKeyword(e.target.value)}/>
-          <FormHelperText id="search-input-helper-text"><span style={{color:'red'}}>todo: Search as you type</span></FormHelperText>
-        </FormControl>
-        <Button onClick={handleSubmit}>Submit</Button>
-      </div>
+      <TextField
+        label={'Search as you type'}
+        onKeyPress={handleSubmit}
+        onChange={handleChange}
+      />
+
+      {!!keywords &&
       <AgGridWrapper className="ag-theme-material">
         <AgGridReact
           onGridReady={onGridReady}
-          pagination={true}
-          paginationAutoPageSize={true}
-          cacheBlockSize={6}
-          suppressRowClickSelection={true}
+          cacheBlockSize={200}
+          //suppressRowClickSelection={true}
           gridOptions={{rowModelType: 'serverSide'}}
           columnDefs={defaultColumnDefs}
           defaultColDef={{
@@ -69,8 +71,11 @@ export default () => {
             editable: true,
             filter: true,
           }}
+          cacheOverflowSize={2}
+          maxConcurrentDatasourceRequests={1}
+          maxBlocksInCache={10}
           modules={AllModules}/>
-      </AgGridWrapper>
+      </AgGridWrapper>}
     </Wrapper>
   )
 }
