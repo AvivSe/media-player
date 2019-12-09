@@ -18,7 +18,7 @@ export default ({handleSubmit, handleChange, useOptions, searchAsYouType}) => {
       fullWidth
       label={'Search as you type'}
       onChange={handleChange}
-      onKeyPress={searchAsYouType ? handleSubmit : handleEnterPress}
+      onKeyPress={searchAsYouType ? null : handleEnterPress}
     />
     { !searchAsYouType && <StyledButton>Search</StyledButton> }
   </Row>

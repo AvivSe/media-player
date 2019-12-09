@@ -4,9 +4,9 @@ import {AllModules} from '@ag-grid-enterprise/all-modules';
 import styled from 'styled-components'
 import '@ag-grid-community/all-modules/dist/styles/ag-grid.css';
 import '../../scss/ag-grid.scss'
-import MoreDetailsCellRenderer from './MoreDetailsCellRenderer';
-import DurationFormatter from './DurationFormatter'
-import ImageCellRenderer from "./ImageCellRenderer";
+import MoreDetailsCellRenderer from './cell-renderers/MoreDetailsCellRenderer';
+import DurationFormatter from './cell-renderers/DurationFormatter'
+import ImageCellRenderer from "./cell-renderers/ImageCellRenderer";
 const AgGridWrapper = styled.div`
   width: 100%;
   height: 75vh;

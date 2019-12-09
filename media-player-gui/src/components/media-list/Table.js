@@ -32,12 +32,24 @@ export default () => {
     [GRID_MODE_OPT]: false,
   });
 
-  useEffect(()=> {
-    if(!!modalContent) {
+  useEffect(() => {
+    if (!!modalContent) {
       setOpen(true)
     }
   }, [modalContent]);
 
+  useEffect(() => {
+    if (!!gridApi && !!keywords) {
+      gridApi.setServerSideDatasource(new DatasourceAgGridAdapter(mediaSearchService, keywords));
+      gridApi.sizeColumnsToFit();
+    }
+  }, [keywords, gridApi]);
+
+  useEffect(() => {
+    if(!!gridApi) {
+      gridApi.sizeColumnsToFit();
+    }
+  }, [gridApi]);
   const handleOpen = media => {
     setModalContent(<Media media={media}/>);
   };
@@ -49,7 +61,7 @@ export default () => {
 
   const handleClose = () => setOpen(false);
 
-  const handleSubmit = e => {
+  const handleSubmit = () => {
     if (!!gridApi && !!keywords) {
       gridApi.setServerSideDatasource(new DatasourceAgGridAdapter(mediaSearchService, keywords));
       gridApi.sizeColumnsToFit();
