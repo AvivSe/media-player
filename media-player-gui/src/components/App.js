@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import darkMuiTheme from '../theme'
 import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 import {ThemeProvider as ScThemeProvider} from 'styled-components';
-import Grid from "./grid/Grid";
+import Table from "./media-list/Table";
 
 const Wrapper = styled.div`
   display: flex;
@@ -18,7 +18,7 @@ export default () => (
   <MuiThemeProvider theme={darkMuiTheme}>
     <ScThemeProvider theme={darkMuiTheme}>
     <Wrapper>
-      <Grid/>
+      <Table/>
     </Wrapper>
     </ScThemeProvider>
   </MuiThemeProvider>
