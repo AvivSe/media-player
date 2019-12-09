@@ -1,6 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppController } from '../../src/controllers/app.controller';
-import { AppService } from '../../src/services/app.service';
+import { AppController } from '../../src/app.controller';
+import { RatingService } from '../../src/services/rating.service';
+import { mediaSearchProvider } from '../../src/app.module';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 describe('AppController', () => {
   let appController: AppController;
@@ -8,15 +10,35 @@ describe('AppController', () => {
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [AppController],
-      providers: [AppService],
+      providers: [mediaSearchProvider, RatingService],
     }).compile();
 
     appController = app.get<AppController>(AppController);
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+  describe('healthCheck', () => {
+    it('should be healthy', () => {
+      expect(appController.healthCheck()).toBeTruthy();
     });
   });
+
+  describe('search', () => {
+    it('should throw bad request', () => {
+      let exception: HttpException;
+      try {
+        appController.search(null, 0, 0);
+      } catch (e) {
+        exception = e as HttpException;
+      }
+      expect(!!exception).toBeTruthy();
+      expect(exception.getStatus()).toBe(HttpStatus.BAD_REQUEST);
+    });
+  });
+
+  describe('top', () => {
+    it('getTop', () => {
+      expect(appController.getTop()).toBe('top');
+    });
+  });
+
 });

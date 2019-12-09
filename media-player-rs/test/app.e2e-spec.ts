@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../src/modules/app.module';
+import { AppModule } from '../src/app.module';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -15,10 +15,28 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET)', () => {
+  it('/api (GET) : should be ok', () => {
     return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
+      .get('/api')
+      .expect(HttpStatus.OK)
+      .expect('true');
+  });
+
+  it('/api/search (GET) : should throw bad request', () => {
+    return request(app.getHttpServer())
+      .get('/api/search')
+      .expect(HttpStatus.BAD_REQUEST);
+  });
+
+  it('/api/search (GET) : should be ok', () => {
+    return request(app.getHttpServer())
+      .get('/api/search?keywords=aviv')
+      .expect(HttpStatus.OK);
+  });
+
+  it('/api/top (GET) : should be ok', () => {
+    return request(app.getHttpServer())
+      .get('/api/top')
+      .expect(HttpStatus.OK);
   });
 });

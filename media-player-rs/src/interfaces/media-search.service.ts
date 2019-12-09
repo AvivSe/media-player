@@ -1,6 +1,12 @@
-export interface Request {
-  keywords: string;
+import { IsNotEmpty } from 'class-validator';
+
+export class Request {
+
+  @IsNotEmpty()
+  term: string;
+
   limit: number;
+
   page: number;
 }
 
