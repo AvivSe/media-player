@@ -1,7 +1,7 @@
 export class Request {
   term: string;
   limit: number;
-  page: number;
+  offset: number;
 }
 
 // tslint:disable-next-line:max-classes-per-file

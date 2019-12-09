@@ -12,11 +12,11 @@ export class AppController {
   }
 
   @Get('search')
-  search(@Query('keywords') term: string, @Query() page: number, @Query('limit') limit: number): Promise<Response> {
+  search(@Query('keywords') term: string, @Query('offset') offset: number, @Query('limit') limit: number): Promise<Response> {
     if (!term) {
       throw new HttpException('Keywords params is required', HttpStatus.BAD_REQUEST);
     }
-    return this.searchService.search({ page, limit, term });
+    return this.searchService.search({ offset, limit, term });
   }
 
   @Get('top')
