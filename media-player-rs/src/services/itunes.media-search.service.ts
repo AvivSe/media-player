@@ -18,7 +18,9 @@ export class ItunesMediaSearchService {
       throw new Error(Exceptions.ENTITIES_UNDEFINED);
     }
     const potentialLastRow = params.offset + params.limit;
-    data.lastRow = data.resultCount < potentialLastRow ? potentialLastRow : 1000;
+    // todo: calc last page
+    //data.lastRow = data.resultCount < potentialLastRow ? potentialLastRow : 1000;
+    data.lastRow = 1000;
     return data as Response;
   }
 }

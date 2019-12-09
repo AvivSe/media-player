@@ -2,20 +2,23 @@ import MediaSearchService from "./media-search.service";
 
 class DatasourceAdapter {
   mediaSearchService: MediaSearchService;
+  keywords: string;
 
   destroy(){
   }
 
-  constructor(mediaSearchService) {
+  constructor(mediaSearchService, keywords) {
     this.mediaSearchService = mediaSearchService;
+    this.keywords = keywords;
   }
+
 
   getRows(params) {
     const { request, successCallback, failCallback } = params;
     const {  startRow, endRow } = request;
     const limit = endRow - startRow;
     console.log(startRow, limit);
-    this.mediaSearchService.search({ keywords: 'red hot chili', offset: startRow, limit }).then(({data}) => {
+    this.mediaSearchService.search({ keywords: this.keywords, offset: startRow, limit }).then(({data}) => {
       if(!!data) {
         console.log(data.results);
         successCallback(data.results, data.lastRow);

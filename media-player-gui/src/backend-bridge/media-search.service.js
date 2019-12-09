@@ -10,10 +10,7 @@ const topUrl = `${mediaServiceUrl}/top`;
 
 class MediaSearchService {
   search(params) {
-    return axios.get(searchUrl, { params }).then(x => {
-      console.log(x);
-      return x;
-    });
+    return axios.get(searchUrl, { params });
   }
 }
 

@@ -12,9 +12,6 @@ const Wrapper = styled.div`
   justify-content: center;
   margin: auto;
   height: 100vh;
-  background-color: black;
-  
-  
 `;
 
 export default () => (
