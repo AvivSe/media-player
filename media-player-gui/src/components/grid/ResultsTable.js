@@ -1,21 +1,13 @@
-import React, {useState} from "react";
+import React from "react";
 import {AgGridReact} from "@ag-grid-community/react";
 import {AllModules} from '@ag-grid-enterprise/all-modules';
 import styled from 'styled-components'
 import '@ag-grid-community/all-modules/dist/styles/ag-grid.css';
-import '../scss/ag-grid.scss'
-import DatasourceAgGridAdapter from '../backend-bridge/datasource.ag-grid.adapter'
-import mediaSearchService from "../backend-bridge/media-search.service";
-import {Input} from "@material-ui/core";
-import TextField from "./TextField";
+import '../../scss/ag-grid.scss'
 
 const AgGridWrapper = styled.div`
-  width: 80vw;
+  width: 100%;
   height: 75vh;
-`;
-
-const Wrapper = styled.div`
-min-width: 500px;
 `;
 
 const defaultColumnDefs = [
@@ -29,36 +21,9 @@ const defaultColumnDefs = [
   {headerName: "Duration", field: "trackTimeMillis", width: 100}
 ];
 
-export default () => {
-  const [keywords, setKeyword] = useState('');
-  const [gridApi, setGridApi] = useState(null);
+export default ({ onGridReady }) => {
 
-  const onGridReady = ({api}) => {
-    setGridApi(api);
-  };
-
-  const handleSubmit = (e) => {
-    console.log(e);
-    if (!!gridApi && !!keywords) {
-      gridApi.setServerSideDatasource(new DatasourceAgGridAdapter(mediaSearchService, keywords));
-      gridApi.sizeColumnsToFit();
-    }
-  };
-
-  const handleChange = e => {
-    setKeyword(e.target.value);
-  };
-
-  return (
-    <Wrapper>
-      <TextField
-        label={'Search as you type'}
-        onKeyPress={handleSubmit}
-        onChange={handleChange}
-      />
-
-      {!!keywords &&
-      <AgGridWrapper className="ag-theme-material">
+  return <AgGridWrapper className="ag-theme-material">
         <AgGridReact
           onGridReady={onGridReady}
           cacheBlockSize={200}
@@ -75,7 +40,5 @@ export default () => {
           maxConcurrentDatasourceRequests={1}
           maxBlocksInCache={10}
           modules={AllModules}/>
-      </AgGridWrapper>}
-    </Wrapper>
-  )
+      </AgGridWrapper>
 }

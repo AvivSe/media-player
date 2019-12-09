@@ -1,9 +1,9 @@
 import React from 'react';
-import ResultsTable from './ResultsTable';
 import styled from 'styled-components';
 import darkMuiTheme from '../theme'
 import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles';
 import {ThemeProvider as ScThemeProvider} from 'styled-components';
+import Grid from "./grid/Grid";
 
 const Wrapper = styled.div`
   display: flex;
@@ -18,7 +18,7 @@ export default () => (
   <MuiThemeProvider theme={darkMuiTheme}>
     <ScThemeProvider theme={darkMuiTheme}>
     <Wrapper>
-      <ResultsTable/>
+      <Grid/>
     </Wrapper>
     </ScThemeProvider>
   </MuiThemeProvider>
