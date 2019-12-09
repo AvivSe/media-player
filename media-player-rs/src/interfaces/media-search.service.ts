@@ -1,18 +1,14 @@
-import { IsNotEmpty } from 'class-validator';
-
 export class Request {
-
-  @IsNotEmpty()
   term: string;
-
   limit: number;
-
   page: number;
 }
 
-export interface Response {
+// tslint:disable-next-line:max-classes-per-file
+export class Response {
   resultCount: number;
   results: any[];
+  lastRow: number;
 }
 
 export default interface MediaSearchService {

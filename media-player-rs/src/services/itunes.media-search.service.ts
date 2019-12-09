@@ -17,6 +17,7 @@ export class ItunesMediaSearchService {
     if (!data) {
       throw new Error(Exceptions.ENTITIES_UNDEFINED);
     }
+    data.lastRow = 199;
     return data as Response;
   }
 }
