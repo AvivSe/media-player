@@ -2,10 +2,20 @@ import {createMuiTheme} from "@material-ui/core";
 
 export default createMuiTheme({
   palette: {
-    primary: { main: '#ff5f7f' },
-    secondary: { main: '#dd1767' },
-    text: {
-      secondary: '#333333',
+    type: "dark",
+    primary: {
+      light: '#06c',
+      main: '#3c4043',
+      dark: '#282c2f',
+      text: '#fff',
+      contrastText: '#3c4043',
+    },
+    secondary: {
+      light: '#757ce8',
+      main: '#282c2f',
+      dark: '#fff',
+      text: '#fff',
+      contrastText: '#282c2f',
     },
   },
 });

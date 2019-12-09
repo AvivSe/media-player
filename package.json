@@ -11,5 +11,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "aviv segal",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "node-sass": "^4.13.0"
+  },
+  "devDependencies": {
+    "webpack": "^4.41.2"
+  }
 }

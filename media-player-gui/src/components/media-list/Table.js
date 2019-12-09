@@ -1,17 +1,24 @@
-import React, {useState} from "react"
+import React, {useEffect, useState} from "react"
 import styled from 'styled-components'
 import '@ag-grid-community/all-modules/dist/styles/ag-grid.css';
 import '../../scss/ag-grid.scss'
 import DatasourceAgGridAdapter from '../../backend-bridge/datasource.ag-grid.adapter'
 import mediaSearchService from "../../backend-bridge/media-search.service";
-import SearchBox from "./SearchBox";
 import ResultsTable from "./ResultsTable";
-import MoreDetailsModal from "./MoreDetailsModal";
 import Options, {GRID_MODE_OPT, SEARCH_AS_YOU_TYPE_OPT} from "./Options";
-import FullDetailes from "./Media";
+import Media from "./Media";
+import SearchBox from "./SearchBox";
+import Dialog from "../Dialog";
 
 const Wrapper = styled.div`
-  width: 70vw;
+  min-width: 1200px;
+  .ag-cell-focus {
+     border: none !important;
+  }
+`;
+
+const Header = styled.div`
+  background-color: ${(({theme}) => theme.palette.primary.main)};
 `;
 
 export default () => {
@@ -25,9 +32,14 @@ export default () => {
     [GRID_MODE_OPT]: false,
   });
 
+  useEffect(()=> {
+    if(!!modalContent) {
+      setOpen(true)
+    }
+  }, [modalContent]);
+
   const handleOpen = media => {
-    setModalContent(<FullDetailes media={media}/>);
-    setOpen(true)
+    setModalContent(<Media media={media}/>);
   };
 
   const onGridReady = ({api}) => {
@@ -50,13 +62,15 @@ export default () => {
 
   return (
     <Wrapper>
-      <SearchBox handleSubmit={handleSubmit} handleChange={handleChange}
-                 searchAsYouType={options[SEARCH_AS_YOU_TYPE_OPT]}/>
-      <Options useOptions={() => [options, setOptions]}/>
-      {!!keywords && <ResultsTable onGridReady={onGridReady} setModalOpen={handleOpen}/>}
-      <MoreDetailsModal open={open} handleClose={handleClose}>
+      <Header>
+        <SearchBox handleSubmit={handleSubmit} handleChange={handleChange}
+                   searchAsYouType={options[SEARCH_AS_YOU_TYPE_OPT]}/>
+        <Options useOptions={() => [options, setOptions]}/>
+        <ResultsTable onGridReady={onGridReady} setModalOpen={handleOpen}/>
+      </Header>
+      <Dialog open={open} handleClose={handleClose}>
         {modalContent}
-      </MoreDetailsModal>
+      </Dialog>
     </Wrapper>
   )
 }

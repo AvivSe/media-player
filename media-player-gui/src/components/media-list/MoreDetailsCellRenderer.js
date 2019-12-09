@@ -1,10 +1,16 @@
 import React from "react";
-
+import MoreVert from '@material-ui/icons/MoreVert';
+import styled from 'styled-components'
+const StyledMoreVert = styled(MoreVert)`
+  cursor: pointer;
+  color: ${({theme})=>theme.palette.secondary.main};
+`;
 export default ({getValue, api}) => {
   const value = getValue();
-  if (typeof api.handleMoreDetailsClicked === 'function') {
-    return <div onClick={() => {
-      api.handleMoreDetailsClicked({value})
-    }}>{value}</div>
+  const handleMoreDetailsClicked = api['handleMoreDetailsClicked'];
+  if (typeof handleMoreDetailsClicked === 'function') {
+    return <StyledMoreVert onClick={() => {
+      handleMoreDetailsClicked({value})
+    }}>{value}</StyledMoreVert>
   }
 };

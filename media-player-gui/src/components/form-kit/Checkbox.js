@@ -6,6 +6,8 @@ const CheckboxWrapper = styled.div`
     border: ${({error}) => (error ? '1px solid red' : null)};
     border-radius: 3px;
     color: ${({error}) => (error ? 'red' : null)};
+    
+    .
 `;
 
 const StyledMuiFormControlLabel = styled(MuiFormControlLabel)`
@@ -30,8 +32,7 @@ export default ({label, value, error, helperText, ...props}) => {
     <Flex>
       <CheckboxWrapper error={error}>
         <StyledMuiFormControlLabel
-          control={<MuiCheckbox {...props} checked={value}/>}
-          label={label}
+          control={<MuiCheckbox labelStyle={{color: 'white'}} {...props} checked={value}/>} label={label}
         />
       </CheckboxWrapper>
       {error && <HelperText>{helperText}</HelperText>}

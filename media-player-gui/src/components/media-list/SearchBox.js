@@ -12,16 +12,13 @@ const StyledButton = styled(Button)`
   margin-inline-start: 10px !important;
 `;
 export default ({handleSubmit, handleChange, useOptions, searchAsYouType}) => {
-  const handleEnterPress =({key}) => {
-    console.log(key);
-    return  key === 'Enter' ? handleSubmit(): null;
-  };
+  const handleEnterPress = ({key}) => key === 'Enter' ? handleSubmit(): null;
   return <Row>
     <TextField
       fullWidth
       label={'Search as you type'}
-      onKeyPress={searchAsYouType ? handleSubmit : handleEnterPress}
       onChange={handleChange}
+      onKeyPress={searchAsYouType ? handleSubmit : handleEnterPress}
     />
     { !searchAsYouType && <StyledButton>Search</StyledButton> }
   </Row>

@@ -5,7 +5,8 @@ import styled from 'styled-components'
 import '@ag-grid-community/all-modules/dist/styles/ag-grid.css';
 import '../../scss/ag-grid.scss'
 import MoreDetailsCellRenderer from './MoreDetailsCellRenderer';
-
+import DurationFormatter from './DurationFormatter'
+import ImageCellRenderer from "./ImageCellRenderer";
 const AgGridWrapper = styled.div`
   width: 100%;
   height: 75vh;
@@ -15,14 +16,14 @@ const AgGridWrapper = styled.div`
 `;
 
 const defaultColumnDefs = [
+  {headerName: '', field: 'artworkUrl100', cellRenderer: 'ImageCellRenderer', width: 60},
   {headerName: 'Artist', field: 'artistName', width: 140},
   {headerName: 'Collection', field: 'collectionName', width: 140},
   {headerName: 'Track', field: 'trackName', width: 140},
-  {headerName: 'Price', field: 'trackPrice', width: 75},
-  {headerName: 'Genre', field: 'primaryGenreName', width: 120,},
-  {headerName: 'Image', field: 'artworkUrl100'},
-  {headerName: 'Duration', field: 'trackTimeMillis', width: 100},
-  {headerName: 'Details', field: 'trackId', cellRenderer: 'MoreDetailsCellRenderer', width: 100,},
+  {headerName: 'Price', field: 'trackPrice', width: 80},
+  {headerName: 'Genre', field: 'primaryGenreName', width: 80,},
+  {headerName: 'Duration', field: 'trackTimeMillis', cellRenderer: 'DurationFormatter', width: 80},
+  {headerName: '', field: 'trackId', cellRenderer: 'MoreDetailsCellRenderer', width: 50,},
 ];
 
 export default ({onGridReady}) => {
@@ -40,7 +41,9 @@ export default ({onGridReady}) => {
         filter: true,
       }}
       frameworkComponents={{
-        'MoreDetailsCellRenderer':MoreDetailsCellRenderer
+        MoreDetailsCellRenderer,
+        DurationFormatter,
+        ImageCellRenderer
       }}
       cacheOverflowSize={2}
       maxConcurrentDatasourceRequests={1}
