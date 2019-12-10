@@ -26,7 +26,14 @@ const defaultColumnDefs = [
   {headerName: '', field: 'trackId', cellRenderer: 'MoreDetailsCellRenderer', width: 50,},
 ];
 
-export default ({onGridReady}) => {
+export default ({useGridApi, useHandlers}) => {
+  const { handleOpenDialog } = useHandlers;
+  const [,setGridApi] = useGridApi;
+
+  const onGridReady = ({api}) => {
+    setGridApi(api);
+    api.handleMoreDetailsClicked = handleOpenDialog;
+  };
 
   return <AgGridWrapper className='ag-theme-material'>
     <AgGridReact

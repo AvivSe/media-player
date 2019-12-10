@@ -2,7 +2,6 @@ import React from 'react';
 import {AppBar, Dialog as MuiDialog, IconButton, makeStyles, Slide, Toolbar,} from '@material-ui/core';
 import {FaTimesCircle as CloseIcon} from 'react-icons/fa';
 import styled from 'styled-components';
-import * as PropTypes from 'prop-types';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -15,7 +14,9 @@ const MainContent = styled.div`
     cursor: default;
 `;
 
-const Dialog = ({children, handleClose, open}) => {
+const Dialog = ({children, useDialog,useHandlers}) => {
+  const [dialog] = useDialog;
+  const { handleCloseDialog } = useHandlers;
   const classes = makeStyles(theme => ({
     appBar: {
       position: 'relative',
@@ -27,16 +28,12 @@ const Dialog = ({children, handleClose, open}) => {
   }));
 
   return (
-    <MuiDialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
+    <MuiDialog fullScreen open={!!dialog} onClose={handleCloseDialog} TransitionComponent={Transition}>
       <AppBar className={classes['appBar']}>
         <Toolbar>
           <IconButton
             edge="start"
-            onClick={() => {
-              if (typeof handleClose === 'function') {
-                handleClose();
-              }
-            }}
+            onClick={handleCloseDialog}
             aria-label="close"
           >
             <CloseIcon style={{fill: 'white'}}/>
@@ -48,7 +45,4 @@ const Dialog = ({children, handleClose, open}) => {
   );
 };
 
-Dialog.prototype = {
-  open: PropTypes.bool.isRequired,
-};
 export default Dialog;

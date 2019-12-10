@@ -30,7 +30,7 @@ export default ({label, value, error, helperText, ...props}) => {
     <Flex>
       <CheckboxWrapper error={error}>
         <StyledMuiFormControlLabel
-          control={<MuiCheckbox labelStyle={{color: 'white'}} {...props} checked={value}/>} label={label}
+          control={<MuiCheckbox {...props} checked={value}/>} label={label}
         />
       </CheckboxWrapper>
       {error && <HelperText>{helperText}</HelperText>}

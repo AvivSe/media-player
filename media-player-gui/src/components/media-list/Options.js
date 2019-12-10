@@ -10,7 +10,7 @@ const Row = styled.div`
 `;
 
 export default ({handleSubmit, handleChange, useOptions}) => {
-  const [options, setOptions] = useOptions();
+  const [options, setOptions] = useOptions;
 
   const handleClick = optionName => e => {
     e.persist();
