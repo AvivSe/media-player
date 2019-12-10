@@ -25,7 +25,7 @@ const HelperText = styled.div`
   color: red;
 `;
 
-export default ({ label, value, error, helperText, ...props }) => {
+const CheckBox = ({ label, value, error, helperText, ...props }) => {
   return (
     <Flex>
       <CheckboxWrapper error={error}>
@@ -35,3 +35,5 @@ export default ({ label, value, error, helperText, ...props }) => {
     </Flex>
   );
 };
+
+export default CheckBox;

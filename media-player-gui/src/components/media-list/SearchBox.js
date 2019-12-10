@@ -12,7 +12,7 @@ const StyledButton = styled(Button)`
   min-width: 15rem !important;
   margin-inline-start: 10px !important;
 `;
-export default ({ options, onKeywordsChange, onSubmit }) => {
+const SearchBox = ({ options, keywords, onKeywordsChange, onSubmit }) => {
 
   const searchAsYouType = options[SEARCH_AS_YOU_TYPE_OPT];
 
@@ -30,7 +30,9 @@ export default ({ options, onKeywordsChange, onSubmit }) => {
         onChange={handleChange}
         onKeyPress={searchAsYouType ? null : handleEnterPress}
       />
-      {!searchAsYouType && <StyledButton onClick={onSubmit}>Search</StyledButton>}
+      {!searchAsYouType && <StyledButton onClick={onSubmit} value={keywords}>Search</StyledButton>}
     </Row>
   );
 };
+
+export default SearchBox;

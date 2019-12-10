@@ -12,7 +12,7 @@ const Wrapper = styled.div`
   padding: 2.5rem;
 `;
 
-export default ({ children, open, handleClose }) => {
+const FullDetailsModal = ({ children, open, handleClose }) => {
   return (
     <Modal
       aria-labelledby="transition-modal-title"
@@ -31,3 +31,5 @@ export default ({ children, open, handleClose }) => {
     </Modal>
   );
 };
+
+export default FullDetailsModal;

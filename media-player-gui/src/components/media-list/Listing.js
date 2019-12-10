@@ -4,9 +4,10 @@ import { AllModules } from "@ag-grid-enterprise/all-modules";
 import styled from "styled-components";
 import "@ag-grid-community/all-modules/dist/styles/ag-grid.css";
 import "../../scss/ag-grid.scss";
-import MoreDetailsCellRenderer from "./cell-renderers/MoreDetailsCellRenderer";
+import FullDetailsCellRenderer from "./cell-renderers/FullDetailsCellRenderer";
 import DurationFormatter from "./cell-renderers/DurationFormatter";
 import ImageCellRenderer from "./cell-renderers/ImageCellRenderer";
+import PlayCellRenderer from "./cell-renderers/PlayCellRenderer";
 
 const AgGridWrapper = styled.div`
   width: 100%;
@@ -16,7 +17,7 @@ const AgGridWrapper = styled.div`
   }
 `;
 
-export default ({ onGridReady, onDialogOpen }) => {
+const Listing = ({ onGridReady, onDialogOpen }) => {
   const defaultColumnDefs = [
     { headerName: "", field: "artworkUrl100", cellRenderer: "ImageCellRenderer", width: 60 },
     { headerName: "Artist", field: "artistName", width: 140 },
@@ -25,10 +26,12 @@ export default ({ onGridReady, onDialogOpen }) => {
     { headerName: "Price", field: "trackPrice", width: 80 },
     { headerName: "Genre", field: "primaryGenreName", width: 80 },
     { headerName: "Duration", field: "trackTimeMillis", cellRenderer: "DurationFormatter", width: 80 },
+    { headerName: "", cellRenderer: "PlayCellRenderer", width: 50},
+
     {
       headerName: "",
       field: "trackId",
-      cellRenderer: "MoreDetailsCellRenderer",
+      cellRenderer: "FullDetailsCellRenderer",
       cellRendererParams: { onDialogOpen },
       width: 50
     }
@@ -47,9 +50,10 @@ export default ({ onGridReady, onDialogOpen }) => {
           filter: true
         }}
         frameworkComponents={{
-          MoreDetailsCellRenderer,
+          FullDetailsCellRenderer,
           DurationFormatter,
-          ImageCellRenderer
+          ImageCellRenderer,
+          PlayCellRenderer
         }}
         cacheOverflowSize={2}
         maxConcurrentDatasourceRequests={1}
@@ -59,3 +63,5 @@ export default ({ onGridReady, onDialogOpen }) => {
     </AgGridWrapper>
   );
 };
+
+export default Listing;

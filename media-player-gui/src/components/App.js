@@ -16,7 +16,7 @@ const Wrapper = styled.div`
   color: ${({ color }) => color};
 `;
 
-export default () => (
+const App = () => (
   <StylesProvider injectFirst>
     <MuiThemeProvider theme={darkMuiTheme}>
       <ScThemeProvider theme={darkMuiTheme}>
@@ -27,3 +27,5 @@ export default () => (
     </MuiThemeProvider>
   </StylesProvider>
 );
+
+export default App;

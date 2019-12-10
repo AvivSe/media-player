@@ -9,7 +9,7 @@ const Row = styled.div`
   display: flex;
 `;
 
-export default ({ options, onOptionsChange }) => {
+const Options = ({ options, onOptionsChange }) => {
   const handleClick = optionName => e => {
     //e.persist();
     onOptionsChange({ [optionName]: e.target.checked });
@@ -23,3 +23,5 @@ export default ({ options, onOptionsChange }) => {
     </Row>
   );
 };
+
+export default Options;

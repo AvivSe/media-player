@@ -1,5 +1,7 @@
 import React from "react";
 
-export default ({ media }) => {
+const Media = ({ media }) => {
   return <div>{JSON.stringify(media)}</div>;
 };
+
+export default Media;

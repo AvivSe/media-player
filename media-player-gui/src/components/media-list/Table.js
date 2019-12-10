@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import "@ag-grid-community/all-modules/dist/styles/ag-grid.css";
 import "../../scss/ag-grid.scss";
-import ResultsTable from "./ResultsTable";
+import Listing from "./Listing";
 import Options, { GRID_MODE_OPT, SEARCH_AS_YOU_TYPE_OPT } from "./Options";
 import SearchBox from "./SearchBox";
 import Dialog from "../Dialog";
@@ -21,8 +21,8 @@ const Header = styled.div`
   background-color: ${({ theme }) => theme.palette.primary.main};
 `;
 
-export default () => {
-  const [keywords, setKeywords] = useState("");
+const Table = () => {
+  const [keywords, setKeywords] = useState("Metallica");
   const [gridApi, setGridApi] = useState(null);
   const [dialog, setDialog] = useState(null);
   const [options, setOptions] = useState({ [SEARCH_AS_YOU_TYPE_OPT]: true, [GRID_MODE_OPT]: false });
@@ -58,9 +58,9 @@ export default () => {
   return (
     <Wrapper>
       <Header>
-        <SearchBox onKeywordsChange={handleKeywordsChange} onSubmit={fetchSearchResults} options={options} />
+        <SearchBox onKeywordsChange={handleKeywordsChange} keywords={keywords} onSubmit={fetchSearchResults} options={options} />
         <Options options={options} onOptionsChange={handleOptionsChange} />
-        <ResultsTable onGridReady={handleGridReady} onDialogOpen={handleOpenDialog} />
+        <Listing onGridReady={handleGridReady} onDialogOpen={handleOpenDialog} />
       </Header>
       <Dialog dialog={dialog} handleCloseDialog={handleCloseDialog}>
         {dialog && dialog.content}
@@ -68,3 +68,5 @@ export default () => {
     </Wrapper>
   );
 };
+
+export default Table;

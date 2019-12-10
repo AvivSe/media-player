@@ -1,6 +1,5 @@
 import * as moment from "moment";
-
-export default ({ getValue }) => {
+const DurationFormatter = ({ getValue }) => {
   const duration = moment.duration(getValue());
 
   if (duration.asHours() > 1) {
@@ -9,3 +8,4 @@ export default ({ getValue }) => {
     return moment.utc(duration.asMilliseconds()).format("mm:ss");
   }
 };
+export default DurationFormatter;
