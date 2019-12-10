@@ -30,7 +30,7 @@ export default ({ options, onKeywordsChange, onSubmit }) => {
         onChange={handleChange}
         onKeyPress={searchAsYouType ? null : handleEnterPress}
       />
-      {!searchAsYouType && <StyledButton>Search</StyledButton>}
+      {!searchAsYouType && <StyledButton onClick={onSubmit}>Search</StyledButton>}
     </Row>
   );
 };

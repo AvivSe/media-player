@@ -11,7 +11,7 @@ const Row = styled.div`
 
 export default ({ options, onOptionsChange }) => {
   const handleClick = optionName => e => {
-    // e.persist();
+    //e.persist();
     onOptionsChange({ [optionName]: e.target.checked });
   };
 

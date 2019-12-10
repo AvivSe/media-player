@@ -29,7 +29,7 @@ export default () => {
   const searchAsYouType = options[SEARCH_AS_YOU_TYPE_OPT];
 
   const fetchSearchResults = useCallback(
-    () => !!gridApi && !!keywords && gridApi.setServerSideDatasource(new DatasourceAgGridAdapter(mediaSearchService, keywords)),
+    () =>{ !!gridApi && !!keywords && gridApi.setServerSideDatasource(new DatasourceAgGridAdapter(mediaSearchService, keywords))},
     [keywords, gridApi]
   );
 
@@ -49,7 +49,7 @@ export default () => {
 
   const handleOpenDialog = content => setDialog({ open: true, content: <Media media={content} /> });
 
-  const handleOptionsChange = options => setOptions(prevOptions => ({ ...prevOptions, options }));
+  const handleOptionsChange = options => setOptions(prevOptions => ({ ...prevOptions, ...options }));
 
   const handleKeywordsChange = keywords => setKeywords(keywords);
 
