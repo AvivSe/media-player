@@ -19,7 +19,7 @@ export class AppController {
     try {
       return this.searchService.search({ offset, limit, term });
     } catch (e) {
-      throw new HttpException({ error: 'Something went wrong' }, Number(HttpStatus[e]) || HttpStatus.INTERNAL_SERVER_ERROR)
+      throw new HttpException({ error: 'Something went wrong' }, Number(HttpStatus[e]) || HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 

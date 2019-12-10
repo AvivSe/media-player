@@ -1,6 +1,6 @@
 import * as moment from "moment";
 
-export default ({getValue}) => {
+export default ({ getValue }) => {
   const duration = moment.duration(getValue());
 
   if (duration.asHours() > 1) {

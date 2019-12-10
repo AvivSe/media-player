@@ -1,6 +1,6 @@
-import {Backdrop, Fade, Modal} from "@material-ui/core";
+import { Backdrop, Fade, Modal } from "@material-ui/core";
 import React from "react";
-import styled from 'styled-components'
+import styled from "styled-components";
 
 const Wrapper = styled.div`
   margin: auto;
@@ -12,23 +12,22 @@ const Wrapper = styled.div`
   padding: 2.5rem;
 `;
 
-export default ({children, open, handleClose}) => {
-
-  return <Modal
-    aria-labelledby="transition-modal-title"
-    aria-describedby="transition-modal-description"
-    open={open}
-    onClose={handleClose}
-    closeAfterTransition
-    BackdropComponent={Backdrop}
-    BackdropProps={{
-      timeout: 500,
-    }}
-  >
-    <Fade in={open}>
-      <Wrapper>
-        {children}
-      </Wrapper>
-    </Fade>
-  </Modal>
-}
+export default ({ children, open, handleClose }) => {
+  return (
+    <Modal
+      aria-labelledby="transition-modal-title"
+      aria-describedby="transition-modal-description"
+      open={open}
+      onClose={handleClose}
+      closeAfterTransition
+      BackdropComponent={Backdrop}
+      BackdropProps={{
+        timeout: 500
+      }}
+    >
+      <Fade in={open}>
+        <Wrapper>{children}</Wrapper>
+      </Fade>
+    </Modal>
+  );
+};

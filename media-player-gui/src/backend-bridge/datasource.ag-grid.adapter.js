@@ -4,8 +4,7 @@ class DatasourceAgGridAdapter {
   mediaSearchService: MediaSearchService;
   keywords: string;
 
-  destroy(){
-  }
+  destroy() {}
 
   constructor(mediaSearchService, keywords) {
     this.mediaSearchService = mediaSearchService;
@@ -14,10 +13,10 @@ class DatasourceAgGridAdapter {
 
   getRows(params) {
     const { request, successCallback, failCallback } = params;
-    const {  startRow, endRow } = request;
+    const { startRow, endRow } = request;
     const limit = endRow - startRow;
-    this.mediaSearchService.search({ keywords: this.keywords, offset: startRow, limit }).then(({data}) => {
-      if(!!data) {
+    this.mediaSearchService.search({ keywords: this.keywords, offset: startRow, limit }).then(({ data }) => {
+      if (!!data) {
         successCallback(data.results, data.lastRow);
       } else {
         failCallback();
