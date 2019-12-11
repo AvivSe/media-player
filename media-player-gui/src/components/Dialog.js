@@ -14,7 +14,7 @@ const MainContent = styled.div`
   cursor: default;
 `;
 
-const Dialog = ({ children, dialog, handleCloseDialog }) => {
+const Dialog = ({ children, dialog, onDialogClose }) => {
   const classes = makeStyles(theme => ({
     appBar: {
       position: "relative"
@@ -26,10 +26,10 @@ const Dialog = ({ children, dialog, handleCloseDialog }) => {
   }));
 
   return (
-    <MuiDialog fullScreen open={!!dialog} onClose={handleCloseDialog} TransitionComponent={Transition}>
+    <MuiDialog fullScreen open={!!dialog} onClose={onDialogClose} TransitionComponent={Transition}>
       <AppBar className={classes["appBar"]}>
         <Toolbar>
-          <IconButton edge="start" onClick={handleCloseDialog} aria-label="close">
+          <IconButton edge="start" onClick={onDialogClose} aria-label="close">
             <CloseIcon style={{ fill: "white" }} />
           </IconButton>
         </Toolbar>

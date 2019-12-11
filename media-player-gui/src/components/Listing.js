@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { AgGridReact } from "@ag-grid-community/react";
 import { AllModules } from "@ag-grid-enterprise/all-modules";
 import styled from "styled-components";
@@ -8,16 +8,16 @@ import FullDetailsCellRenderer from "./cell-renderers/FullDetailsCellRenderer";
 import DurationFormatter from "./cell-renderers/DurationFormatter";
 import ImageCellRenderer from "./cell-renderers/ImageCellRenderer";
 import PlayCellRenderer from "./cell-renderers/PlayCellRenderer";
+import { MediaPlayerContext } from "./MediaPlayer";
 
 const AgGridWrapper = styled.div`
   width: 100%;
   height: 75vh;
-  .ag-body-horizontal-scroll {
-    display: none;
-  }
 `;
 
-const Listing = ({ onGridReady, onDialogOpen }) => {
+const Listing = ({ onGridReady, onDialogOpen}) => {
+  const {selected, onSelectedChange} = useContext(MediaPlayerContext);
+
   const defaultColumnDefs = [
     { headerName: "", field: "artworkUrl100", cellRenderer: "ImageCellRenderer", width: 60 },
     { headerName: "Artist", field: "artistName", width: 140 },
@@ -26,7 +26,13 @@ const Listing = ({ onGridReady, onDialogOpen }) => {
     { headerName: "Price", field: "trackPrice", width: 80 },
     { headerName: "Genre", field: "primaryGenreName", width: 80 },
     { headerName: "Duration", field: "trackTimeMillis", cellRenderer: "DurationFormatter", width: 80 },
-    { headerName: "", cellRenderer: "PlayCellRenderer", width: 50},
+    {
+      headerName: "",
+      field: "trackId",
+      cellRenderer: "PlayCellRenderer",
+      cellRendererParams: { selected, onSelectedChange },
+      width: 50
+    },
 
     {
       headerName: "",

@@ -6,16 +6,15 @@ const StyledMoreVert = styled(MoreVert)`
   cursor: pointer;
 `;
 
-const FullDetailsCellRenderer = ({ getValue, onDialogOpen }) => {
-  const value = getValue();
+const FullDetailsCellRenderer = ({ onDialogOpen, data }) => {
   if (!!onDialogOpen && typeof onDialogOpen === "function") {
     return (
       <StyledMoreVert
         onClick={() => {
-          onDialogOpen({ value });
+          onDialogOpen(data);
         }}
       >
-        {value}
+        {JSON.stringify(data)}
       </StyledMoreVert>
     );
   } else {

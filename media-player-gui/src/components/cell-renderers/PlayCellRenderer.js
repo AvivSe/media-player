@@ -1,33 +1,20 @@
-import React, { useState } from "react";
-import { PlayArrowOutlined, StopOutlined, PlayArrow, Stop } from "@material-ui/icons";
+import React, { useContext, useState } from "react";
+import { PlayArrowOutlined, Stop } from "@material-ui/icons";
 
 import styled from "styled-components";
+import { MediaPlayerContext } from "../MediaPlayer";
 
 const Wrapper = styled.div`
   cursor: pointer;
 `;
 
-const PlayCellRenderer = ({playing, setPlaying}) => {
-  const [hovered, sethHovered] = useState(false);
-
+const PlayCellRenderer = ({ data }) => {
+  const { selected, onSelectedChange } = useContext(MediaPlayerContext);
+  const playing = selected && selected["trackId"] === data["trackId"];
+  console.log(selected);
   return (
-    <Wrapper
-      onClick={() => setPlaying && setPlaying(!playing)}
-      onMouseEnter={() => sethHovered(true)}
-      onMouseLeave={() => sethHovered(false)}
-    >
-      {playing && (
-        <>
-        {hovered && <Stop className={"filled"} />}
-        {!hovered && <StopOutlined className={"outlined"} />}
-        </>
-      )}
-      {!playing && (
-        <>
-          {hovered && <PlayArrow className={"filled"} />}
-          {!hovered && <PlayArrowOutlined className={"outlined"} />}
-        </>
-      )}
+    <Wrapper onClick={() => onSelectedChange(playing ? null : data)}>
+      {playing ? <Stop /> : <PlayArrowOutlined />}
     </Wrapper>
   );
 };
