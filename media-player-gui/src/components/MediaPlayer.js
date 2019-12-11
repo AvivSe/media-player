@@ -19,6 +19,12 @@ const Wrapper = styled.div`
   }
 `;
 
+const StyledHTML5Player = styled(HTML5Player)`
+  z-index: 9;
+  height: 800px;
+`;
+
+
 const MediaPlayer = () => {
   const _useMediaPlayer = useMediaPlayer();
   const [keywords, setKeywords] = useState("Metallica");
@@ -45,7 +51,6 @@ const MediaPlayer = () => {
     }
   }, [gridApi, _useMediaPlayer.selected]);
 
-
   const handleCloseDialog = () => setDialog(null);
 
   const handleOpenDialog = content => setDialog({ open: true, content: <HTML5Player media={content} /> });
@@ -59,6 +64,7 @@ const MediaPlayer = () => {
   return (
     <Wrapper>
       <MediaPlayerContextProvider value={_useMediaPlayer}>
+        <StyledHTML5Player />
         <SearchBox
           onKeywordsChange={handleKeywordsChange}
           keywords={keywords}
@@ -67,7 +73,6 @@ const MediaPlayer = () => {
         />
         <Options options={options} onOptionsChange={handleOptionsChange} />
         <Listing onGridReady={handleGridReady} onDialogOpen={handleOpenDialog} />
-        <HTML5Player/>
         <Dialog dialog={dialog} onDialogClose={handleCloseDialog}>
           {dialog && dialog.content}
         </Dialog>
