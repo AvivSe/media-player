@@ -11,7 +11,6 @@ const Wrapper = styled.div`
 const PlayCellRenderer = ({ data }) => {
   const { selected, onSelectedChange } = useContext(MediaPlayerContext);
   const playing = selected && selected["trackId"] === data["trackId"];
-  console.log(selected);
   return (
     <Wrapper onClick={() => onSelectedChange(playing ? null : data)}>
       {playing ? <Stop /> : <PlayArrowOutlined />}

@@ -13,7 +13,6 @@ const StyledButton = styled(Button)`
   margin-inline-start: 10px !important;
 `;
 const SearchBox = ({ options, keywords, onKeywordsChange, onSubmit }) => {
-  console.log(keywords);
   const searchAsYouType = options[SEARCH_AS_YOU_TYPE_OPT];
 
   const handleChange = e => {
@@ -26,7 +25,7 @@ const SearchBox = ({ options, keywords, onKeywordsChange, onSubmit }) => {
     <Row>
       <TextField
         fullWidth
-        label={"Search as you type"}
+        label={searchAsYouType ? SEARCH_AS_YOU_TYPE_OPT : 'Search' }
         onChange={handleChange}
         value={keywords}
         onKeyPress={searchAsYouType ? null : handleEnterPress}

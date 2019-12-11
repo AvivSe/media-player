@@ -14,6 +14,14 @@ const MainContent = styled.div`
   cursor: default;
 `;
 
+const StyledDialog = styled(MuiDialog)`
+
+.MuiPaper-root {
+  background-color: ${({ theme }) => theme.palette.secondary.light};
+}
+`;
+
+
 const Dialog = ({ children, dialog, onDialogClose }) => {
   const classes = makeStyles(theme => ({
     appBar: {
@@ -26,7 +34,7 @@ const Dialog = ({ children, dialog, onDialogClose }) => {
   }));
 
   return (
-    <MuiDialog fullScreen open={!!dialog} onClose={onDialogClose} TransitionComponent={Transition}>
+    <StyledDialog fullScreen open={!!dialog} onClose={onDialogClose} TransitionComponent={Transition}>
       <AppBar className={classes["appBar"]}>
         <Toolbar>
           <IconButton edge="start" onClick={onDialogClose} aria-label="close">
@@ -35,7 +43,7 @@ const Dialog = ({ children, dialog, onDialogClose }) => {
         </Toolbar>
       </AppBar>
       <MainContent>{children}</MainContent>
-    </MuiDialog>
+    </StyledDialog>
   );
 };
 

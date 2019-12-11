@@ -5,17 +5,17 @@ export default createMuiTheme({
     type: "dark",
     primary: {
       light: "#06c",
-      main: "#3c4043",
-      dark: "#282c2f",
-      text: "#fff",
-      contrastText: "#3c4043"
-    },
-    secondary: {
-      light: "#757ce8",
-      main: "#282c2f",
+      main: "#ffffff",
       dark: "#fff",
       text: "#fff",
-      contrastText: "#282c2f"
+      contrastText: "#090909"
+    },
+    secondary: {
+      light: "#0C0C0C",
+      main: "#fff",
+      dark: "#141414",
+      text: "#fff",
+      contrastText: "#090909"
     }
   }
 });

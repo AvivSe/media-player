@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
 import { AgGridReact } from "@ag-grid-community/react";
+import "@ag-grid-community/all-modules/dist/styles/ag-grid.css";
+import "@ag-grid-community/all-modules/dist/styles/ag-theme-material/sass/ag-theme-material.scss"
+
 import { AllModules } from "@ag-grid-enterprise/all-modules";
 import styled from "styled-components";
-import "@ag-grid-community/all-modules/dist/styles/ag-grid.css";
-import "../scss/ag-grid.scss";
 import FullDetailsCellRenderer from "./cell-renderers/FullDetailsCellRenderer";
 import DurationFormatter from "./cell-renderers/DurationFormatter";
 import ImageCellRenderer from "./cell-renderers/ImageCellRenderer";
@@ -13,6 +14,12 @@ import { MediaPlayerContext } from "./MediaPlayer";
 const AgGridWrapper = styled.div`
   width: 100%;
   height: 75vh;
+  
+  // .ag-root-wrapper, .ag-header, .ag-header-row {
+  //     color: ${({ theme }) => theme.palette.primary.text};
+  //     background-color: ${({ theme }) => theme.palette.primary.contrastText};
+  // }
+  
 `;
 
 const Listing = ({ onGridReady, onDialogOpen}) => {
