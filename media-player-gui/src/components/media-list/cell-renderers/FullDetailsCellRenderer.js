@@ -4,7 +4,6 @@ import styled from "styled-components";
 
 const StyledMoreVert = styled(MoreVert)`
   cursor: pointer;
-  color: ${({ theme }) => theme.palette.primary.light};
 `;
 
 const FullDetailsCellRenderer = ({ getValue, onDialogOpen }) => {

@@ -21,7 +21,7 @@ const Header = styled.div`
   background-color: ${({ theme }) => theme.palette.primary.main};
 `;
 
-const Table = () => {
+const MediaPlayer = () => {
   const [keywords, setKeywords] = useState("Metallica");
   const [gridApi, setGridApi] = useState(null);
   const [dialog, setDialog] = useState(null);
@@ -69,4 +69,4 @@ const Table = () => {
   );
 };
 
-export default Table;
+export default MediaPlayer;

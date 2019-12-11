@@ -2,7 +2,7 @@ import React from "react";
 import styled, { ThemeProvider as ScThemeProvider } from "styled-components";
 import darkMuiTheme from "../theme";
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
-import Table from "./media-list/Table";
+import MediaPlayer from "./media-list/MediaPlayer";
 import { StylesProvider } from "@material-ui/styles";
 
 const Wrapper = styled.div`
@@ -21,7 +21,7 @@ const App = () => (
     <MuiThemeProvider theme={darkMuiTheme}>
       <ScThemeProvider theme={darkMuiTheme}>
         <Wrapper backgroundColor={darkMuiTheme.palette.primary.contrastText} color={darkMuiTheme.palette.primary.dark}>
-          <Table />
+          <MediaPlayer />
         </Wrapper>
       </ScThemeProvider>
     </MuiThemeProvider>
