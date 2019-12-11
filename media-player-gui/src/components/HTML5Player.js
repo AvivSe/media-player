@@ -7,7 +7,6 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import Fab from "@material-ui/core/Fab";
 import {
   PlayArrowOutlined,
-  Stop,
   PauseOutlined,
   SkipPreviousOutlined,
   SkipNextOutlined,
@@ -46,7 +45,7 @@ const HTML5Player = () => {
 
   const progress = (time / duration) * 100;
 
-  const handleClickSkip = index => {};
+  const handleClickSkip = index => {alert("todo")};
 
   return (
     <Draggable handle=".handle" defaultPosition={{ x: 300, y: 500 }} grid={null} enableUserSelectHack={true} scale={2}>
@@ -55,7 +54,7 @@ const HTML5Player = () => {
           <LinearProgress variant="determinate" value={progress} color={"secondary"} />
           {video}
           <Controls>
-            <StyledFab size="small" color="primary" onClick={paused ? controls.play : controls.pause}>
+            <StyledFab size="small" color="primary" onClick={handleClickSkip}>
               {<SkipPreviousOutlined />}
             </StyledFab>
             <StyledFab size="medium" color="primary" onClick={() => controls.seek(state.time - 5)}>
@@ -67,7 +66,7 @@ const HTML5Player = () => {
             <StyledFab size="medium" color="primary" onClick={() => controls.seek(state.time + 5)}>
               {<FastForwardOutlined />}
             </StyledFab>
-            <StyledFab size="small" color="primary" onClick={() => handleClickSkip()}>
+            <StyledFab size="small" color="primary" onClick={handleClickSkip}>
               {<SkipNextOutlined />}
             </StyledFab>
           </Controls>

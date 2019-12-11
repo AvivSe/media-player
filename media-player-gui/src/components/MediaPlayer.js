@@ -64,7 +64,6 @@ const MediaPlayer = () => {
   return (
     <Wrapper>
       <MediaPlayerContextProvider value={_useMediaPlayer}>
-        <StyledHTML5Player />
         <SearchBox
           onKeywordsChange={handleKeywordsChange}
           keywords={keywords}

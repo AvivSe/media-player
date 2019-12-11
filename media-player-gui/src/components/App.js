@@ -4,6 +4,8 @@ import darkMuiTheme from "../theme";
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
 import MediaPlayer from "./MediaPlayer";
 import { StylesProvider } from "@material-ui/styles";
+import { Route, Switch, BrowserRouter } from "react-router-dom";
+import Routing from "./Routing";
 
 const Wrapper = styled.div`
   display: flex;
@@ -12,16 +14,22 @@ const Wrapper = styled.div`
   justify-content: center;
   margin: auto;
   height: 100vh;
-  background-color: ${({ backgroundColor }) => backgroundColor};
-  color: ${({ color }) => color};
+  ${({ theme }) =>
+    theme.palette.type === "dark"
+      ? `
+      background-color: #2d3436;
+      background-image: linear-gradient(315deg, #2d3436 0%, #000000 74%);
+  `
+      : null};
+  color: ${({ theme }) => theme.palette.primary.text};
 `;
 
 const App = () => (
   <StylesProvider injectFirst>
     <MuiThemeProvider theme={darkMuiTheme}>
       <ScThemeProvider theme={darkMuiTheme}>
-        <Wrapper backgroundColor={darkMuiTheme.palette.primary.contrastText} color={darkMuiTheme.palette.primary.dark}>
-          <MediaPlayer />
+        <Wrapper>
+          <Routing/>
         </Wrapper>
       </ScThemeProvider>
     </MuiThemeProvider>
