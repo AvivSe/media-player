@@ -2,7 +2,7 @@ import React from "react";
 import styled, { ThemeProvider as ScThemeProvider } from "styled-components";
 import darkMuiTheme from "../theme";
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
-import MediaPlayer from "./media-list/MediaPlayer";
+import MediaPlayer from "./MediaPlayer";
 import { StylesProvider } from "@material-ui/styles";
 
 const Wrapper = styled.div`

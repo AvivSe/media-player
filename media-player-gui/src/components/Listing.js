@@ -3,7 +3,7 @@ import { AgGridReact } from "@ag-grid-community/react";
 import { AllModules } from "@ag-grid-enterprise/all-modules";
 import styled from "styled-components";
 import "@ag-grid-community/all-modules/dist/styles/ag-grid.css";
-import "../../scss/ag-grid.scss";
+import "../scss/ag-grid.scss";
 import FullDetailsCellRenderer from "./cell-renderers/FullDetailsCellRenderer";
 import DurationFormatter from "./cell-renderers/DurationFormatter";
 import ImageCellRenderer from "./cell-renderers/ImageCellRenderer";

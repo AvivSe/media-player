@@ -1,5 +1,5 @@
 import React from "react";
-import Checkbox from "../form-kit/Checkbox";
+import Checkbox from "./form-kit/Checkbox";
 import styled from "styled-components";
 
 export const SEARCH_AS_YOU_TYPE_OPT = "Search as you type";

@@ -1,6 +1,6 @@
 import React from "react";
-import TextField from "../form-kit/TextField";
-import Button from "../form-kit/Button";
+import TextField from "./form-kit/TextField";
+import Button from "./form-kit/Button";
 import styled from "styled-components";
 import { SEARCH_AS_YOU_TYPE_OPT } from "./Options";
 
@@ -13,7 +13,7 @@ const StyledButton = styled(Button)`
   margin-inline-start: 10px !important;
 `;
 const SearchBox = ({ options, keywords, onKeywordsChange, onSubmit }) => {
-
+  console.log(keywords);
   const searchAsYouType = options[SEARCH_AS_YOU_TYPE_OPT];
 
   const handleChange = e => {
@@ -28,9 +28,10 @@ const SearchBox = ({ options, keywords, onKeywordsChange, onSubmit }) => {
         fullWidth
         label={"Search as you type"}
         onChange={handleChange}
+        value={keywords}
         onKeyPress={searchAsYouType ? null : handleEnterPress}
       />
-      {!searchAsYouType && <StyledButton onClick={onSubmit} value={keywords}>Search</StyledButton>}
+      {!searchAsYouType && <StyledButton onClick={onSubmit}>Search</StyledButton>}
     </Row>
   );
 };

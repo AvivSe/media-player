@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import "@ag-grid-community/all-modules/dist/styles/ag-grid.css";
-import "../../scss/ag-grid.scss";
+import "../scss/ag-grid.scss";
 import Listing from "./Listing";
 import Options, { GRID_MODE_OPT, SEARCH_AS_YOU_TYPE_OPT } from "./Options";
 import SearchBox from "./SearchBox";
@@ -62,6 +62,7 @@ const MediaPlayer = () => {
         <Options options={options} onOptionsChange={handleOptionsChange} />
         <Listing onGridReady={handleGridReady} onDialogOpen={handleOpenDialog} />
       </Header>
+
       <Dialog dialog={dialog} handleCloseDialog={handleCloseDialog}>
         {dialog && dialog.content}
       </Dialog>
