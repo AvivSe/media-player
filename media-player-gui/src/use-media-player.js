@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export const useMediaPlayer = () => {
-  const [selected, setSelected] = useState(false);
+  const [selected, setSelected] = useState(null);
 
   const handleSelectedChange = media => setSelected(media);
   return {

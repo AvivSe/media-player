@@ -6,8 +6,7 @@ import SearchBox from "./SearchBox";
 import Dialog from "./Dialog";
 import DatasourceAgGridAdapter from "../backend-bridge/datasource.ag-grid.adapter";
 import mediaSearchService from "../backend-bridge/media-search.service";
-import Media from "./Media";
-import Player from "./Player";
+import HTML5Player from "./HTML5Player";
 import { useMediaPlayer } from "../use-media-player";
 
 export const MediaPlayerContext = createContext();
@@ -46,9 +45,10 @@ const MediaPlayer = () => {
     }
   }, [gridApi, _useMediaPlayer.selected]);
 
+
   const handleCloseDialog = () => setDialog(null);
 
-  const handleOpenDialog = content => setDialog({ open: true, content: <Media media={content} /> });
+  const handleOpenDialog = content => setDialog({ open: true, content: <HTML5Player media={content} /> });
 
   const handleOptionsChange = options => setOptions(prevOptions => ({ ...prevOptions, ...options }));
 
@@ -67,7 +67,7 @@ const MediaPlayer = () => {
         />
         <Options options={options} onOptionsChange={handleOptionsChange} />
         <Listing onGridReady={handleGridReady} onDialogOpen={handleOpenDialog} />
-        <Player />
+        <HTML5Player/>
         <Dialog dialog={dialog} onDialogClose={handleCloseDialog}>
           {dialog && dialog.content}
         </Dialog>
