@@ -1,28 +1,34 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User } from './User.model';
+import { User } from './User';
 import { CreateUserDto } from '../dto/CreateUserDto';
 import { UpdateUserDto } from '../dto/UpdateUserDto';
-
+import bcrypt from 'bcrypt';
 @Injectable()
 export class UsersService {
   constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
+    createUserDto = { ...createUserDto, password: await bcrypt.hash(createUserDto.password, 10) };
     const createUser = new this.userModel(createUserDto);
-    return createUser.save();
+    return createUser.save().catch(err => {
+      if (!!err && err.name === 'MongoError' && err.code === 11000) {
+        throw new ConflictException('User already exists');
+      }
+    });
   }
 
   async findOne(username: string) {
     return this.userModel.findOne({ username });
   }
+
   async find(): Promise<User[]> {
-    return await this.userModel.find().exec();
+    return await this.userModel.find();
   }
 
   async put(updateUserDto: UpdateUserDto): Promise<User> {
-    return this.userModel.findOneAndUpdate({ username: updateUserDto.username }, updateUserDto, { new: true});
+    return this.userModel.findOneAndUpdate({ username: updateUserDto.username }, updateUserDto, { new: true });
   }
 
   async delete(userNames: string[]): Promise<any> {

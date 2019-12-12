@@ -9,9 +9,16 @@ import { UsersModule } from '../users/users.module';
 export const mediaSearchProvider = { provide: 'MediaSearchService', useClass: ItunesMediaSearchService };
 
 @Module({
-  imports: [AuthModule, UsersModule, MongooseModule.forRoot('mongodb://localhost/media-search')],
+  imports: [
+    AuthModule,
+    UsersModule,
+    MongooseModule.forRoot('mongodb://localhost/media-search', {
+      useNewUrlParser: true,
+      useCreateIndex: true,
+      useFindAndModify: false,
+    }),
+  ],
   controllers: [AppController],
   providers: [mediaSearchProvider, RatingService],
 })
-export class AppModule {
-}
+export class AppModule {}

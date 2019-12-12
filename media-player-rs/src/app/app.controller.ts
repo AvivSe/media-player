@@ -8,11 +8,13 @@ import {
   Request,
   Post,
   UseGuards,
-  BadRequestException, HttpCode,
+  BadRequestException, HttpCode, Body,
 } from '@nestjs/common';
 import MediaSearchService, { Response as MediaSearchResponse } from '../media-search/media-search.service';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from '../auth/auth.service';
+import { SignInDto } from '../dto/SignInDto';
+import { SignUpDto } from '../dto/SignUpDto';
 
 @Controller('api')
 export class AppController {
@@ -53,8 +55,18 @@ export class AppController {
   @UseGuards(AuthGuard('local'))
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  async login(@Request() req) {
-    return ;
+  async login(@Body() signInDto: SignInDto) {
+    return this.authService.login(signInDto);
+  }
+
+  @UseGuards(AuthGuard('local'))
+  @HttpCode(HttpStatus.OK)
+  @Post('signup')
+  async signUp(@Body() signUpDto: SignUpDto) {
+    if (signUpDto._password !== signUpDto.password) {
+      throw new BadRequestException('passwords do not math');
+    }
+    return this.authService.signUp(signUpDto);
   }
 
   @UseGuards(AuthGuard('jwt'))

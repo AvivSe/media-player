@@ -1,19 +1,15 @@
 import {
+  Body,
   Controller,
+  Delete,
   Get,
-  HttpException,
+  HttpCode,
   HttpStatus,
-  Inject,
-  Query,
-  Request,
+  NotFoundException,
+  Param,
   Post,
-  UseGuards,
-  BadRequestException,
-  HttpCode, Body, Delete, Put,
+  Put,
 } from '@nestjs/common';
-import MediaSearchService, { Response as MediaSearchResponse } from '../media-search/media-search.service';
-import { AuthGuard } from '@nestjs/passport';
-import { AuthService } from '../auth/auth.service';
 import { UsersService } from './users.service';
 import { CreateUserDto } from '../dto/CreateUserDto';
 import { UpdateUserDto } from '../dto/UpdateUserDto';
@@ -22,9 +18,27 @@ import { UpdateUserDto } from '../dto/UpdateUserDto';
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
+  handleNoSuchEntity(res) {
+    if (!res) {
+      throw new NotFoundException('no such entity');
+    } else {
+      return res;
+    }
+  }
+
+  @Get(':username')
+  async findOne(@Param('username') username: string) {
+    return this.userService.findOne(username).then(this.handleNoSuchEntity);
+  }
+
+  @Get()
+  async find() {
+    return this.userService.find();
+  }
+
   // @UseGuards(AuthGuard('local'))
-  @HttpCode(HttpStatus.CREATED)
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   async create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
@@ -36,11 +50,6 @@ export class UsersController {
 
   @Put()
   async put(@Body() updateUserDto: UpdateUserDto) {
-    return this.userService.put(updateUserDto);
-  }
-
-  @Get()
-  async getProfile() {
-    return this.userService.find();
+    return this.userService.put(updateUserDto).then(this.handleNoSuchEntity);
   }
 }
