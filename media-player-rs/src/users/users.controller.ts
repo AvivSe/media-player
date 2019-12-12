@@ -15,6 +15,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from '../dto/CreateUserDto';
 import { UpdateUserDto } from '../dto/UpdateUserDto';
 import { AuthGuard } from '@nestjs/passport';
+import { ChangeUserParamDto } from '../dto/ChangeUserParamDto';
 
 @Controller('api/user')
 export class UsersController {
@@ -29,12 +30,12 @@ export class UsersController {
   }
 
   @Put(':username')
-  async put(@Param('username') username, @Body() updateUserDto: UpdateUserDto) {
+  async put(@Param() {username}: ChangeUserParamDto, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.put(username, updateUserDto).then(this.handleNoSuchEntity);
   }
 
   @Get(':username')
-  async findOne(@Param('username') username: string) {
+  async findOne(@Param() {username}: ChangeUserParamDto) {
     return this.userService.findOne(username).then(this.handleNoSuchEntity);
   }
 

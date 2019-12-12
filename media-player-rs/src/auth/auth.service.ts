@@ -14,7 +14,7 @@ export class AuthService {
   async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.usersService.findOneAllowPassword(username).then(res => {
       if (!res) {
-        throw new UnauthorizedException('1');
+        throw new UnauthorizedException('No match');
       } else {
         return res;
       }
@@ -22,14 +22,14 @@ export class AuthService {
     if (user && bcrypt.compareSync(pass, user.password)) {
       return user;
     } else {
-      throw new UnauthorizedException('2');
+      throw new UnauthorizedException('No match');
     }
   }
 
   async login(signInDto: SignInDto) {
     return this.usersService.put(signInDto.username, { lastLogin: new Date() } as UpdateUserDto).then(() => {
       return {
-        token: this.jwtService.sign(signInDto),
+        AUTH_TOKEN: this.jwtService.sign(signInDto),
       };
     });
   }
@@ -38,14 +38,12 @@ export class AuthService {
     if (signUpDto.password !== signUpDto._password) {
       throw new BadRequestException('passwords do not match');
     } else {
-      return await this.usersService
-        .create(signUpDto as CreateUserDto)
-        .then(async result => {
-          return {
-            ...result,
-            ...await this.login({ username: result.username, password: signUpDto._password })
-          };
-        });
+      return await this.usersService.create(signUpDto as CreateUserDto).then(async result => {
+        return {
+          ...result,
+          ...(await this.login({ username: result.username, password: signUpDto._password })),
+        };
+      });
     }
   }
 }

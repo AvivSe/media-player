@@ -1,4 +1,9 @@
-export interface SignInDto {
-  readonly username: string;
-  readonly password: string;
+import { IsEmail, IsNotEmpty } from 'class-validator';
+
+export class SignInDto {
+  @IsEmail()
+  username: string;
+
+  @IsNotEmpty()
+  password: string;
 }
