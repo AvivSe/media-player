@@ -22,7 +22,7 @@ const MediaPlayer = () => {
   const [keywords, setKeywords] = useState("Metallica");
   const [gridApi, setGridApi] = useState(null);
   const [dialog, setDialog] = useState(null);
-  const [options, setOptions] = useState({ [SEARCH_AS_YOU_TYPE_OPT]: true, [GRID_MODE_OPT]: false });
+  const [options, setOptions] = useState({ [SEARCH_AS_YOU_TYPE_OPT]: true });
   const searchAsYouType = options[SEARCH_AS_YOU_TYPE_OPT];
 
   const fetchSearchResults = useCallback(() => {
@@ -56,6 +56,7 @@ const MediaPlayer = () => {
   return (
     <Wrapper>
       <MediaPlayerContextProvider value={_useMediaPlayer}>
+        <HTML5Player/>
         <SearchBox
           onKeywordsChange={handleKeywordsChange}
           keywords={keywords}

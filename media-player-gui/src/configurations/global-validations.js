@@ -1,9 +1,9 @@
 import * as yup from "yup";
 
-export const firstName = "First Name";
-export const lastName = "Last Name";
-export const email = "Email";
-export const password = "Password";
+export const firstName = "firstName";
+export const lastName = "lastName";
+export const email = "email";
+export const password = "password";
 
 const tooShort = "Too short";
 const tooLong = "Too long";

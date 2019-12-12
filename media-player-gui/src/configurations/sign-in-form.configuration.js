@@ -1,15 +1,15 @@
-import { email, password, genericValidationSchema, } from "./global-validations";
+import { email, password, genericValidationSchema } from "./global-validations";
 import TextField from "../components/form-kit/TextField";
-import authService from "../services/auth.service"
+import authService from "../services/auth.service";
 export default {
   initialValues: {
-    [email]: 'avivsegal@gmail.com',
-    [password]: '123456',
+    [email]: "avivsegal@gmail.com",
+    [password]: "123456"
   },
   hidePreloader: true,
   validationSchema: genericValidationSchema,
-  sendForm: values => {
-    return authService.authenticate(values);
+  sendForm: ({ [email]: username, [password]: _password }) => {
+    return authService.login({ username, password: _password });
   },
   groups: [
     {
@@ -25,7 +25,7 @@ export default {
           name: password,
           component: TextField,
           required: true,
-          type: 'new-password'
+          type: "new-password"
         }
       ]
     }

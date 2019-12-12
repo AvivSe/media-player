@@ -27,9 +27,10 @@ export class AuthService {
   }
 
   async login(signInDto: SignInDto) {
-    return this.usersService.put(signInDto.username, { lastLogin: new Date() } as UpdateUserDto).then(() => {
+    return this.usersService.put(signInDto.username, { lastLogin: new Date() } as UpdateUserDto).then(user => {
       return {
         AUTH_TOKEN: this.jwtService.sign(signInDto),
+        profile: user,
       };
     });
   }

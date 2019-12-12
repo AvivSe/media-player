@@ -51,7 +51,7 @@ export class AppController {
   getTop() {
     return 'top';
   }
-
+  @UseGuards(AuthGuard('local'))
   @HttpCode(HttpStatus.OK)
   @Post('login')
   async login(@Body() signInDto: SignInDto) {

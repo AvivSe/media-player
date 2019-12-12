@@ -3,12 +3,11 @@ import axios from "axios";
 // defaults
 const host = "http://localhost:8080";
 const api = "/api";
-const version = "";
-const authServiceUrl = `${host}${version}${api}`;
+const authServiceUrl = `${host}${api}`;
 
 class AuthService {
-  authenticate(data) {
-    return axios.post(authServiceUrl, data);
+  async login(data) {
+    return axios.post(`${authServiceUrl}/login`, data);
   }
 }
 

@@ -46,33 +46,30 @@ const StyledPreloader = styled(Preloader)`
   margin: auto;
 `;
 const Form = ({ successContent, onCancel, configuration, submitLabel, hidePreloader, onSubmit, ...otherProps }) => {
-  const { title, initialValues, direction, groups, validationSchema, sendForm } = configuration;
+  const { title, initialValues, direction, groups, validationSchema } = configuration;
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [error, setError] = useState(null);
+
   const cancelButtonEnabled = typeof onCancel === "function";
 
   useEffect(() => {
     setDisabled(loading);
   }, [loading]);
 
-  const handleSubmit = (values, actions) => {
-    setLoading(true);
-    if (Boolean(sendForm)) {
-      sendForm(values)
-        .then(() => {
-          setSubmitted(true);
-          setLoading(false);
-          if (onSubmit) {
-            onSubmit({ values, actions });
-          }
-        })
-        .catch(error => {
-          onSubmit({ error });
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+  const handleSuccess = () => {
+    setSubmitted(true);
+  };
+
+  const handleError = err => {
+    setSubmitted(false);
+    setError(err);
+  };
+
+  const handleSubmit = (values) => {
+    if(onSubmit) {
+      return onSubmit({values, onSuccess: handleSuccess, onError: handleError})
     }
   };
 
@@ -97,7 +94,7 @@ const Form = ({ successContent, onCancel, configuration, submitLabel, hidePreloa
   };
 
   return submitted ? (
-    successContent
+    successContent || <div>Success</div>
   ) : (
     <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
       {({ handleSubmit, handleChange, handleBlur, values, errors, touched }) => (

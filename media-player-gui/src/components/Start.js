@@ -6,18 +6,18 @@ import Form from "./form-kit/Form";
 import signInFormConfiguration from "../configurations/sign-in-form.configuration";
 import signUpFormConfiguration from "../configurations/sign-up-form.configuration";
 import { useHistory } from "react-router-dom";
-import Snackbar from "@material-ui/core/Snackbar";
 import { exceptionToMessage } from "../services/http.exception.descriptions";
 import { connect } from "react-redux";
 import { closeSnackbar, openSnackbar } from "../actions/ui.actions";
-
+import { login } from "../actions/auth.actions";
+import authService from "../services/auth.service";
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
-const Start = ({ mode, snackbar, openSnackbar, closeSnackbar }) => {
+const Start = ({ mode, snackbar, openSnackbar, closeSnackbar, login }) => {
   const { visible, drag: playing } = useContextPreloader();
 
   const history = useHistory();
@@ -26,15 +26,23 @@ const Start = ({ mode, snackbar, openSnackbar, closeSnackbar }) => {
     history.push("/");
   };
 
-  const handleLoginSubmit = ({ values, actions, error }) => {
-    if (!!error) {
-      openSnackbar({ message: exceptionToMessage[error.statusCode] || "Something went wrong" });
-    } else {
-      history.push("/listing");
-    }
+  const handleLoginSubmit = ({ values, onSuccess, onError }) => {
+    const { email: username, password } = values;
+    authService
+      .login({ username, password })
+      .then(res => {
+        login(res.data);
+        history.push("/listing");
+        onSuccess();
+      })
+      .catch(error => {
+        onError(error);
+        console.log(JSON.stringify(error));
+        openSnackbar({ message: exceptionToMessage[error.statusCode] || error.message || "Something went wrong" });
+      });
   };
 
-  return visible ? (
+  return (
     <Wrapper>
       {!mode && (
         <Wrapper>
@@ -43,13 +51,13 @@ const Start = ({ mode, snackbar, openSnackbar, closeSnackbar }) => {
             onSubmit={handleLoginSubmit}
             hidePreloader={true}
             configuration={signInFormConfiguration}
-            submitLabel={playing ? "Stop playing.." : "Lets start."}
+            submitLabel={playing ? "Stop playing.." : "Login"}
           />
         </Wrapper>
       )}
       {mode === "signUp" && <Form configuration={signUpFormConfiguration} onCancel={handleSignUpCancel} />}
     </Wrapper>
-  ) : null;
+  );
 };
 
 const mapStateToProps = state => {
@@ -60,5 +68,6 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps, {
   openSnackbar,
-  closeSnackbar
+  closeSnackbar,
+  login
 })(Start);

@@ -1,7 +1,5 @@
 import { email, password, genericValidationSchema, firstName, lastName } from "./global-validations";
 import TextField from "../components/form-kit/TextField";
-import Select from "../components/form-kit/Select";
-import Checkbox from "../components/form-kit/Checkbox";
 
 export default {
   initialValues: {
@@ -52,6 +50,16 @@ export default {
       inputs: [
         {
           name: password,
+          component: TextField,
+          required: true,
+          autoComplete: "new-password",
+        }
+      ]
+    },
+    {
+      inputs: [
+        {
+          name: `_${password}`,
           component: TextField,
           required: true,
           autoComplete: "new-password",

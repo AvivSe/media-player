@@ -5,7 +5,6 @@ export const uiInitialState = {
 };
 
 function uiReducer(state = uiInitialState, { type, ...payload }) {
-  console.log(payload);
   switch (type) {
     case OPEN_SNACKBAR:
       return { snackbar: { ...state.snackbar, ...payload, open: true } };
