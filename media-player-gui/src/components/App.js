@@ -1,11 +1,11 @@
-import React from "react";
+import React, { createContext } from "react";
 import styled, { ThemeProvider as ScThemeProvider } from "styled-components";
 import darkMuiTheme from "../theme";
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
-import MediaPlayer from "./MediaPlayer";
 import { StylesProvider } from "@material-ui/styles";
-import { Route, Switch, BrowserRouter } from "react-router-dom";
 import Routing from "./Routing";
+import usePreloader  from "../hooks/usePreloder";
+import { PreloaderContextProvider } from "../contexts";
 
 const Wrapper = styled.div`
   display: flex;
@@ -24,13 +24,16 @@ const Wrapper = styled.div`
   color: ${({ theme }) => theme.palette.primary.text};
 `;
 
+
 const App = () => (
   <StylesProvider injectFirst>
     <MuiThemeProvider theme={darkMuiTheme}>
       <ScThemeProvider theme={darkMuiTheme}>
-        <Wrapper>
-          <Routing/>
-        </Wrapper>
+        <PreloaderContextProvider value={usePreloader()}>
+          <Wrapper>
+            <Routing />
+          </Wrapper>
+        </PreloaderContextProvider>
       </ScThemeProvider>
     </MuiThemeProvider>
   </StylesProvider>

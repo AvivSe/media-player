@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { useVideo } from "react-use";
-import { MediaPlayerContext } from "./MediaPlayer";
+import { MediaPlayerContext } from "./../contexts";
 import styled from "styled-components";
 import Draggable from "react-draggable";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -33,11 +33,11 @@ const Controls = styled.div`
 const StyledFab = styled(Fab)`
   margin: 0 .2rem;
 `;
-const HTML5Player = () => {
-  const { selected, onSelectedChange } = useContext(MediaPlayerContext);
+const HTML5Player = ({ initialUrl }) => {
+  const { selected, onSelectedChange } = useContext(MediaPlayerContext) || { };
   const [video, state, controls, ref] = useVideo(
     <StyledVideo
-      src={selected ? selected["previewUrl"] : "http://www.anyvision.co/admin/wp-content/uploads/2018/02/4.mp4"}
+      src={(selected && selected["previewUrl"]) || initialUrl || "http://www.anyvision.co/admin/wp-content/uploads/2018/02/4.mp4"}
       autoPlay
     />
   );
@@ -70,17 +70,6 @@ const HTML5Player = () => {
               {<SkipNextOutlined />}
             </StyledFab>
           </Controls>
-
-          {/*<br />*/}
-          {/*<button onClick={controls.mute}>Mute</button>*/}
-          {/*<button onClick={controls.unmute}>Un-mute</button>*/}
-          {/*<br />*/}
-          {/*<button onClick={() => controls.volume(0.1)}>Volume: 10%</button>*/}
-          {/*<button onClick={() => controls.volume(0.5)}>Volume: 50%</button>*/}
-          {/*<button onClick={() => controls.volume(1)}>Volume: 100%</button>*/}
-          {/*<br />*/}
-          {/*<button onClick={() => controls.seek(state.time - 5)}>-5 sec</button>*/}
-          {/*<button onClick={() => controls.seek(state.time + 5)}>+5 sec</button>*/}
           {/*{JSON.stringify({ state, progress })}*/}
         </Wrapper>
       </div>

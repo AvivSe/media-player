@@ -1,8 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { PlayArrowOutlined, Stop } from "@material-ui/icons";
 
 import styled from "styled-components";
-import { MediaPlayerContext } from "../MediaPlayer";
+import { MediaPlayerContext } from "../../contexts";
 
 const Wrapper = styled.div`
   cursor: pointer;

@@ -9,7 +9,7 @@ import FullDetailsCellRenderer from "./cell-renderers/FullDetailsCellRenderer";
 import DurationFormatter from "./cell-renderers/DurationFormatter";
 import ImageCellRenderer from "./cell-renderers/ImageCellRenderer";
 import PlayCellRenderer from "./cell-renderers/PlayCellRenderer";
-import { MediaPlayerContext } from "./MediaPlayer";
+import { MediaPlayerContext } from "./../contexts";
 
 const AgGridWrapper = styled.div`
   width: 100%;

@@ -1,17 +1,33 @@
 import styled from "styled-components";
 import React from "react";
-import Button from "./form-kit/Button";
 import Preloader from "./Preloader";
+import { useContextPreloader } from "../contexts";
+import Form from "./form-kit/Form";
+import signInFormConfiguration from "../configurations/sign-in-form.configuration";
+import signUpFormConfiguration from "../configurations/sign-up-form.configuration";
+import {useHistory} from 'react-router-dom'
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
-const Wrapper = styled.div``;
+const Start = ({ mode }) => {
+  const { visible, drag: playing } = useContextPreloader();
+  const history = useHistory();
 
-const Start = () => {
-  return (
+  const handleSignUpCancel = () => {
+    history.push('/')
+  };
+  return visible ? (
     <Wrapper>
-      <Preloader/>
-      <Button>Lets start.</Button>
+      <Preloader size={15} />
+      {!mode && (
+        <Form configuration={signInFormConfiguration} submitLabel={playing ? "Stop playing.." : "Lets start."} />
+      )}
+      {mode === "signUp" && <Form configuration={signUpFormConfiguration} onCancel={handleSignUpCancel}/>}
     </Wrapper>
-  );
+  ) : null;
 };
 
 export default Start;

@@ -6,6 +6,7 @@ import Start from "./Start";
 const pages = [
   { url: "/admin", component: ()=><div/> },
   { url: "/listing", component: MediaPlayer },
+  { url: "/signup", component: ()=><Start mode={'signUp'}/> },
   { url: "/", component: Start }
 ];
 

@@ -7,10 +7,8 @@ import Dialog from "./Dialog";
 import DatasourceAgGridAdapter from "../backend-bridge/datasource.ag-grid.adapter";
 import mediaSearchService from "../backend-bridge/media-search.service";
 import HTML5Player from "./HTML5Player";
-import { useMediaPlayer } from "../use-media-player";
-
-export const MediaPlayerContext = createContext();
-export const MediaPlayerContextProvider = MediaPlayerContext.Provider;
+import { useMediaPlayer } from "../hooks/useMediaPlayer";
+import { MediaPlayerContextProvider } from "../contexts";
 
 const Wrapper = styled.div`
   min-width: 1200px;
@@ -18,12 +16,6 @@ const Wrapper = styled.div`
     border: none !important;
   }
 `;
-
-const StyledHTML5Player = styled(HTML5Player)`
-  z-index: 9;
-  height: 800px;
-`;
-
 
 const MediaPlayer = () => {
   const _useMediaPlayer = useMediaPlayer();
