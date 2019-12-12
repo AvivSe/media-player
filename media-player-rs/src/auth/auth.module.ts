@@ -9,7 +9,7 @@ import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [
     UsersModule,
-    PassportModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }), // TODO: Read about session:true
     JwtModule.register({
       secret: 'change-me',
       signOptions: { expiresIn: '60s' },

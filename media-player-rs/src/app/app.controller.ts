@@ -8,9 +8,9 @@ import {
   Request,
   Post,
   UseGuards,
-  BadRequestException,
+  BadRequestException, HttpCode,
 } from '@nestjs/common';
-import MediaSearchService, { Response } from '../media-search/media-search.service';
+import MediaSearchService, { Response as MediaSearchResponse } from '../media-search/media-search.service';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from '../auth/auth.service';
 
@@ -31,7 +31,7 @@ export class AppController {
     @Query('keywords') term: string,
     @Query('offset') offset: number,
     @Query('limit') limit: number,
-  ): Promise<Response> {
+  ): Promise<MediaSearchResponse> {
     if (!term) {
       throw new BadRequestException('Keywords params is required');
     }
@@ -51,6 +51,7 @@ export class AppController {
   }
 
   @UseGuards(AuthGuard('local'))
+  @HttpCode(HttpStatus.OK)
   @Post('auth/login')
   async login(@Request() req) {
     return req.user;

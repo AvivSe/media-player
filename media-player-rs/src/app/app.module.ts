@@ -4,11 +4,12 @@ import { ItunesMediaSearchService } from '../media-search/itunes.media-search.se
 import { RatingService } from '../rating.service';
 import { AuthService } from '../auth/auth.service';
 import { AuthModule } from '../auth/auth.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 export const mediaSearchProvider = { provide: 'MediaSearchService', useClass: ItunesMediaSearchService };
 
 @Module({
-  imports: [AuthModule],
+  imports: [AuthModule, MongooseModule.forRoot('mongodb://localhost/media-search')],
   controllers: [AppController],
   providers: [mediaSearchProvider, RatingService],
 })
