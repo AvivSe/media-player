@@ -16,6 +16,7 @@ export const mediaSearchProvider = { provide: 'MediaSearchService', useClass: It
       useNewUrlParser: true,
       useCreateIndex: true,
       useFindAndModify: false,
+      useUnifiedTopology: true,
     }),
   ],
   controllers: [AppController],

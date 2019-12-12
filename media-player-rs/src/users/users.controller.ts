@@ -9,10 +9,12 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from '../dto/CreateUserDto';
 import { UpdateUserDto } from '../dto/UpdateUserDto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('api/user')
 export class UsersController {
@@ -26,11 +28,17 @@ export class UsersController {
     }
   }
 
+  @Put(':username')
+  async put(@Param('username') username, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.put(username, updateUserDto).then(this.handleNoSuchEntity);
+  }
+
   @Get(':username')
   async findOne(@Param('username') username: string) {
     return this.userService.findOne(username).then(this.handleNoSuchEntity);
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get()
   async find() {
     return this.userService.find();
@@ -46,10 +54,5 @@ export class UsersController {
   @Delete()
   async delete(@Body() userNames: string[]) {
     return this.userService.delete(userNames);
-  }
-
-  @Put()
-  async put(@Body() updateUserDto: UpdateUserDto) {
-    return this.userService.put(updateUserDto).then(this.handleNoSuchEntity);
   }
 }

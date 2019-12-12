@@ -8,7 +8,7 @@ import {
   Request,
   Post,
   UseGuards,
-  BadRequestException, HttpCode, Body,
+  BadRequestException, HttpCode, Body, Res,
 } from '@nestjs/common';
 import MediaSearchService, { Response as MediaSearchResponse } from '../media-search/media-search.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -52,14 +52,12 @@ export class AppController {
     return 'top';
   }
 
-  @UseGuards(AuthGuard('local'))
   @HttpCode(HttpStatus.OK)
   @Post('login')
   async login(@Body() signInDto: SignInDto) {
     return this.authService.login(signInDto);
   }
 
-  @UseGuards(AuthGuard('local'))
   @HttpCode(HttpStatus.OK)
   @Post('signup')
   async signUp(@Body() signUpDto: SignUpDto) {

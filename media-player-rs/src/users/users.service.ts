@@ -4,7 +4,8 @@ import { Model } from 'mongoose';
 import { User } from './User';
 import { CreateUserDto } from '../dto/CreateUserDto';
 import { UpdateUserDto } from '../dto/UpdateUserDto';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
+
 @Injectable()
 export class UsersService {
   constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
@@ -15,6 +16,8 @@ export class UsersService {
     return createUser.save().catch(err => {
       if (!!err && err.name === 'MongoError' && err.code === 11000) {
         throw new ConflictException('User already exists');
+      } else {
+        throw err;
       }
     });
   }
@@ -23,12 +26,19 @@ export class UsersService {
     return this.userModel.findOne({ username });
   }
 
+  async findOneAllowPassword(username: string) {
+    return this.userModel
+      .findOne({ username })
+      .select('+password')
+      .exec();
+  }
+
   async find(): Promise<User[]> {
     return await this.userModel.find();
   }
 
-  async put(updateUserDto: UpdateUserDto): Promise<User> {
-    return this.userModel.findOneAndUpdate({ username: updateUserDto.username }, updateUserDto, { new: true });
+  async put(username: string, updateUserDto: UpdateUserDto): Promise<User> {
+    return this.userModel.findOneAndUpdate({ username }, updateUserDto, { new: true });
   }
 
   async delete(userNames: string[]): Promise<any> {
