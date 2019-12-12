@@ -6,6 +6,9 @@ import { StylesProvider } from "@material-ui/styles";
 import Routing from "./Routing";
 import usePreloader from "../hooks/usePreloder";
 import { PreloaderContextProvider } from "../contexts";
+import Snackbar from "@material-ui/core/Snackbar";
+import { connect } from "react-redux";
+import { closeSnackbar } from "../actions/ui.actions";
 
 const Wrapper = styled.div`
   display: flex;
@@ -24,13 +27,26 @@ const Wrapper = styled.div`
   color: ${({ theme }) => theme.palette.primary.text};
 `;
 
-const App = () => (
+const App = ({ snackbar, closeSnackbar }) => (
   <StylesProvider injectFirst>
     <MuiThemeProvider theme={darkMuiTheme}>
       <ScThemeProvider theme={darkMuiTheme}>
         <PreloaderContextProvider value={usePreloader()}>
           <Wrapper>
             <Routing />
+            <Snackbar
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "left"
+              }}
+              open={!!snackbar.open}
+              autoHideDuration={snackbar.duration}
+              onClose={closeSnackbar}
+              ContentProps={{
+                "aria-describedby": "message-id"
+              }}
+              message={snackbar.message}
+            />
           </Wrapper>
         </PreloaderContextProvider>
       </ScThemeProvider>
@@ -38,4 +54,12 @@ const App = () => (
   </StylesProvider>
 );
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    snackbar: state.ui.snackbar
+  };
+};
+
+export default connect(mapStateToProps, {
+  closeSnackbar
+})(App);

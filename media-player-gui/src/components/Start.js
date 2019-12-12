@@ -7,7 +7,9 @@ import signInFormConfiguration from "../configurations/sign-in-form.configuratio
 import signUpFormConfiguration from "../configurations/sign-up-form.configuration";
 import { useHistory } from "react-router-dom";
 import Snackbar from "@material-ui/core/Snackbar";
-import { exceptionToMessage } from "../services/auth.service";
+import { exceptionToMessage } from "../services/http.exception.descriptions";
+import { connect } from "react-redux";
+import { closeSnackbar, openSnackbar } from "../actions/ui.actions";
 
 const Wrapper = styled.div`
   display: flex;
@@ -15,14 +17,8 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const getInitialSnackBarState = () => ({ open: false, message: null, variant: null });
-const Start = ({ mode }) => {
+const Start = ({ mode, snackbar, openSnackbar, closeSnackbar }) => {
   const { visible, drag: playing } = useContextPreloader();
-  const [snackbar, setSnackBar] = React.useState(getInitialSnackBarState());
-
-  const handleCloseSnackBar = (event, reason) => {
-    setSnackBar(getInitialSnackBarState());
-  };
 
   const history = useHistory();
 
@@ -32,7 +28,7 @@ const Start = ({ mode }) => {
 
   const handleLoginSubmit = ({ values, actions, error }) => {
     if (!!error) {
-      setSnackBar({ message: exceptionToMessage[error.statusCode] || "Something went wrong", variant: "error", open: true });
+      openSnackbar({ message: exceptionToMessage[error.statusCode] || "Something went wrong" });
     } else {
       history.push("/listing");
     }
@@ -52,21 +48,17 @@ const Start = ({ mode }) => {
         </Wrapper>
       )}
       {mode === "signUp" && <Form configuration={signUpFormConfiguration} onCancel={handleSignUpCancel} />}
-      <Snackbar
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left"
-        }}
-        open={!!snackbar.open}
-        autoHideDuration={2000}
-        onClose={handleCloseSnackBar}
-        ContentProps={{
-          "aria-describedby": "message-id"
-        }}
-        message={snackbar.message}
-      />
     </Wrapper>
   ) : null;
 };
 
-export default Start;
+const mapStateToProps = state => {
+  return {
+    snackbar: state.ui.snackbar
+  };
+};
+
+export default connect(mapStateToProps, {
+  openSnackbar,
+  closeSnackbar
+})(Start);
