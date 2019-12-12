@@ -52,9 +52,9 @@ export class AppController {
 
   @UseGuards(AuthGuard('local'))
   @HttpCode(HttpStatus.OK)
-  @Post('auth/login')
+  @Post('login')
   async login(@Request() req) {
-    return req.user;
+    return ;
   }
 
   @UseGuards(AuthGuard('jwt'))

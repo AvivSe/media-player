@@ -22,10 +22,10 @@ export class UsersService {
   }
 
   async put(updateUserDto: UpdateUserDto): Promise<User> {
-    return this.userModel.findOneAndUpdate({ _id: updateUserDto._id }, updateUserDto);
+    return this.userModel.findOneAndUpdate({ username: updateUserDto.username }, updateUserDto, { new: true});
   }
 
-  async delete(ids: string[]): Promise<any> {
-    return this.userModel.remove({ _id: ids });
+  async delete(userNames: string[]): Promise<any> {
+    return this.userModel.remove({ username: userNames });
   }
 }
