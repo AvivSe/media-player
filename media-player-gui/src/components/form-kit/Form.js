@@ -45,7 +45,7 @@ const StyledPreloader = styled(Preloader)`
   z-index: 20;
   margin: auto;
 `;
-const Form = ({ successContent, onCancel, configuration, submitLabel, ...otherProps }) => {
+const Form = ({ successContent, onCancel, configuration, submitLabel, hidePreloader, onSubmit, ...otherProps }) => {
   const { title, initialValues, direction, groups, validationSchema, sendForm } = configuration;
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -57,13 +57,22 @@ const Form = ({ successContent, onCancel, configuration, submitLabel, ...otherPr
   }, [loading]);
 
   const handleSubmit = (values, actions) => {
-    console.log(sendForm);
     setLoading(true);
     if (Boolean(sendForm)) {
-      sendForm(values).then(({ error }) => {
-        setSubmitted(!error);
-        setLoading(false);
-      });
+      sendForm(values)
+        .then(() => {
+          setSubmitted(true);
+          setLoading(false);
+          if (onSubmit) {
+            onSubmit({ values, actions });
+          }
+        })
+        .catch(error => {
+          onSubmit({ error });
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
   };
 
@@ -93,7 +102,7 @@ const Form = ({ successContent, onCancel, configuration, submitLabel, ...otherPr
     <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
       {({ handleSubmit, handleChange, handleBlur, values, errors, touched }) => (
         <Wrapper>
-          {loading && (
+          {loading && !configuration.hidePreloader && (
             <Cover>
               <StyledPreloader />
             </Cover>

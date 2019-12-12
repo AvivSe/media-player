@@ -10,6 +10,7 @@ export default {
     [lastName]: "", //'Segal',
     [password]: "" //'123456',
   },
+  hidePreloader: false,
   validationSchema: genericValidationSchema,
   sendForm: values =>
     new Promise(resolve => {

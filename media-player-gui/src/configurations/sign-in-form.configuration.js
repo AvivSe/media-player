@@ -1,26 +1,16 @@
-import { email, password, genericValidationSchema, firstName, lastName } from "./global-validations";
+import { email, password, genericValidationSchema, } from "./global-validations";
 import TextField from "../components/form-kit/TextField";
-import Select from "../components/form-kit/Select";
-import Checkbox from "../components/form-kit/Checkbox";
-
+import authService from "../services/auth.service"
 export default {
   initialValues: {
-    [email]: "", //'avivsegal@gmail.com',
-    [firstName]: "", //'Aviv',
-    [lastName]: "", //'Segal',
-    [password]: "" //'123456',
+    [email]: 'avivsegal@gmail.com',
+    [password]: '123456',
   },
+  hidePreloader: true,
   validationSchema: genericValidationSchema,
-  sendForm: values =>
-    new Promise(resolve => {
-      setTimeout(() => {
-        // TODO: backend call
-        //.......
-        //.......
-
-        resolve({ error: false });
-      }, 3000);
-    }),
+  sendForm: values => {
+    return authService.authenticate(values);
+  },
   groups: [
     {
       title: "", // optional

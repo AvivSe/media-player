@@ -1,10 +1,10 @@
-import React, { createContext } from "react";
+import React from "react";
 import styled, { ThemeProvider as ScThemeProvider } from "styled-components";
 import darkMuiTheme from "../theme";
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
 import { StylesProvider } from "@material-ui/styles";
 import Routing from "./Routing";
-import usePreloader  from "../hooks/usePreloder";
+import usePreloader from "../hooks/usePreloder";
 import { PreloaderContextProvider } from "../contexts";
 
 const Wrapper = styled.div`
@@ -23,7 +23,6 @@ const Wrapper = styled.div`
       : null};
   color: ${({ theme }) => theme.palette.primary.text};
 `;
-
 
 const App = () => (
   <StylesProvider injectFirst>
