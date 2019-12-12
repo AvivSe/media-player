@@ -1,4 +1,4 @@
-import { ItunesMediaSearchService } from '../../src/services/itunes.media-search.service';
+import { ItunesMediaSearchService } from '../../src/media-search/itunes.media-search.service';
 
 describe('iTunes Media Search Service Test', () => {
   const itunesMediaSearchService: ItunesMediaSearchService = new ItunesMediaSearchService();

@@ -15,15 +15,13 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
+const getInitialSnackBarState = () => ({ open: false, message: null, variant: null });
 const Start = ({ mode }) => {
   const { visible, drag: playing } = useContextPreloader();
-  const [snackbar, setSnackBar] = React.useState({ open: false, message: null, variant: null });
+  const [snackbar, setSnackBar] = React.useState(getInitialSnackBarState());
 
   const handleCloseSnackBar = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setSnackBar({ open: false, message: null, variant: null });
+    setSnackBar(getInitialSnackBarState());
   };
 
   const history = useHistory();
@@ -34,7 +32,7 @@ const Start = ({ mode }) => {
 
   const handleLoginSubmit = ({ values, actions, error }) => {
     if (!!error) {
-      setSnackBar({ message: exceptionToMessage[error.message], variant: "error", open: true });
+      setSnackBar({ message: exceptionToMessage[error.statusCode] || "Something went wrong", variant: "error", open: true });
     } else {
       history.push("/listing");
     }

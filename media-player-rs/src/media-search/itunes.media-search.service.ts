@@ -1,4 +1,4 @@
-import { Request, Response } from '../interfaces/media-search.service';
+import { Request, Response } from './media-search.service';
 import axios from 'axios';
 import { HttpStatus, Injectable } from '@nestjs/common';
 

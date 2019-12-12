@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppController } from '../../src/app.controller';
-import { RatingService } from '../../src/services/rating.service';
-import { mediaSearchProvider } from '../../src/app.module';
+import { AppController } from '../../src/app/app.controller';
+import { RatingService } from '../../src/rating.service';
+import { mediaSearchProvider } from '../../src/app/app.module';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
 describe('AppController', () => {

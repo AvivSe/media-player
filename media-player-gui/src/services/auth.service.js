@@ -7,7 +7,9 @@ const version = "";
 const authServiceUrl = `${host}${version}${api}`;
 
 export const exceptionToMessage = {
-  'Request failed with status code 404':'Something went wrong'
+  404: 'Something went wrong (404)',
+  401: 'Session expired (401)',
+  403: 'Slow down',
 };
 class AuthService {
   authenticate(data) {

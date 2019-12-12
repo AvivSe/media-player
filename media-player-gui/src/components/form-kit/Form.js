@@ -143,10 +143,10 @@ const Form = ({ successContent, onCancel, configuration, submitLabel, hidePreloa
                 </Group>
               ))}
             </FieldsWrapper>
-            <Group style={{ padding: "0.5rem" }} disabled={loading}>
-              <Button type="submit">{submitLabel || "Submit"}</Button>
+            <Group style={{ padding: "0.5rem" }}>
+              <Button type="submit"  disabled={disabled}>{submitLabel || "Submit"}</Button>
               {cancelButtonEnabled && (
-                <Button onClick={handleClickCancel} secondary disabled={loading}>
+                <Button onClick={handleClickCancel} secondary disabled={disabled}>
                   {"Cancel"}
                 </Button>
               )}

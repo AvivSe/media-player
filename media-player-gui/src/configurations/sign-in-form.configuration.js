@@ -25,7 +25,7 @@ export default {
           name: password,
           component: TextField,
           required: true,
-          autoComplete: "new-password"
+          type: 'new-password'
         }
       ]
     }
