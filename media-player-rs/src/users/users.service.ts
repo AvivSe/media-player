@@ -41,7 +41,7 @@ export class UsersService {
     return this.userModel.countDocuments();
   }
 
-  async put(username: string, updateUserDto: UpdateUserDto): Promise<User> {
+  async put(username: string, updateUserDto: any): Promise<User> {
     return this.userModel.findOneAndUpdate({ username }, updateUserDto, { new: true });
   }
 

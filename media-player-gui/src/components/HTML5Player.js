@@ -53,7 +53,7 @@ const StyledFab = styled(Fab)`
 const HTML5Player = ({ initialUrl }) => {
   const { selected, onSelectedChange } = useContext(MediaPlayerContext) || {};
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(true);
 
   const [video, state, controls, ref] = useVideo(
     <StyledVideo

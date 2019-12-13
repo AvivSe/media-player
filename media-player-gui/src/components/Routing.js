@@ -6,9 +6,9 @@ import Admin from "./Admin";
 
 const pages = [
   { url: "/admin", component: Admin },
-  { url: "/listing", component: MediaPlayer },
   { url: "/signup", component: ()=><Start mode={'signUp'}/> },
-  { url: "/", component: Start }
+  { url: "/login", component: Start },
+  { url: "/", component: MediaPlayer }
 ];
 
 const Routing = () => {

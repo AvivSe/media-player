@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength, MaxLength, IsOptional } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, MinLength, MaxLength, IsOptional, IsEmpty } from 'class-validator';
 
 export class UpdateUserDto {
   @IsEmail()
@@ -23,6 +23,4 @@ export class UpdateUserDto {
   @IsOptional()
   readonly lastName: string;
 
-  readonly lastLogin: Date;
-  readonly topSearches: any[];
 }

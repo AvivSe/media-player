@@ -12,6 +12,7 @@ import DeleteCellRenderer from "./cell-renderers/DeleteCellRenderer";
 import { connect } from "react-redux";
 import { openSnackbar } from "../actions/ui.actions";
 import PasswordCellFormatter from "./cell-renderers/PasswordCellForamtter";
+import { DateCellFormatter } from "./cell-renderers/DateCellFormatter";
 
 const Wrapper = styled.div``;
 
@@ -65,6 +66,7 @@ const Admin = ({ openSnackbar }) => {
     { headerName: "First Name", field: "firstName" },
     { headerName: "Last Name", field: "lastName" },
     { headerName: "Password", field: "password", cellRenderer: "PasswordCellFormatter"},
+    { headerName: "Last Login", field: "lastLogin", editable: false, cellRenderer: "DateCellFormatter" },
     { headerName: "Top Searches", field: "topSearches" }, // todo: cell renderer
     {
       headerName: "",
@@ -112,7 +114,7 @@ const Admin = ({ openSnackbar }) => {
             filter: true,
             editable: true
           }}
-          frameworkComponents={{ DeleteCellRenderer, PasswordCellFormatter }}
+          frameworkComponents={{ DeleteCellRenderer, PasswordCellFormatter, DateCellFormatter }}
           // gridOptions={{ rowModelType: "serverSide" }}
           // cacheBlockSize={200}
           // cacheOverflowSize={2}
