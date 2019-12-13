@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useVideo } from "react-use";
 import { MediaPlayerContext } from "./../contexts";
 import styled from "styled-components";
@@ -6,16 +6,16 @@ import Draggable from "react-draggable";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Fab from "@material-ui/core/Fab";
 import {
-  PlayArrowOutlined,
-  PauseOutlined,
-  SkipPreviousOutlined,
-  SkipNextOutlined,
+  ExpandLess,
+  ExpandMore,
   FastForwardOutlined,
   FastRewindOutlined,
   Fullscreen,
   FullscreenExit,
-  ExpandLess,
-  ExpandMore
+  PauseOutlined,
+  PlayArrowOutlined,
+  SkipNextOutlined,
+  SkipPreviousOutlined
 } from "@material-ui/icons";
 
 const StyledVideo = styled.video`
@@ -29,26 +29,28 @@ const Container = styled.div`
 const VideoContainer = styled.div`
   display: ${({ isMinimized }) => (isMinimized ? "none" : "block")};
 `;
-const VideoWrapper = styled.div``;
 
 const Wrapper = styled.div`
-  position: absolute;
+  position: fixed;
   z-index: 100;
-  height: 0;
-  width: 0;
+  height: 500px;
+  width: 500px;
 `;
 
 const Controls = styled.div`
-  margin: -35px;
+  margin-bottom: -35px;
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 101;
 `;
 
 const StyledFab = styled(Fab)`
   margin: 0 0.2rem;
   background-color: ${({ transparent }) => (transparent ? "transparent" : null)};
 `;
+
+const VideoProgress = styled;
 
 const HTML5Player = ({ initialUrl }) => {
   const { selected, onSelectedChange } = useContext(MediaPlayerContext) || {};
@@ -99,45 +101,39 @@ const HTML5Player = ({ initialUrl }) => {
     setIsMinimized(!isMinimized);
   };
 
-  // delete this when fix pause action
-  useEffect(() => {
-    setInterval(handleClickFastRewind, 10000);
-  }, [handleClickFastRewind]);
-
   return (
     <Wrapper>
-      <Draggable handle=".handle">
+      <Draggable handle=".handle" defaultPosition={{ x: 515, y: -75 }}>
         <div className={"handle"}>
           <Container isFullScreen={isFullScreen}>
             <VideoContainer isMinimized={isMinimized}>
-              <LinearProgress variant="determinate" value={progress} color={"secondary"} />
-              <VideoWrapper>{video}</VideoWrapper>
+              <LinearProgress variant="determinate" value={progress} color={"secondary"}/>
+              {video}
             </VideoContainer>
-            <div>
-              <Controls>
-                <StyledFab color="primary" size="small" onClick={handleClickMinimize}>
-                  {isMinimized ? <ExpandLess /> : <ExpandMore />}
-                </StyledFab>
-                <StyledFab size="small" color="primary" onClick={handleClickSkip}>
-                  {<SkipPreviousOutlined />}
-                </StyledFab>
-                <StyledFab size="medium" color="primary" onClick={handleClickFastRewind}>
-                  {<FastRewindOutlined />}
-                </StyledFab>
-                <StyledFab color="primary" onClick={paused ? handleClickPlay : handleClickPause}>
-                  {paused ? <PlayArrowOutlined /> : <PauseOutlined />}
-                </StyledFab>
-                <StyledFab size="medium" color="primary" onClick={handleClickFastForward}>
-                  {<FastForwardOutlined />}
-                </StyledFab>
-                <StyledFab size="small" color="primary" onClick={handleClickSkip}>
-                  {<SkipNextOutlined />}
-                </StyledFab>
-                <StyledFab color="primary" size="small" onClick={handleClickFullScreen}>
-                  {isFullScreen ? <FullscreenExit /> : <Fullscreen />}
-                </StyledFab>
-              </Controls>
-            </div>
+
+            <Controls>
+              <StyledFab color="primary" size="small" onClick={handleClickMinimize}>
+                {isMinimized ? <ExpandLess/> : <ExpandMore/>}
+              </StyledFab>
+              <StyledFab size="small" color="primary" onClick={handleClickSkip}>
+                {<SkipPreviousOutlined/>}
+              </StyledFab>
+              <StyledFab size="medium" color="primary" onClick={handleClickFastRewind}>
+                {<FastRewindOutlined/>}
+              </StyledFab>
+              <StyledFab color="primary" onClick={paused ? handleClickPlay : handleClickPause}>
+                {paused ? <PlayArrowOutlined/> : <PauseOutlined/>}
+              </StyledFab>
+              <StyledFab size="medium" color="primary" onClick={handleClickFastForward}>
+                {<FastForwardOutlined/>}
+              </StyledFab>
+              <StyledFab size="small" color="primary" onClick={handleClickSkip}>
+                {<SkipNextOutlined/>}
+              </StyledFab>
+              <StyledFab color="primary" size="small" onClick={handleClickFullScreen}>
+                {isFullScreen ? <FullscreenExit/> : <Fullscreen/>}
+              </StyledFab>
+            </Controls>
           </Container>
         </div>
       </Draggable>
