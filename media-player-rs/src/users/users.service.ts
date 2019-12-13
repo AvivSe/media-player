@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './User';
@@ -43,6 +43,15 @@ export class UsersService {
 
   async put(username: string, updateUserDto: UpdateUserDto): Promise<User> {
     return this.userModel.findOneAndUpdate({ username }, updateUserDto, { new: true });
+  }
+
+  async deleteOne(username): Promise<any> {
+    return this.userModel.deleteOne({ username }).then(res => {
+      if (res.ok !== 1 || res.deletedCount === 0) {
+        throw new InternalServerErrorException('Deletion failed');
+      }
+      return res;
+    });
   }
 
   async delete(userNames: string[]): Promise<any> {

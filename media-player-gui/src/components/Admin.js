@@ -1,22 +1,18 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { AgGridReact } from "@ag-grid-community/react";
 import { AllModules } from "@ag-grid-enterprise/all-modules";
 import styled from "styled-components";
-import UserDatasourceAgGridAdapter from "../services/user.ag-grid-adapter";
+import UserDatasourceAgGridAdapter from "../services/ag-grid-adapters/user.ag-grid-adapter";
 import userService from "../services/user.service";
+import Fab from "@material-ui/core/Fab";
+import { CloseOutlined } from "@material-ui/icons";
+import LinkFab from "../LinkFab";
+import { useWidth } from "../hooks/useWidth";
+import DeleteCellRenderer from "./cell-renderers/DeleteCellRenderer";
+import { connect } from "react-redux";
+import { openSnackbar } from "../actions/ui.actions";
 
-const defaultColumnDefs = [
-  { headerName: "#", width: 45, checkboxSelection: true, sortable: false, filter: false, pinned: true },
-  { headerName: "Id", field: "_id", hide: true, sortable: false, editable: false },
-  { headerName: "Username", field: "username" },
-  { headerName: "First Name", field: "firstName" },
-  { headerName: "Last Name", field: "lastName" },
-  { headerName: "Top Searches", field: "topSearches", width: 80 } // todo: cell renderer
-];
-
-const Wrapper = styled.div`
-  width: 75vw;
-`;
+const Wrapper = styled.div``;
 
 const AgGridWrapper = styled.div`
   width: 100%;
@@ -31,17 +27,72 @@ const AgGridWrapper = styled.div`
   
 `;
 
-const Admin = () => {
-  const onGridReady = ({ api }) => {
-    api.setServerSideDatasource(new UserDatasourceAgGridAdapter(userService));
-    api.sizeColumnsToFit();
+const Admin = ({ openSnackbar }) => {
+  const [rowData, setRowData] = useState([]);
+  const [gridApi, setGridApi] = useState(null);
+  const width = useWidth();
+
+  useEffect(() => {
+    userService.find().then(({ data }) => {
+      setRowData(data.rows);
+    }).catch(error => {
+      openSnackbar(error);
+    })
+  }, []);
+
+  useEffect(() => {
+    if (!!gridApi) {
+      gridApi.sizeColumnsToFit();
+    }
+    console.log(rowData)
+  }, [gridApi, rowData]);
+
+  const handleClickDeleteOne = ({ username, api }) => {
+    userService
+      .deleteOne(username)
+      .then(({ data }) => {
+        openSnackbar({ message: `${username} has been deleted` });
+        console.log(api);
+      })
+      .catch(openSnackbar);
   };
+
+  const defaultColumnDefs = [
+    { headerName: "#", width: 45, checkboxSelection: true, sortable: false, filter: false, pinned: true },
+    { headerName: "Id", field: "_id", hide: true, sortable: false, editable: false },
+    { headerName: "Username", field: "username" },
+    { headerName: "First Name", field: "firstName" },
+    { headerName: "Last Name", field: "lastName" },
+    { headerName: "Top Searches", field: "topSearches" }, // todo: cell renderer
+    {
+      headerName: "",
+      cellRenderer: "DeleteCellRenderer",
+      cellRendererParams: { onClick: handleClickDeleteOne },
+      width: 80
+    }
+  ];
+
+  const onGridReady = ({ api }) => {
+    //api.setServerSideDatasource(new UserDatasourceAgGridAdapter(userService));
+    api.sizeColumnsToFit();
+    setGridApi(api);
+  };
+
+  const handleEditingStop = () => {};
+
+  useEffect(() => {
+    if (!!gridApi) {
+      gridApi.sizeColumnsToFit();
+    }
+  }, [width, gridApi]);
 
   return (
     <Wrapper>
+      <LinkFab to={"/listing"} icon={CloseOutlined} />
       <AgGridWrapper className={"ag-theme-material"}>
         <AgGridReact
           onGridReady={onGridReady}
+          rowData={rowData}
           //suppressRowClickSelection={true}
           columnDefs={defaultColumnDefs}
           defaultColDef={{
@@ -50,17 +101,20 @@ const Admin = () => {
             filter: true,
             editable: true
           }}
-          frameworkComponents={{}}
-          gridOptions={{ rowModelType: "serverSide" }}
-          cacheBlockSize={200}
-          cacheOverflowSize={2}
-          maxConcurrentDatasourceRequests={1}
-          maxBlocksInCache={10}
+          frameworkComponents={{ DeleteCellRenderer }}
+          // gridOptions={{ rowModelType: "serverSide" }}
+          // cacheBlockSize={200}
+          // cacheOverflowSize={2}
+          // maxConcurrentDatasourceRequests={1}
+          // maxBlocksInCache={10}
           modules={AllModules}
+          onCellEditingStopped={handleEditingStop}
         />
       </AgGridWrapper>
     </Wrapper>
   );
 };
 
-export default Admin;
+export default connect(null, {
+  openSnackbar
+})(Admin);

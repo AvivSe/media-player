@@ -9,6 +9,23 @@ class UserService {
   async find(params) {
     return axios.get(userServiceUrl, { params });
   }
+
+  async put(username, payload) {
+    return axios.put(userServiceUrl, payload, { params: username});
+  }
+
+  async deleteOne(username) {
+    return axios.delete(`${userServiceUrl}/${username}`);
+  }
+
+  async delete(usernameList) {
+    return axios.delete(userServiceUrl, usernameList);
+  }
+
+  async create(user) {
+    return axios.put(userServiceUrl, user);
+  }
+
 }
 
 const instance = new UserService();

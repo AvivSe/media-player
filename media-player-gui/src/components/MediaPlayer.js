@@ -4,15 +4,23 @@ import Listing from "./Listing";
 import Options, { GRID_MODE_OPT, SEARCH_AS_YOU_TYPE_OPT } from "./Options";
 import SearchBox from "./SearchBox";
 import Dialog from "./Dialog";
-import MediaSearchAgGridAdapter from "../services/media-search.ag-grid.adapter";
+import MediaSearchAgGridAdapter from "../services/ag-grid-adapters/media-search.ag-grid.adapter";
 import mediaSearchService from "../services/media-search.service";
 import HTML5Player from "./HTML5Player";
 import { useMediaPlayer } from "../hooks/useMediaPlayer";
 import { MediaPlayerContextProvider } from "../contexts";
+import { PeopleOutline } from "@material-ui/icons";
+
+import LinkFab from "../LinkFab";
+import { useWidth } from "../hooks/useWidth";
 
 const Wrapper = styled.div`
-  min-width: 1200px;
 
+`;
+
+const PlayerPositionHelper =styled.div`
+  position: absolute;
+  z-index: 100;
 `;
 
 const MediaPlayer = () => {
@@ -22,6 +30,7 @@ const MediaPlayer = () => {
   const [dialog, setDialog] = useState(null);
   const [options, setOptions] = useState({ [SEARCH_AS_YOU_TYPE_OPT]: true });
   const searchAsYouType = options[SEARCH_AS_YOU_TYPE_OPT];
+  const width = useWidth();
 
   const fetchSearchResults = useCallback(() => {
     !!gridApi &&
@@ -39,7 +48,7 @@ const MediaPlayer = () => {
     if (!!gridApi) {
       gridApi.sizeColumnsToFit();
     }
-  }, [gridApi, _useMediaPlayer.selected]);
+  }, [gridApi, _useMediaPlayer.selected, width]);
 
   const handleCloseDialog = () => setDialog(null);
 
@@ -54,7 +63,10 @@ const MediaPlayer = () => {
   return (
     <Wrapper>
       <MediaPlayerContextProvider value={_useMediaPlayer}>
-        <HTML5Player/>
+        <PlayerPositionHelper>
+          <HTML5Player/>
+        </PlayerPositionHelper>
+        <LinkFab to={"/admin"} icon={PeopleOutline}/>
         <SearchBox
           onKeywordsChange={handleKeywordsChange}
           keywords={keywords}

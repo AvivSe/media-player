@@ -16,7 +16,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   margin: auto;
-  height: 100vh;
+  min-height: 100vh;
   ${({ theme }) =>
     theme.palette.type === "dark"
       ? `
@@ -27,13 +27,19 @@ const Wrapper = styled.div`
   color: ${({ theme }) => theme.palette.primary.text};
 `;
 
+const MainContentVieport = styled.div`
+  width: 80vw;
+`;
+
 const App = ({ snackbar, closeSnackbar }) => (
   <StylesProvider injectFirst>
     <MuiThemeProvider theme={darkMuiTheme}>
       <ScThemeProvider theme={darkMuiTheme}>
         <PreloaderContextProvider value={usePreloader()}>
           <Wrapper>
-            <Routing />
+            <MainContentVieport>
+              <Routing />
+            </MainContentVieport>
             <Snackbar
               anchorOrigin={{
                 vertical: "bottom",

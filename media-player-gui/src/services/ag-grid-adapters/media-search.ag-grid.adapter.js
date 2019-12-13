@@ -1,4 +1,4 @@
-import MediaSearchService from "./media-search.service";
+import MediaSearchService from "../media-search.service";
 
 class MediaSearchAgGridAdapter {
   mediaSearchService: MediaSearchService;
