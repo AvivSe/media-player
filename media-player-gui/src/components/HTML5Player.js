@@ -91,6 +91,7 @@ const HTML5Player = ({ initialUrl }) => {
   };
 
   const handleClickFullScreen = () => {
+    setIsMinimized(false);
     setIsFullScreen(!isFullScreen);
   };
 

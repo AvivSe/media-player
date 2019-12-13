@@ -7,7 +7,6 @@ const StyledFab = styled(Fab)`
 margin-bottom: 1.5rem;
 `;
 
-
 const LinkFab = ({ to, icon: Icon }) => {
   const history = useHistory();
 

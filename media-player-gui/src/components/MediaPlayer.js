@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import Listing from "./Listing";
-import Options, { GRID_MODE_OPT, SEARCH_AS_YOU_TYPE_OPT } from "./Options";
+import OptionsSpeedDial, { GRID_MODE_OPT, SEARCH_AS_YOU_TYPE_OPT } from "./OptionsSpeedDial";
 import SearchBox from "./SearchBox";
 import Dialog from "./Dialog";
 import MediaSearchAgGridAdapter from "../services/ag-grid-adapters/media-search.ag-grid.adapter";
@@ -13,6 +13,11 @@ import { PeopleOutline } from "@material-ui/icons";
 
 import LinkFab from "../LinkFab";
 import { useWidth } from "../hooks/useWidth";
+
+const Row = styled.div`
+  display: flex;
+  margin-bottom: 1rem;
+`;
 
 const MediaPlayer = () => {
   const _useMediaPlayer = useMediaPlayer();
@@ -28,7 +33,6 @@ const MediaPlayer = () => {
       !!keywords &&
       gridApi.setServerSideDatasource(new MediaSearchAgGridAdapter(mediaSearchService, keywords));
   }, [keywords, gridApi]);
-
 
   useEffect(() => {
     if (searchAsYouType) {
@@ -57,15 +61,17 @@ const MediaPlayer = () => {
   return (
     <div>
       <MediaPlayerContextProvider value={_useMediaPlayer}>
-        <LinkFab to={"/admin"} icon={PeopleOutline}/>
-        <HTML5Player/>
-        <SearchBox
-          onKeywordsChange={handleKeywordsChange}
-          keywords={keywords}
-          onSubmit={fetchSearchResults}
-          options={options}
-        />
-        <Options options={options} onOptionsChange={handleOptionsChange} />
+        <LinkFab to={"/admin"} icon={PeopleOutline} />
+        <HTML5Player />
+        <Row>
+          <SearchBox
+            onKeywordsChange={handleKeywordsChange}
+            keywords={keywords}
+            onSubmit={fetchSearchResults}
+            options={options}
+          />
+          <OptionsSpeedDial options={options} onOptionsChange={handleOptionsChange} />
+        </Row>
         <Listing onGridReady={handleGridReady} onDialogOpen={handleOpenDialog} />
         <Dialog dialog={dialog} onDialogClose={handleCloseDialog}>
           {dialog && dialog.content}
