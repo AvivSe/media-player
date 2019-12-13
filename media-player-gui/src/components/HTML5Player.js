@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useVideo } from "react-use";
 import { MediaPlayerContext } from "./../contexts";
 import styled from "styled-components";
@@ -11,69 +11,136 @@ import {
   SkipPreviousOutlined,
   SkipNextOutlined,
   FastForwardOutlined,
-  FastRewindOutlined
+  FastRewindOutlined,
+  Fullscreen,
+  FullscreenExit,
+  ExpandLess,
+  ExpandMore
 } from "@material-ui/icons";
 
 const StyledVideo = styled.video`
   width: 100%;
 `;
 
+const Container = styled.div`
+  width: ${({ isFullScreen }) => (isFullScreen ? "70vw" : "500px")};
+`;
+
+const VideoContainer = styled.div`
+  display: ${({ isMinimized }) => (isMinimized ? "none" : "block")};
+`;
+const VideoWrapper = styled.div``;
+
 const Wrapper = styled.div`
-  height: 1000px;
-  width: 600px;
+  position: absolute;
+  z-index: 100;
+  height: 0;
+  width: 0;
 `;
 
 const Controls = styled.div`
-  margin: -25px;
+  margin: -35px;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
 const StyledFab = styled(Fab)`
-  margin: 0 .2rem;
+  margin: 0 0.2rem;
+  background-color: ${({ transparent }) => (transparent ? "transparent" : null)};
 `;
+
 const HTML5Player = ({ initialUrl }) => {
-  const { selected, onSelectedChange } = useContext(MediaPlayerContext) || { };
+  const { selected, onSelectedChange } = useContext(MediaPlayerContext) || {};
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false);
+
   const [video, state, controls, ref] = useVideo(
     <StyledVideo
-      src={(selected && selected["previewUrl"]) || initialUrl || "http://www.anyvision.co/admin/wp-content/uploads/2018/02/4.mp4"}
+      src={
+        (selected && selected["previewUrl"]) ||
+        initialUrl ||
+        "http://www.anyvision.co/admin/wp-content/uploads/2018/02/4.mp4"
+      }
       autoPlay
     />
   );
+
   const { time, duration, paused } = state;
 
   const progress = (time / duration) * 100;
 
-  const handleClickSkip = index => {alert("todo")};
+  const handleClickSkip = () => {
+    alert("todo");
+  };
+
+  const handleClickPlay = () => {
+    controls.play();
+  };
+
+  const handleClickPause = () => {
+    controls.pause();
+  };
+
+  const handleClickFastRewind = () => {
+    controls.seek(state.time - 5);
+  };
+
+  const handleClickFastForward = () => {
+    controls.seek(state.time - 5);
+  };
+
+  const handleClickFullScreen = () => {
+    setIsFullScreen(!isFullScreen);
+  };
+
+  const handleClickMinimize = () => {
+    setIsMinimized(!isMinimized);
+  };
+
+  // delete this when fix pause action
+  useEffect(() => {
+    setInterval(handleClickFastRewind, 10000);
+  }, []);
 
   return (
-    <Draggable handle=".handle" defaultPosition={{ x: 300, y: 500 }} grid={null} enableUserSelectHack={true} scale={2}>
-      <div className={"handle"}>
-        <Wrapper>
-          <LinearProgress variant="determinate" value={progress} color={"secondary"} />
-          {video}
-          <Controls>
-            <StyledFab size="small" color="primary" onClick={handleClickSkip}>
-              {<SkipPreviousOutlined />}
-            </StyledFab>
-            <StyledFab size="medium" color="primary" onClick={() => controls.seek(state.time - 5)}>
-              {<FastRewindOutlined />}
-            </StyledFab>
-            <StyledFab size="large" color="primary" onClick={paused ? controls.play : controls.pause}>
-              {paused ? <PlayArrowOutlined /> : <PauseOutlined />}
-            </StyledFab>
-            <StyledFab size="medium" color="primary" onClick={() => controls.seek(state.time + 5)}>
-              {<FastForwardOutlined />}
-            </StyledFab>
-            <StyledFab size="small" color="primary" onClick={handleClickSkip}>
-              {<SkipNextOutlined />}
-            </StyledFab>
-          </Controls>
-          {/*{JSON.stringify({ state, progress })}*/}
-        </Wrapper>
-      </div>
-    </Draggable>
+    <Wrapper>
+      <Draggable handle=".handle">
+        <div className={"handle"}>
+          <Container isFullScreen={isFullScreen}>
+            <VideoContainer isMinimized={isMinimized}>
+              <LinearProgress variant="determinate" value={progress} color={"secondary"} />
+              <VideoWrapper>{video}</VideoWrapper>
+            </VideoContainer>
+            <div>
+              <Controls>
+                <StyledFab color="primary" size="small" onClick={handleClickMinimize}>
+                  {isMinimized ? <ExpandLess /> : <ExpandMore />}
+                </StyledFab>
+                <StyledFab size="small" color="primary" onClick={handleClickSkip}>
+                  {<SkipPreviousOutlined />}
+                </StyledFab>
+                <StyledFab size="medium" color="primary" onClick={handleClickFastRewind}>
+                  {<FastRewindOutlined />}
+                </StyledFab>
+                <StyledFab color="primary" onClick={paused ? handleClickPlay : handleClickPause}>
+                  {paused ? <PlayArrowOutlined /> : <PauseOutlined />}
+                </StyledFab>
+                <StyledFab size="medium" color="primary" onClick={handleClickFastForward}>
+                  {<FastForwardOutlined />}
+                </StyledFab>
+                <StyledFab size="small" color="primary" onClick={handleClickSkip}>
+                  {<SkipNextOutlined />}
+                </StyledFab>
+                <StyledFab color="primary" size="small" onClick={handleClickFullScreen}>
+                  {isFullScreen ? <FullscreenExit /> : <Fullscreen />}
+                </StyledFab>
+              </Controls>
+            </div>
+          </Container>
+        </div>
+      </Draggable>
+    </Wrapper>
   );
 };
 

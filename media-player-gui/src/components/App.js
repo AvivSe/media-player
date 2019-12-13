@@ -27,7 +27,7 @@ const Wrapper = styled.div`
   color: ${({ theme }) => theme.palette.primary.text};
 `;
 
-const MainContentVieport = styled.div`
+const MainContentViewport = styled.div`
   width: 80vw;
 `;
 
@@ -37,9 +37,9 @@ const App = ({ snackbar, closeSnackbar }) => (
       <ScThemeProvider theme={darkMuiTheme}>
         <PreloaderContextProvider value={usePreloader()}>
           <Wrapper>
-            <MainContentVieport>
+            <MainContentViewport>
               <Routing />
-            </MainContentVieport>
+            </MainContentViewport>
             <Snackbar
               anchorOrigin={{
                 vertical: "bottom",

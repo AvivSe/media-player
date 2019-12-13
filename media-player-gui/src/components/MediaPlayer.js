@@ -14,15 +14,6 @@ import { PeopleOutline } from "@material-ui/icons";
 import LinkFab from "../LinkFab";
 import { useWidth } from "../hooks/useWidth";
 
-const Wrapper = styled.div`
-
-`;
-
-const PlayerPositionHelper =styled.div`
-  position: absolute;
-  z-index: 100;
-`;
-
 const MediaPlayer = () => {
   const _useMediaPlayer = useMediaPlayer();
   const [keywords, setKeywords] = useState("Metallica");
@@ -38,6 +29,7 @@ const MediaPlayer = () => {
       gridApi.setServerSideDatasource(new MediaSearchAgGridAdapter(mediaSearchService, keywords));
   }, [keywords, gridApi]);
 
+
   useEffect(() => {
     if (searchAsYouType) {
       fetchSearchResults();
@@ -47,6 +39,8 @@ const MediaPlayer = () => {
   useEffect(() => {
     if (!!gridApi) {
       gridApi.sizeColumnsToFit();
+      // TODO The timeout is only for fix the first time loading table margin bottom issue, have to handle without timeout
+      setTimeout(() => gridApi.sizeColumnsToFit(), 500);
     }
   }, [gridApi, _useMediaPlayer.selected, width]);
 
@@ -61,12 +55,10 @@ const MediaPlayer = () => {
   const handleGridReady = ({ api }) => setGridApi(api);
 
   return (
-    <Wrapper>
+    <div>
       <MediaPlayerContextProvider value={_useMediaPlayer}>
-        <PlayerPositionHelper>
-          <HTML5Player/>
-        </PlayerPositionHelper>
         <LinkFab to={"/admin"} icon={PeopleOutline}/>
+        <HTML5Player/>
         <SearchBox
           onKeywordsChange={handleKeywordsChange}
           keywords={keywords}
@@ -79,7 +71,7 @@ const MediaPlayer = () => {
           {dialog && dialog.content}
         </Dialog>
       </MediaPlayerContextProvider>
-    </Wrapper>
+    </div>
   );
 };
 
