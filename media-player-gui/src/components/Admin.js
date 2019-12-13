@@ -11,6 +11,7 @@ import { useWidth } from "../hooks/useWidth";
 import DeleteCellRenderer from "./cell-renderers/DeleteCellRenderer";
 import { connect } from "react-redux";
 import { openSnackbar } from "../actions/ui.actions";
+import PasswordCellFormatter from "./cell-renderers/PasswordCellForamtter";
 
 const Wrapper = styled.div``;
 
@@ -24,7 +25,6 @@ const AgGridWrapper = styled.div`
   //     color: ${({ theme }) => theme.palette.primary.text};
   //     background-color: ${({ theme }) => theme.palette.primary.contrastText};
   // }
-  
 `;
 
 const Admin = ({ openSnackbar }) => {
@@ -33,18 +33,20 @@ const Admin = ({ openSnackbar }) => {
   const width = useWidth();
 
   useEffect(() => {
-    userService.find().then(({ data }) => {
-      setRowData(data.rows);
-    }).catch(error => {
-      openSnackbar(error);
-    })
+    userService
+      .find()
+      .then(({ data }) => {
+        setRowData(data.rows);
+      })
+      .catch(error => {
+        openSnackbar(error);
+      });
   }, []);
 
   useEffect(() => {
     if (!!gridApi) {
       gridApi.sizeColumnsToFit();
     }
-    console.log(rowData)
   }, [gridApi, rowData]);
 
   const handleClickDeleteOne = ({ username, api }) => {
@@ -52,7 +54,6 @@ const Admin = ({ openSnackbar }) => {
       .deleteOne(username)
       .then(({ data }) => {
         openSnackbar({ message: `${username} has been deleted` });
-        console.log(api);
       })
       .catch(openSnackbar);
   };
@@ -60,9 +61,10 @@ const Admin = ({ openSnackbar }) => {
   const defaultColumnDefs = [
     { headerName: "#", width: 45, checkboxSelection: true, sortable: false, filter: false, pinned: true },
     { headerName: "Id", field: "_id", hide: true, sortable: false, editable: false },
-    { headerName: "Username", field: "username" },
+    { headerName: "Username", field: "username", editable: false },
     { headerName: "First Name", field: "firstName" },
     { headerName: "Last Name", field: "lastName" },
+    { headerName: "Password", field: "password", cellRenderer: "PasswordCellFormatter"},
     { headerName: "Top Searches", field: "topSearches" }, // todo: cell renderer
     {
       headerName: "",
@@ -78,7 +80,16 @@ const Admin = ({ openSnackbar }) => {
     setGridApi(api);
   };
 
-  const handleEditingStop = () => {};
+  const handleEditingStop = ({ column, data }) => {
+    userService
+      .put(data.username, { [column.colId]: data[column.colId] })
+      .then(res => {
+        openSnackbar({ message: `${data.username} updated successfully` });
+      })
+      .catch(error => {
+        openSnackbar(error);
+      });
+  };
 
   useEffect(() => {
     if (!!gridApi) {
@@ -101,7 +112,7 @@ const Admin = ({ openSnackbar }) => {
             filter: true,
             editable: true
           }}
-          frameworkComponents={{ DeleteCellRenderer }}
+          frameworkComponents={{ DeleteCellRenderer, PasswordCellFormatter }}
           // gridOptions={{ rowModelType: "serverSide" }}
           // cacheBlockSize={200}
           // cacheOverflowSize={2}

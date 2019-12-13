@@ -61,7 +61,7 @@ export class AppController {
   @HttpCode(HttpStatus.OK)
   @Post('signup')
   async signUp(@Body() signUpDto: SignUpDto) {
-    if (signUpDto._password !== signUpDto.password) {
+    if (signUpDto.retypePassword !== signUpDto.password) {
       throw new BadRequestException('passwords do not math');
     }
     return this.authService.signUp(signUpDto);

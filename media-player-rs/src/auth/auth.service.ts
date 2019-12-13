@@ -36,13 +36,13 @@ export class AuthService {
   }
 
   async signUp(signUpDto: SignUpDto) {
-    if (signUpDto.password !== signUpDto._password) {
+    if (signUpDto.password !== signUpDto.retypePassword) {
       throw new BadRequestException('passwords do not match');
     } else {
       return await this.usersService.create(signUpDto as CreateUserDto).then(async result => {
         return {
           ...result,
-          ...(await this.login({ username: result.username, password: signUpDto._password })),
+          ...(await this.login({ username: result.username, password: signUpDto.retypePassword })),
         };
       });
     }

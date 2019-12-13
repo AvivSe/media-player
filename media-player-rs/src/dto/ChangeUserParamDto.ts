@@ -1,5 +1,6 @@
 import { IsEmail } from 'class-validator';
 
-export interface ChangeUserParamDto {
+export class ChangeUserParamDto {
+  @IsEmail()
   readonly username: string;
 }

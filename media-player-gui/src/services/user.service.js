@@ -11,7 +11,7 @@ class UserService {
   }
 
   async put(username, payload) {
-    return axios.put(userServiceUrl, payload, { params: username});
+    return axios.put(`${userServiceUrl}/${username}`, payload);
   }
 
   async deleteOne(username) {

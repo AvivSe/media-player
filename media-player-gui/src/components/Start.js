@@ -37,7 +37,6 @@ const Start = ({ mode, snackbar, openSnackbar, closeSnackbar, login }) => {
       })
       .catch(error => {
         onError(error);
-        console.log(JSON.stringify(error));
         openSnackbar({ message: exceptionToMessage[error.statusCode] || error.message || "Something went wrong" });
       });
   };

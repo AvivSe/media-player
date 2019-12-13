@@ -16,6 +16,7 @@ import { CreateUserDto } from '../dto/CreateUserDto';
 import { UpdateUserDto } from '../dto/UpdateUserDto';
 import { AuthGuard } from '@nestjs/passport';
 import { ChangeUserParamDto } from '../dto/ChangeUserParamDto';
+import * as bcrypt from 'bcrypt';
 
 //@UseGuards(AuthGuard('jwt'))
 @Controller('api/user')
@@ -32,7 +33,11 @@ export class UsersController {
 
   @Put(':username')
   async put(@Param() { username }: ChangeUserParamDto, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.put(username, updateUserDto).then(this.handleNoSuchEntity);
+    let copyDto = null;
+    if (updateUserDto.password) {
+      copyDto = { ...updateUserDto, password: await bcrypt.hash(updateUserDto.password, 10) };
+    }
+    return this.userService.put(username, copyDto || updateUserDto).then(this.handleNoSuchEntity);
   }
 
   @Get(':username')
