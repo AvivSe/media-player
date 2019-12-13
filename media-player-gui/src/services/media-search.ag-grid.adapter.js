@@ -1,6 +1,6 @@
 import MediaSearchService from "./media-search.service";
 
-class DatasourceAgGridAdapter {
+class MediaSearchAgGridAdapter {
   mediaSearchService: MediaSearchService;
   keywords: string;
 
@@ -25,4 +25,4 @@ class DatasourceAgGridAdapter {
   }
 }
 
-export default DatasourceAgGridAdapter;
+export default MediaSearchAgGridAdapter;

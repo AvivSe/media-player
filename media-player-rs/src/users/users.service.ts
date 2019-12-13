@@ -34,7 +34,11 @@ export class UsersService {
   }
 
   async find(): Promise<User[]> {
-    return await this.userModel.find();
+    return this.userModel.find();
+  }
+
+  async count(): Promise<User[]> {
+    return this.userModel.countDocuments();
   }
 
   async put(username: string, updateUserDto: UpdateUserDto): Promise<User> {

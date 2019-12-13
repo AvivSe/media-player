@@ -5,6 +5,8 @@ import App from "./components/App";
 import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
 import store from './store'
+import "@ag-grid-community/all-modules/dist/styles/ag-grid.css";
+import "@ag-grid-community/all-modules/dist/styles/ag-theme-material/sass/ag-theme-material.scss"
 
 ReactDOM.render(
   <Provider store={store}>

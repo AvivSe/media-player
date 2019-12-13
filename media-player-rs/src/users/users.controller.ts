@@ -17,6 +17,7 @@ import { UpdateUserDto } from '../dto/UpdateUserDto';
 import { AuthGuard } from '@nestjs/passport';
 import { ChangeUserParamDto } from '../dto/ChangeUserParamDto';
 
+//@UseGuards(AuthGuard('jwt'))
 @Controller('api/user')
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
@@ -39,10 +40,12 @@ export class UsersController {
     return this.userService.findOne(username).then(this.handleNoSuchEntity);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get()
   async find() {
-    return this.userService.find();
+    return {
+      lastRow: await this.userService.count(),
+      rows: await this.userService.find(),
+    };
   }
 
   // @UseGuards(AuthGuard('local'))
