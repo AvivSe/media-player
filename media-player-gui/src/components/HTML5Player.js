@@ -102,7 +102,7 @@ const HTML5Player = ({ initialUrl }) => {
   // delete this when fix pause action
   useEffect(() => {
     setInterval(handleClickFastRewind, 10000);
-  }, []);
+  }, [handleClickFastRewind]);
 
   return (
     <Wrapper>

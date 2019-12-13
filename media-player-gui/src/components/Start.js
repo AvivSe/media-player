@@ -1,26 +1,35 @@
 import styled from "styled-components";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Animation from "./Preloader";
 import { useContextPreloader } from "../contexts";
 import Form from "./form-kit/Form";
 import signInFormConfiguration from "../configurations/sign-in-form.configuration";
 import signUpFormConfiguration from "../configurations/sign-up-form.configuration";
-import { useHistory } from "react-router-dom";
-import { exceptionToMessage } from "../services/http.exception.descriptions";
-import { connect } from "react-redux";
-import { closeSnackbar, openSnackbar } from "../actions/ui.actions";
-import { login } from "../actions/auth.actions";
-import authService from "../services/auth.service";
+import { useHistory, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getIsAuthenticated } from "../redux/auth/auth.selectors";
+import { login } from "../redux/auth/auth.actions";
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
-const Start = ({ mode, snackbar, openSnackbar, closeSnackbar, login }) => {
+const Start = () => {
   const { visible, drag: playing } = useContextPreloader();
-
+  const [isSignUp, setIsSignUp] = useState(false);
   const history = useHistory();
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector(getIsAuthenticated);
+
+  useEffect(() => {
+    if (isAuthenticated && location.pathname === "/login") {
+      history.push("/");
+    }
+  }, [isAuthenticated, location.pathname, history]);
+
 
   const handleSignUpCancel = () => {
     history.push("/");
@@ -28,45 +37,26 @@ const Start = ({ mode, snackbar, openSnackbar, closeSnackbar, login }) => {
 
   const handleLoginSubmit = ({ values, onSuccess, onError }) => {
     const { email: username, password } = values;
-    authService
-      .login({ username, password })
-      .then(res => {
-        login(res.data);
-        history.push("/listing");
-        onSuccess();
-      })
-      .catch(error => {
-        onError(error);
-        openSnackbar({ message: exceptionToMessage[error.statusCode] || error.message || "Something went wrong" });
-      });
+    dispatch(login(username, password));
   };
 
   return (
     <Wrapper>
-      {!mode && (
+      {!isSignUp && (
         <Wrapper>
-          <Animation size={15} />
+          <Animation size={15}/>
           <Form
             onSubmit={handleLoginSubmit}
             hidePreloader={true}
             configuration={signInFormConfiguration}
             submitLabel={playing ? "Stop playing.." : "Login"}
           />
+          <button onClick={() => setIsSignUp(true)}>{isSignUp ? "Back to Login" : "Sign Up"}</button>
         </Wrapper>
       )}
-      {mode === "signUp" && <Form configuration={signUpFormConfiguration} onCancel={handleSignUpCancel} />}
+      {isSignUp && <Form configuration={signUpFormConfiguration} onCancel={handleSignUpCancel}/>}
     </Wrapper>
   );
 };
 
-const mapStateToProps = state => {
-  return {
-    snackbar: state.ui.snackbar
-  };
-};
-
-export default connect(mapStateToProps, {
-  openSnackbar,
-  closeSnackbar,
-  login
-})(Start);
+export default Start;

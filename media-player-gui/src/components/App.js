@@ -8,7 +8,7 @@ import usePreloader from "../hooks/usePreloder";
 import { PreloaderContextProvider } from "../contexts";
 import Snackbar from "@material-ui/core/Snackbar";
 import { connect } from "react-redux";
-import { closeSnackbar } from "../actions/ui.actions";
+import { closeSnackbar } from "../redux/ui/ui.actions";
 
 const Wrapper = styled.div`
   display: flex;

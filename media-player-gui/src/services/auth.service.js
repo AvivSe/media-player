@@ -6,8 +6,8 @@ const api = "/api";
 const authServiceUrl = `${host}${api}`;
 
 class AuthService {
-  async login(data) {
-    return axios.post(`${authServiceUrl}/login`, data);
+  async login(username, password) {
+    return axios.post(`${authServiceUrl}/login`, { username, password });
   }
 }
 

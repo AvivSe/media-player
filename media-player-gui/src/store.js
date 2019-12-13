@@ -1,13 +1,9 @@
-import { createStore } from "redux";
-import reducers from "./reducers";
-import { uiInitialState } from "./reducers/ui.reducer";
-
-const initialState = {
-  ui: uiInitialState
-};
+import { applyMiddleware, createStore } from "redux";
+import reducers from "./redux";
+import ReduxThunk from "redux-thunk";
+import { composeWithDevTools } from "redux-devtools-extension";
 
 export default createStore(
   reducers,
-  initialState,
-  window["__REDUX_DEVTOOLS_EXTENSION__"] && window["__REDUX_DEVTOOLS_EXTENSION__"]()
+  composeWithDevTools(applyMiddleware(ReduxThunk))
 );

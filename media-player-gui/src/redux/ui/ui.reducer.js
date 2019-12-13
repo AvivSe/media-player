@@ -1,4 +1,4 @@
-import { CLOSE_SNACKBAR, OPEN_SNACKBAR } from "../actions/ui.actions";
+import { CLOSE_SNACKBAR, OPEN_SNACKBAR } from "./ui.actions";
 
 export const uiInitialState = {
   snackbar: { open: false, message: "", duration: 2000 }

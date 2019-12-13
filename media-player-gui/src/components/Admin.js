@@ -10,7 +10,7 @@ import LinkFab from "../LinkFab";
 import { useWidth } from "../hooks/useWidth";
 import DeleteCellRenderer from "./cell-renderers/DeleteCellRenderer";
 import { connect } from "react-redux";
-import { openSnackbar } from "../actions/ui.actions";
+import { openSnackbar } from "../redux/ui/ui.actions";
 import PasswordCellFormatter from "./cell-renderers/PasswordCellForamtter";
 import { DateCellFormatter } from "./cell-renderers/DateCellFormatter";
 
