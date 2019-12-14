@@ -5,10 +5,12 @@ import Login from "./Login";
 import Admin from "./Admin";
 import { useSelector } from "react-redux";
 import { getIsAuthenticated } from "../redux/auth/auth.selectors";
+import SignUp from "./SignUp";
 
 const pages = [
   { url: "/admin", component: Admin, isPrivate: true },
   { url: "/login", component: Login, isPrivate: false },
+  { url: "/signup", component: SignUp, isPrivate: false },
   { url: "/", component: MediaPlayer, isPrivate: true }
 ];
 

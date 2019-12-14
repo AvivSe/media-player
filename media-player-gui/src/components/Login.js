@@ -16,9 +16,8 @@ const Wrapper = styled.div`
 `;
 
 const Login = () => {
-  const [isSignUp, setIsSignUp] = useState(false);
-  const history = useHistory();
   const location = useLocation();
+  const history = useHistory();
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(getIsAuthenticated);
 
@@ -29,31 +28,28 @@ const Login = () => {
     }
   }, [isAuthenticated, location.pathname, history]);
 
-
-  const handleSignUpCancel = () => {
-    history.push("/");
-  };
-
   const handleLoginSubmit = ({ values, onSuccess, onError }) => {
     const { email: username, password } = values;
     dispatch(login(username, password));
   };
 
+  const handleSignUpClick = () => {
+    history.push('/signup');
+  };
+
   return (
     <Wrapper>
-      {!isSignUp && (
         <Wrapper>
           <Animation size={15}/>
           <Form
             onSubmit={handleLoginSubmit}
             hidePreloader={true}
+            secondaryButtonLabel={"Sign Up"}
             configuration={signInFormConfiguration}
             submitLabel={"Login"}
+            onSecondaryButtonClick={handleSignUpClick}
           />
-          <button onClick={() => setIsSignUp(true)}>{isSignUp ? "Back to login" : "Sign Up"}</button>
         </Wrapper>
-      )}
-      {isSignUp && <Form configuration={signUpFormConfiguration} onCancel={handleSignUpCancel}/>}
     </Wrapper>
   );
 };

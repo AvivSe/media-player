@@ -5,8 +5,9 @@ import authService from "../services/auth.service";
 export default {
   initialValues: {
     [email]: "avivsegal@gmail.com",
-    [password]: "123456"
+    [password]: "123456",
   },
+  flexDirection: 'column',
   hidePreloader: true,
   validationSchema: genericValidationSchema,
   sendForm: ({ [email]: username, [password]: _password }) => {
@@ -26,7 +27,7 @@ export default {
           name: password,
           component: TextField,
           required: true,
-          type: "new-password"
+          type: password,
         }
       ]
     }

@@ -3,6 +3,7 @@ import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Preloader from "../Preloader";
+import { fieldToLabelMap } from "../../configurations/global-validations";
 
 const Group = styled.div`
   display: flex;
@@ -39,20 +40,22 @@ const Cover = styled.div`
 const StyledHtmlForm = styled.form`
   margin: auto;
   width: fit-content;
+  display: flex;
+  flex-direction: ${({flexDirection})=> flexDirection || 'row'};
 `;
 
 const StyledPreloader = styled(Preloader)`
   z-index: 20;
   margin: auto;
 `;
-const Form = ({ successContent, onCancel, configuration, submitLabel, hidePreloader, onSubmit, ...otherProps }) => {
+const Form = ({ successContent, onSecondaryButtonClick,secondaryButtonLabel, configuration, submitLabel, hidePreloader, onSubmit, ...otherProps }) => {
   const { title, initialValues, direction, groups, validationSchema } = configuration;
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [error, setError] = useState(null);
 
-  const cancelButtonEnabled = typeof onCancel === "function";
+  const secondaryButtonEnabled = !!onSecondaryButtonClick && typeof onSecondaryButtonClick === "function";
 
   useEffect(() => {
     setDisabled(loading);
@@ -73,10 +76,10 @@ const Form = ({ successContent, onCancel, configuration, submitLabel, hidePreloa
     }
   };
 
-  const handleClickCancel = () => {
+  const handleSecondaryButtonClick = () => {
     setSubmitted(false);
-    if (cancelButtonEnabled) {
-      onCancel();
+    if (secondaryButtonEnabled) {
+      onSecondaryButtonClick();
     }
   };
 
@@ -104,7 +107,7 @@ const Form = ({ successContent, onCancel, configuration, submitLabel, hidePreloa
               <StyledPreloader />
             </Cover>
           )}
-          <StyledHtmlForm onSubmit={handleSubmit} {...otherProps}>
+          <StyledHtmlForm flexDirection={configuration.flexDirection} onSubmit={handleSubmit} {...otherProps}>
             {Boolean(title) && (
               <div>
                 <h2>{title}</h2>
@@ -128,7 +131,7 @@ const Form = ({ successContent, onCancel, configuration, submitLabel, hidePreloa
                           onChange={handleChange}
                           onBlur={handleBlur}
                           options={options}
-                          label={label}
+                          label={fieldToLabelMap[label]}
                           fullWidth={inputs.length === 1}
                           style={{ margin: "0.5rem" }}
                           disabled={disabled}
@@ -141,10 +144,10 @@ const Form = ({ successContent, onCancel, configuration, submitLabel, hidePreloa
               ))}
             </FieldsWrapper>
             <Group style={{ padding: "0.5rem" }}>
-              <Button type="submit"  disabled={disabled}>{submitLabel || "Submit"}</Button>
-              {cancelButtonEnabled && (
-                <Button onClick={handleClickCancel} secondary disabled={disabled}>
-                  {"Cancel"}
+              <Button type="submit"  disabled={disabled}> {submitLabel || "Submit"}</Button>
+              {secondaryButtonEnabled && (
+                <Button onClick={handleSecondaryButtonClick} disabled={disabled}>
+                  {secondaryButtonLabel || "Cancel"}
                 </Button>
               )}
             </Group>

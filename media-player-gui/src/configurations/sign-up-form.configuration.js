@@ -1,14 +1,17 @@
-import { email, firstName, genericValidationSchema, lastName, password } from "./global-validations";
+import { email, firstName, genericValidationSchema, lastName, password, retypePassword } from "./global-validations";
 import TextField from "../components/form-kit/TextField";
 
 export default {
   initialValues: {
-    [email]: "", //'avivsegal@gmail.com',
-    [firstName]: "", //'Aviv',
-    [lastName]: "", //'Segal',
-    [password]: "" //'123456',
+    [email]: 'avivsegal@gmail.com',
+    [firstName]: 'Aviv',
+    [lastName]: 'Segal',
+    [password]: '123456',
+    [retypePassword]: '123456',
+
   },
   hidePreloader: false,
+  flexDirection: 'column',
   validationSchema: genericValidationSchema,
   sendForm: values =>
     new Promise(resolve => {
@@ -22,21 +25,6 @@ export default {
     }),
   groups: [
     {
-      title: "", // optional
-      inputs: [
-        {
-          name: firstName,
-          component: TextField,
-          required: false
-        },
-        {
-          name: lastName,
-          component: TextField,
-          required: false
-        }
-      ]
-    },
-    {
       inputs: [
         {
           name: email,
@@ -49,20 +37,34 @@ export default {
     {
       inputs: [
         {
-          name: password,
+          name: firstName,
           component: TextField,
-          required: true,
-          autoComplete: "new-password",
+          required: true
+        },
+        {
+          name: lastName,
+          component: TextField,
+          required: true
         }
       ]
     },
     {
       inputs: [
         {
-          name: `_${password}`,
+          name: password,
           component: TextField,
           required: true,
-          autoComplete: "new-password",
+          type: password,
+        }
+      ]
+    },
+    {
+      inputs: [
+        {
+          name: retypePassword,
+          component: TextField,
+          required: true,
+          type: password,
         }
       ]
     }
