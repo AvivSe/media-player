@@ -9,7 +9,7 @@ import DeleteCellRenderer from "./cell-renderers/DeleteCellRenderer";
 import { useDispatch, useSelector } from "react-redux";
 import PasswordCellFormatter from "./cell-renderers/PasswordCellForamtter";
 import { DateCellFormatter } from "./cell-renderers/DateCellFormatter";
-import { deleteManyUsers, deleteOneUser, deleteUsers, fetchUsers, updateUser } from "../redux/user/user.actions";
+import { deleteOneUser, deleteUsers, fetchUsers, updateUser } from "../redux/user/user.actions";
 import { getIsEmptyUserList, getUserList } from "../redux/user/user.selectors";
 import { openSnackbar } from "../redux/ui/ui.actions";
 import Fab from "@material-ui/core/Fab";
@@ -34,7 +34,6 @@ const Users = () => {
   const { width } = useWindowSize();
   const isEmptyUserList = useSelector(getIsEmptyUserList);
   const rowData = useSelector(getUserList);
-  const isDeleteClicked = useSelector(getUserList);
 
   useEffect(() => {
     if (isEmptyUserList) {
@@ -44,6 +43,7 @@ const Users = () => {
 
   useEffect(() => {
     const keyDownEventHandler = ({key}) => {
+      console.log(key);
       if(!!gridApi && key === "Delete") {
         const selectedRows = gridApi.getSelectedRows();
         if(selectedRows.length === 0) {
@@ -55,7 +55,7 @@ const Users = () => {
     };
       document.addEventListener('keydown', keyDownEventHandler);
     return () => document.removeEventListener('keydown', keyDownEventHandler);
-  }, [gridApi]);
+  }, [gridApi, dispatch]);
 
   useEffect(() => {
     if (!!gridApi) {
@@ -91,7 +91,6 @@ const Users = () => {
     { headerName: "Last Name", field: "lastName" },
     { headerName: "Password", field: "password", cellRenderer: "PasswordCellFormatter" },
     { headerName: "Last Login", field: "lastLogin", editable: false, cellRenderer: "DateCellFormatter" },
-    { headerName: "Top Searches", field: "topSearches" }, // todo: cell renderer
     {
       headerName: "",
       cellRenderer: "DeleteCellRenderer",
@@ -101,7 +100,6 @@ const Users = () => {
   ];
 
   const onGridReady = ({ api }) => {
-    //api.setServerSideDatasource(new UserDatasourceAgGridAdapter(userService));
     api.sizeColumnsToFit();
     setGridApi(api);
   };

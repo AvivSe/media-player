@@ -7,5 +7,5 @@ export interface User extends Document {
   readonly lastLogin: Date;
   readonly firstName: string;
   readonly lastName: string;
-  readonly searchHistory: Map<string, number>;
+  readonly topSearches: Map<string, number>;
 }

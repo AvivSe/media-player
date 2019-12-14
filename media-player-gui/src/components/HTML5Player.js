@@ -1,12 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useVideo } from "react-use";
-import { MediaPlayerContext } from "./../contexts";
 import styled from "styled-components";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Fab from "@material-ui/core/Fab";
 import {
-  ExpandLess,
-  ExpandMore,
   FastForwardOutlined,
   FastRewindOutlined,
   Fullscreen,
@@ -14,8 +11,13 @@ import {
   PauseOutlined,
   PlayArrowOutlined,
   SkipNextOutlined,
-  SkipPreviousOutlined
+  SkipPreviousOutlined,
+  VolumeOffOutlined,
+  VolumeUpOutlined
 } from "@material-ui/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { getSelectedMedia } from "../redux/player/player.selectors";
+import { setSelectedMedia } from "../redux/player/player.actions";
 
 const StyledVideo = styled.video`
   width: 100%;
@@ -26,7 +28,7 @@ const Container = styled.div`
 `;
 
 const VideoContainer = styled.div`
-  display: ${({ isMinimized }) => (isMinimized ? "none" : "block")};
+  display: ${({ hidden }) => (hidden ? "none" : "block")};
 `;
 
 const Controls = styled.div`
@@ -42,21 +44,29 @@ const StyledFab = styled(Fab)`
   background-color: ${({ transparent }) => (transparent ? "transparent" : null)};
 `;
 
-const HTML5Player = ({ initialUrl, position }) => {
-  const { selected, onSelectedChange } = useContext(MediaPlayerContext) || {};
+const HTML5Player = () => {
+  const selectedMedia = useSelector(getSelectedMedia);
+  const isVideo = !!selectedMedia && selectedMedia.kind === "feature-movie";
+  const [isMute, setIsMute] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(true);
 
-  const [video, state, controls, ref] = useVideo(
-    <StyledVideo
-      src={
-        (selected && selected["previewUrl"]) ||
-        initialUrl ||
-        "http://www.anyvision.co/admin/wp-content/uploads/2018/02/4.mp4"
-      }
-      autoPlay
-    />
+  const [video, state, controls] = useVideo(
+    <StyledVideo src={selectedMedia && selectedMedia["previewUrl"]} autoPlay />
   );
+
+  useEffect(()=> {
+    if(isMute) {
+      controls.mute();
+    } else {
+      controls.unmute();
+    }
+  }, [isMute, controls]);
+
+  useEffect(() => {
+    if (!selectedMedia) {
+      controls.pause();
+    }
+  }, [selectedMedia, controls]);
 
   const { time, duration, paused } = state;
 
@@ -83,25 +93,23 @@ const HTML5Player = ({ initialUrl, position }) => {
   };
 
   const handleClickFullScreen = () => {
-    setIsMinimized(false);
     setIsFullScreen(!isFullScreen);
   };
 
-  const handleClickMinimize = () => {
-    setIsMinimized(!isMinimized);
+  const handleMuteButtonClick = () => {
+    setIsMute(!isMute);
   };
 
   return (
     <Container isFullScreen={isFullScreen}>
-      <VideoContainer isMinimized={isMinimized}>
+      <VideoContainer hidden={!isVideo}>
         <LinearProgress variant="determinate" value={progress} color={"primary"} />
         {video}
       </VideoContainer>
-
       <Controls>
-        <StyledFab color="primary" size="small" onClick={handleClickMinimize}>
-          {isMinimized ? <ExpandLess /> : <ExpandMore />}
-        </StyledFab>
+          <StyledFab color="primary" size="small" onClick={handleMuteButtonClick}>
+            {isMute ? <VolumeOffOutlined /> : <VolumeUpOutlined />}
+          </StyledFab>
         <StyledFab size="small" color="primary" onClick={handleClickSkip}>
           {<SkipPreviousOutlined />}
         </StyledFab>
@@ -117,9 +125,11 @@ const HTML5Player = ({ initialUrl, position }) => {
         <StyledFab size="small" color="primary" onClick={handleClickSkip}>
           {<SkipNextOutlined />}
         </StyledFab>
-        <StyledFab color="primary" size="small" onClick={handleClickFullScreen}>
-          {isFullScreen ? <FullscreenExit /> : <Fullscreen />}
-        </StyledFab>
+        {isVideo && (
+          <StyledFab color="primary" size="small" onClick={handleClickFullScreen}>
+            {isFullScreen ? <FullscreenExit /> : <Fullscreen />}
+          </StyledFab>
+        )}
       </Controls>
     </Container>
   );

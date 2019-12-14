@@ -2,8 +2,8 @@ import { ConflictException, Injectable, InternalServerErrorException, NotFoundEx
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './User';
-import { CreateUserDto } from '../dto/CreateUserDto';
-import { UpdateUserDto } from '../dto/UpdateUserDto';
+import { CreateUserDto } from './CreateUserDto';
+
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -23,7 +23,7 @@ export class UserService {
   }
 
   async findOne(username: string) {
-    return this.userModel.findOne({ username }) as User;
+    return this.userModel.findOne({ username });
   }
 
   async findOneAllowPassword(username: string) {
@@ -41,7 +41,7 @@ export class UserService {
     return this.userModel.countDocuments();
   }
 
-  async put(username: string, updateUserDto: any): Promise<User> {
+  async update(username: string, updateUserDto: any): Promise<User> {
     return this.userModel.findOneAndUpdate({ username }, updateUserDto, { new: true });
   }
 

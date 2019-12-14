@@ -1,38 +1,44 @@
 import {
+  BadRequestException,
+  Body,
   Controller,
   Get,
+  HttpCode,
   HttpException,
   HttpStatus,
-  Inject,
-  Query,
-  Request,
   Post,
-  UseGuards,
-  BadRequestException,
-  HttpCode,
-  Body,
-  Res,
+  Query,
   Req,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
-import MediaSearchService, { Response as MediaSearchResponse } from '../media-search/media-search.service';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from '../auth/auth.service';
 import { UserService } from '../users/users.service';
 
-import { SignInDto } from '../dto/SignInDto';
-import { SignUpDto } from '../dto/SignUpDto';
+import { SignInDto } from '../auth/SignInDto';
+import { SignUpDto } from '../auth/SignUpDto';
+import { MediaSearchResponseDto } from '../media-search-service/MediaSearchResponseDto';
+import { MediaSearchService } from '../media-search-service/media-search.service';
+import { ReportService } from '../reports/report.service';
+import { GetMyTopSearchesRequest } from '../reports/GetMyTopSearchesRequest';
 
 @Controller('api')
 export class AppController {
   constructor(
-    @Inject('MediaSearchService') private searchService: MediaSearchService,
+    private readonly mediaSearchService: MediaSearchService,
     private readonly authService: AuthService,
+    private readonly reportService: ReportService,
     private readonly userService: UserService,
   ) {}
 
-  @Get()
-  healthCheck(): boolean {
-    return true;
+  @UseGuards(AuthGuard('jwt'))
+  @Get('top')
+  getMyTopSearches(
+    @Query() {limit}: GetMyTopSearchesRequest,
+    @Req() request,
+  ): Promise<any> {
+    return this.reportService.getUserTopSearches(request.user.username, limit);
   }
 
   @UseGuards(AuthGuard('jwt'))
@@ -42,18 +48,20 @@ export class AppController {
     @Query('offset') offset: number,
     @Query('limit') limit: number,
     @Req() request,
-  ): Promise<MediaSearchResponse> {
+  ): Promise<MediaSearchResponseDto> {
     if (!term) {
       throw new BadRequestException('Keywords params is required');
     }
+    this.reportService.report(request.user.username, term)
+      .then(() => this.userService.findOne(request.user.username)
+        .then(async user => {
+          user.topSearches = await this.reportService.getUserTopSearches(request.user.username, 10);
+          user.save();
+        })).catch(e => {
+          console.warn(e);
+    });
     try {
-      this.userService.findOne(request.user.username).then(user => {
-        user.searchHistory.set(term, (user.searchHistory.get(term) || 0) + 1);
-        this.userService.put(request.user.username, user).catch(err => {
-          throw err;
-        });
-      });
-      return this.searchService.search({ offset, limit, term });
+      return this.mediaSearchService.search({ offset, limit, term });
     } catch (e) {
       throw new HttpException(
         { error: 'Something went wrong' },
@@ -62,10 +70,6 @@ export class AppController {
     }
   }
 
-  @Get('top')
-  getTop() {
-    return 'top';
-  }
   @UseGuards(AuthGuard('local'))
   @HttpCode(HttpStatus.OK)
   @Post('login')
@@ -86,5 +90,10 @@ export class AppController {
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;
+  }
+
+  @Get()
+  healthCheck(): boolean {
+    return true;
   }
 }

@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from '../../src/app/app.controller';
-import { RatingService } from '../../src/rating.service';
+import { ReportService } from '../../src/reports/report.service';
 import { mediaSearchProvider } from '../../src/app/app.module';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
@@ -10,7 +10,7 @@ describe('AppController', () => {
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [AppController],
-      providers: [mediaSearchProvider, RatingService],
+      providers: [mediaSearchProvider, ReportService],
     }).compile();
 
     appController = app.get<AppController>(AppController);

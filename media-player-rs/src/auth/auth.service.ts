@@ -1,11 +1,11 @@
 import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { SignInDto } from '../dto/SignInDto';
-import { SignUpDto } from '../dto/SignUpDto';
-import { CreateUserDto } from '../dto/CreateUserDto';
+import { SignInDto } from './SignInDto';
+import { SignUpDto } from './SignUpDto';
+import { CreateUserDto } from '../users/CreateUserDto';
 import * as bcrypt from 'bcrypt';
-import { UpdateUserDto } from '../dto/UpdateUserDto';
+import { UpdateUserDto } from '../users/UpdateUserDto';
 
 @Injectable()
 export class AuthService {
@@ -27,7 +27,7 @@ export class AuthService {
   }
 
   async login(signInDto: SignInDto) {
-    return this.userService.put(signInDto.username, { lastLogin: new Date() }).then(user => {
+    return this.userService.update(signInDto.username, { lastLogin: new Date() }).then(user => {
       return {
         token: this.jwtService.sign(signInDto),
         profile: user,

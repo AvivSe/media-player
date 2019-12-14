@@ -7,16 +7,15 @@ import Dialog from "./Dialog";
 import MediaSearchAgGridAdapter from "../services/ag-grid-adapters/media-search.ag-grid.adapter";
 import mediaSearchService from "../services/media-search.service";
 import HTML5Player from "./HTML5Player";
-import { useMediaPlayer } from "../hooks/useMediaPlayer";
-import { MediaPlayerContextProvider } from "../contexts";
 import { ExitToAppOutlined, PeopleOutline } from "@material-ui/icons";
 import Draggable from "react-draggable";
 
 import LinkFab from "../LinkFab";
 import { useWindowSize } from "../hooks/useWindowSize";
 import SearchHistory from "./SearchHistory";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/auth/auth.actions";
+import { getSelectedMedia } from "../redux/player/player.selectors";
 
 const Row = styled.div`
   display: flex;
@@ -36,7 +35,8 @@ const DraggableHelper = styled.div`
 `;
 
 const MediaPlayer = () => {
-  const _useMediaPlayer = useMediaPlayer();
+  const selectedMedia = useSelector(getSelectedMedia);
+
   const [keywords, setKeywords] = useState("Metallica");
   const [gridApi, setGridApi] = useState(null);
   const [dialog, setDialog] = useState(null);
@@ -63,7 +63,7 @@ const MediaPlayer = () => {
       // TODO The timeout is only for fix the first time loading table margin bottom issue, have to handle without timeout
       setTimeout(() => gridApi.sizeColumnsToFit(), 500);
     }
-  }, [gridApi, _useMediaPlayer.selected, width]);
+  }, [gridApi, selectedMedia, width]);
 
   const handleCloseDialog = () => setDialog(null);
 
@@ -80,40 +80,31 @@ const MediaPlayer = () => {
   };
   return (
     <div>
-      <MediaPlayerContextProvider value={_useMediaPlayer}>
-        <Draggable handle=".handle" defaultPosition={{ x: 0, y: 0 }}>
-        <Controls className="handle">
-          <LinkFab to={"/users"} icon={<PeopleOutline />} />
-          <LinkFab icon={<ExitToAppOutlined />} onClick={handleLogoutClick} />
-          <SearchHistory onKeywordsChange={handleKeywordsChange} />
-        </Controls>
-        </Draggable>
-        <DraggableHelper>
-          <Draggable handle=".handle" defaultPosition={{ x: width - 1400, y: -40 }}>
-            <div className={"handle"}>
-              <HTML5Player />
-            </div>
-          </Draggable>
-        </DraggableHelper>
-
-        <Row>
-          <SearchBox
-            onKeywordsChange={handleKeywordsChange}
-            keywords={keywords}
-            onSubmit={fetchSearchResults}
-            options={options}
-          />
-          <OptionsSpeedDial options={options} onOptionsChange={handleOptionsChange} />
-        </Row>
-        <Draggable handle=".handle" defaultPosition={{ x: 0, y: 0 }}>
+      <Controls>
+        <LinkFab to={"/users"} icon={<PeopleOutline />} />
+        <LinkFab icon={<ExitToAppOutlined />} onClick={handleLogoutClick} />
+        <SearchHistory onKeywordsChange={handleKeywordsChange} />
+      </Controls>
+      <DraggableHelper>
+        <Draggable handle=".handle" defaultPosition={{ x: width - 1400, y: -40 }}>
           <div className={"handle"}>
-            <Listing onGridReady={handleGridReady} onDialogOpen={handleOpenDialog} />
+            <HTML5Player />
           </div>
         </Draggable>
-        <Dialog dialog={dialog} onDialogClose={handleCloseDialog}>
-          {dialog && dialog.content}
-        </Dialog>
-      </MediaPlayerContextProvider>
+      </DraggableHelper>
+      <Row>
+        <SearchBox
+          onKeywordsChange={handleKeywordsChange}
+          keywords={keywords}
+          onSubmit={fetchSearchResults}
+          options={options}
+        />
+        <OptionsSpeedDial options={options} onOptionsChange={handleOptionsChange} />
+      </Row>
+      <Listing onGridReady={handleGridReady} onDialogOpen={handleOpenDialog} />
+      <Dialog dialog={dialog} onDialogClose={handleCloseDialog}>
+        {dialog && dialog.content}
+      </Dialog>
     </div>
   );
 };

@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 const LinkFab = ({ to, icon, onClick }) => {
   const history = useHistory();
 
-  const handleClick = () => {
+  const handleClick = e => {
     if(to) {
       history.push(to);
     }

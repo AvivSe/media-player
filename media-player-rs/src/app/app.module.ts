@@ -1,18 +1,17 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { ItunesMediaSearchService } from '../media-search/itunes.media-search.service';
-import { RatingService } from '../rating.service';
+import { MediaSearchService } from '../media-search-service/media-search.service';
 import { AuthModule } from '../auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from '../users/users.module';
-
-export const mediaSearchProvider = { provide: 'MediaSearchService', useClass: ItunesMediaSearchService };
+import { ReportModule } from '../reports/report.module';
 
 @Module({
   imports: [
     AuthModule,
     UsersModule,
-    MongooseModule.forRoot('mongodb://localhost/media-search', {
+    ReportModule,
+    MongooseModule.forRoot('mongodb://localhost/media-search-service', {
       useNewUrlParser: true,
       useCreateIndex: true,
       useFindAndModify: false,
@@ -20,6 +19,6 @@ export const mediaSearchProvider = { provide: 'MediaSearchService', useClass: It
     }),
   ],
   controllers: [AppController],
-  providers: [mediaSearchProvider, RatingService],
+  providers: [MediaSearchService],
 })
 export class AppModule {}

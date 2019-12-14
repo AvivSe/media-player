@@ -12,10 +12,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './users.service';
-import { CreateUserDto } from '../dto/CreateUserDto';
-import { UpdateUserDto } from '../dto/UpdateUserDto';
+import { CreateUserDto } from './CreateUserDto';
+import { UpdateUserDto } from './UpdateUserDto';
 import { AuthGuard } from '@nestjs/passport';
-import { ChangeUserParamDto } from '../dto/ChangeUserParamDto';
+import { ChangeUserParamDto } from './ChangeUserParamDto';
 import * as bcrypt from 'bcrypt';
 
 @UseGuards(AuthGuard('jwt'))
@@ -37,7 +37,7 @@ export class UsersController {
     if (updateUserDto.password) {
       copyDto = { ...updateUserDto, password: await bcrypt.hash(updateUserDto.password, 10) };
     }
-    return this.userService.put(username, copyDto || updateUserDto).then(this.handleNoSuchEntity);
+    return this.userService.update(username, copyDto || updateUserDto).then(this.handleNoSuchEntity);
   }
 
   @Get(':username')

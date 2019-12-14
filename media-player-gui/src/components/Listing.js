@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { AgGridReact } from "@ag-grid-community/react";
 import "@ag-grid-community/all-modules/dist/styles/ag-grid.css";
 import "@ag-grid-community/all-modules/dist/styles/ag-theme-material/sass/ag-theme-material.scss";
@@ -9,23 +9,29 @@ import FullDetailsCellRenderer from "./cell-renderers/FullDetailsCellRenderer";
 import DurationFormatter from "./cell-renderers/DurationFormatter";
 import ImageCellRenderer from "./cell-renderers/ImageCellRenderer";
 import PlayCellRenderer from "./cell-renderers/PlayCellRenderer";
-import { MediaPlayerContext } from "./../contexts";
-import MediaTypeCellRenderer from "./cell-renderers/MediaTypeCellRenderer";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedMedia } from "../redux/player/player.actions";
+import { getSelectedMedia } from "../redux/player/player.selectors";
 
 const AgGridWrapper = styled.div`
   width: 100%;
   height: 75vh;
-  
+
   .ag-cell-focus {
     border: none !important;
   }
-   .ag-icon {
+  .ag-icon {
     color: ${({ theme }) => theme.palette.secondary.main};
   }
 `;
 
 const Listing = ({ onGridReady, onDialogOpen }) => {
-  const { selected, onSelectedChange } = useContext(MediaPlayerContext);
+  const selectedMedia = useSelector(getSelectedMedia);
+  const dispatch = useDispatch();
+
+  const handleSelectedMediaChange = media => {
+    dispatch(setSelectedMedia(media))
+  };
 
   const defaultColumnDefs = [
     { headerName: "", field: "artworkUrl100", cellRenderer: "ImageCellRenderer", width: 60 },
@@ -35,15 +41,13 @@ const Listing = ({ onGridReady, onDialogOpen }) => {
     { headerName: "Price", field: "trackPrice", width: 80 },
     { headerName: "Genre", field: "primaryGenreName", width: 80 },
     { headerName: "Duration", field: "trackTimeMillis", cellRenderer: "DurationFormatter", width: 80 },
-    { headerName: "", field: "kind", cellRenderer: "MediaTypeCellRenderer", width: 40 },
     {
       headerName: "",
       field: "trackId",
       cellRenderer: "PlayCellRenderer",
-      cellRendererParams: { selected, onSelectedChange },
+      cellRendererParams: { selectedMedia, onSelectedMediaChange: handleSelectedMediaChange },
       width: 40
     },
-
     {
       headerName: "",
       field: "trackId",
@@ -69,8 +73,7 @@ const Listing = ({ onGridReady, onDialogOpen }) => {
           FullDetailsCellRenderer,
           DurationFormatter,
           ImageCellRenderer,
-          PlayCellRenderer,
-          MediaTypeCellRenderer
+          PlayCellRenderer
         }}
         cacheOverflowSize={2}
         maxConcurrentDatasourceRequests={1}
