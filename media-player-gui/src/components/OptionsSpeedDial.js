@@ -44,7 +44,7 @@ const OptionsSpeedDial = ({ options, onOptionsChange }) => {
         onOpen={handleOpen}
         open={open}
         direction={"down"}
-        ariaLabel={"test"}
+        ariaLabel={"Settings"}
       >
         {Object.entries(options).map(([label, value]) => {
           const SvgIcon = optionToIcon[label];
@@ -52,10 +52,8 @@ const OptionsSpeedDial = ({ options, onOptionsChange }) => {
             <SpeedDialAction
               key={label}
               icon={<SvgIcon style={options[label] ? null : { fill: "#333" }} />}
-              label={label}
-              value={value}
-              title={label}
               onClick={handleToggleOptionClick(label)}
+              title={label}
             />
           );
         })}

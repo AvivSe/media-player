@@ -94,7 +94,7 @@ const HTML5Player = ({ initialUrl, position }) => {
   return (
     <Container isFullScreen={isFullScreen}>
       <VideoContainer isMinimized={isMinimized}>
-        <LinearProgress variant="determinate" value={progress} color={"secondary"} />
+        <LinearProgress variant="determinate" value={progress} color={"primary"} />
         {video}
       </VideoContainer>
 

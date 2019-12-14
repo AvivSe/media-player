@@ -9,8 +9,10 @@ export class CreateUserDto {
   password: string;
 
   @MaxLength(35)
+  @MinLength(2)
   readonly firstName: string;
 
   @MaxLength(35)
+  @MinLength(2)
   readonly lastName: string;
 }

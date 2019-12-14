@@ -30,9 +30,6 @@ export const signUp = (username, password, retypePassword, firstName, lastName) 
     const result = await authService.signUp(username, password, retypePassword, firstName, lastName);
     dispatch({ type: SIGNUP_SUCCESS, payload: result.data });
   } catch (e) {
-    if(e.message === "Request failed with status code 409") {
-      e.message = "User already exists";
-    }
     dispatch({ type: SIGNUP_ERROR });
     dispatch(openSnackbar(e));
   }

@@ -76,17 +76,17 @@ const MediaPlayer = () => {
   const handleGridReady = ({ api }) => setGridApi(api);
 
   const handleLogoutClick = () => {
-    dispatch(logout())
+    dispatch(logout());
   };
   return (
     <div>
       <MediaPlayerContextProvider value={_useMediaPlayer}>
         <Draggable handle=".handle" defaultPosition={{ x: 0, y: 0 }}>
-          <Controls className="handle">
-            <LinkFab to={"/admin"} icon={<PeopleOutline />} />
-            <LinkFab icon={<ExitToAppOutlined />} onClick={handleLogoutClick} />
-            <SearchHistory onKeywordsChange={handleKeywordsChange} />
-          </Controls>
+        <Controls className="handle">
+          <LinkFab to={"/users"} icon={<PeopleOutline />} />
+          <LinkFab icon={<ExitToAppOutlined />} onClick={handleLogoutClick} />
+          <SearchHistory onKeywordsChange={handleKeywordsChange} />
+        </Controls>
         </Draggable>
         <DraggableHelper>
           <Draggable handle=".handle" defaultPosition={{ x: width - 1400, y: -40 }}>
@@ -95,19 +95,18 @@ const MediaPlayer = () => {
             </div>
           </Draggable>
         </DraggableHelper>
+
+        <Row>
+          <SearchBox
+            onKeywordsChange={handleKeywordsChange}
+            keywords={keywords}
+            onSubmit={fetchSearchResults}
+            options={options}
+          />
+          <OptionsSpeedDial options={options} onOptionsChange={handleOptionsChange} />
+        </Row>
         <Draggable handle=".handle" defaultPosition={{ x: 0, y: 0 }}>
-          <Row className="handle">
-            <SearchBox
-              onKeywordsChange={handleKeywordsChange}
-              keywords={keywords}
-              onSubmit={fetchSearchResults}
-              options={options}
-            />
-            <OptionsSpeedDial options={options} onOptionsChange={handleOptionsChange} />
-          </Row>
-        </Draggable>
-        <Draggable handle=".handle" defaultPosition={{ x: 0, y: 0 }}>
-          <div className="handle">
+          <div className={"handle"}>
             <Listing onGridReady={handleGridReady} onDialogOpen={handleOpenDialog} />
           </div>
         </Draggable>

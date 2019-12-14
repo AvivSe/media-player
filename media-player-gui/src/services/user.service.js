@@ -10,7 +10,7 @@ class UserService {
     return axios.get(userServiceUrl, { params });
   }
 
-  async put(username, payload) {
+  async update(username, payload) {
     return axios.put(`${userServiceUrl}/${username}`, payload);
   }
 
@@ -19,7 +19,7 @@ class UserService {
   }
 
   async delete(usernameList) {
-    return axios.delete(userServiceUrl, usernameList);
+    return axios.delete(userServiceUrl, { data: usernameList});
   }
 
   async create(user) {

@@ -18,7 +18,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ChangeUserParamDto } from '../dto/ChangeUserParamDto';
 import * as bcrypt from 'bcrypt';
 
-//@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt'))
 @Controller('api/user')
 export class UsersController {
   constructor(private readonly userService: UserService) {}

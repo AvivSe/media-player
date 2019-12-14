@@ -2,42 +2,60 @@ import React, { useEffect, useState } from "react";
 import { AgGridReact } from "@ag-grid-community/react";
 import { AllModules } from "@ag-grid-enterprise/all-modules";
 import styled from "styled-components";
-import userService from "../services/user.service";
 import { CloseOutlined } from "@material-ui/icons";
 import LinkFab from "../LinkFab";
 import { useWindowSize } from "../hooks/useWindowSize";
 import DeleteCellRenderer from "./cell-renderers/DeleteCellRenderer";
-import { connect } from "react-redux";
-import { openSnackbar } from "../redux/ui/ui.actions";
+import { useDispatch, useSelector } from "react-redux";
 import PasswordCellFormatter from "./cell-renderers/PasswordCellForamtter";
 import { DateCellFormatter } from "./cell-renderers/DateCellFormatter";
+import { deleteManyUsers, deleteOneUser, deleteUsers, fetchUsers, updateUser } from "../redux/user/user.actions";
+import { getIsEmptyUserList, getUserList } from "../redux/user/user.selectors";
+import { openSnackbar } from "../redux/ui/ui.actions";
+import Fab from "@material-ui/core/Fab";
 
 const Wrapper = styled.div``;
 
 const AgGridWrapper = styled.div`
   width: 100%;
   height: 75vh;
+  margin-top: 1rem;
   .ag-cell-focus {
     border: none !important;
   }
-
+  .ag-icon {
+    color: ${({ theme }) => theme.palette.secondary.main};
+  }
 `;
 
-const Admin = ({ openSnackbar }) => {
-  const [rowData, setRowData] = useState([]);
+const Users = () => {
   const [gridApi, setGridApi] = useState(null);
-  const {width} = useWindowSize();
+  const dispatch = useDispatch();
+  const { width } = useWindowSize();
+  const isEmptyUserList = useSelector(getIsEmptyUserList);
+  const rowData = useSelector(getUserList);
+  const isDeleteClicked = useSelector(getUserList);
 
   useEffect(() => {
-    userService
-      .find()
-      .then(({ data }) => {
-        setRowData(data.rows);
-      })
-      .catch(error => {
-        openSnackbar(error);
-      });
-  }, []);
+    if (isEmptyUserList) {
+      dispatch(fetchUsers());
+    }
+  }, [isEmptyUserList, dispatch]);
+
+  useEffect(() => {
+    const keyDownEventHandler = ({key}) => {
+      if(!!gridApi && key === "Delete") {
+        const selectedRows = gridApi.getSelectedRows();
+        if(selectedRows.length === 0) {
+          dispatch(openSnackbar({ message: "Pressing delete will affect selected rows"}))
+        } else {
+          dispatch(deleteUsers(selectedRows.map(user => user.username)))
+        }
+      }
+    };
+      document.addEventListener('keydown', keyDownEventHandler);
+    return () => document.removeEventListener('keydown', keyDownEventHandler);
+  }, [gridApi]);
 
   useEffect(() => {
     if (!!gridApi) {
@@ -45,17 +63,28 @@ const Admin = ({ openSnackbar }) => {
     }
   }, [gridApi, rowData]);
 
-  const handleClickDeleteOne = ({ username, api }) => {
-    userService
-      .deleteOne(username)
-      .then(({ data }) => {
-        openSnackbar({ message: `${username} has been deleted` });
+  const handleClickDeleteOne = ({ username }) => {
+    dispatch(
+      openSnackbar({
+        message: (
+          <div>
+            {`Delete ${username}? `}
+            <Fab
+              color={"secondary"}
+              onClick={() => {
+                dispatch(deleteOneUser(username));
+              }}
+            >
+              yes
+            </Fab>
+          </div>
+        )
       })
-      .catch(openSnackbar);
+    );
   };
 
   const defaultColumnDefs = [
-    { headerName: "#", width: 45, checkboxSelection: true, sortable: false, filter: false, pinned: true },
+    { headerName: "#", width: 45, checkboxSelection: true, editable: false, sortable: false, filter: false, pinned: true },
     { headerName: "Id", field: "_id", hide: true, sortable: false, editable: false },
     { headerName: "Username", field: "username", editable: false },
     { headerName: "First Name", field: "firstName" },
@@ -78,14 +107,7 @@ const Admin = ({ openSnackbar }) => {
   };
 
   const handleEditingStop = ({ column, data }) => {
-    userService
-      .put(data.username, { [column.colId]: data[column.colId] })
-      .then(res => {
-        openSnackbar({ message: `${data.username} updated successfully` });
-      })
-      .catch(error => {
-        openSnackbar(error);
-      });
+    dispatch(updateUser(data.username, data[column.colId]));
   };
 
   useEffect(() => {
@@ -100,8 +122,10 @@ const Admin = ({ openSnackbar }) => {
       <AgGridWrapper className={"ag-theme-material"}>
         <AgGridReact
           onGridReady={onGridReady}
-          rowData={rowData}
           suppressRowClickSelection={true}
+          animateRows={true}
+          rowData={rowData}
+          rowSelection="multiple"
           columnDefs={defaultColumnDefs}
           defaultColDef={{
             resizable: true,
@@ -118,6 +142,4 @@ const Admin = ({ openSnackbar }) => {
   );
 };
 
-export default connect(null, {
-  openSnackbar
-})(Admin);
+export default Users;

@@ -18,6 +18,7 @@ const StyledFab = styled(Fab)`
     height: 60px;
   }
 `;
+
 const SearchBox = ({ options, keywords, onKeywordsChange, onSubmit }) => {
   const searchAsYouType = options[SEARCH_AS_YOU_TYPE_OPT];
 

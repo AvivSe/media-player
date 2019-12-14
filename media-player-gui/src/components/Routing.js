@@ -2,17 +2,11 @@ import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import React from "react";
 import MediaPlayer from "./MediaPlayer";
 import Login from "./Login";
-import Admin from "./Admin";
+import Users from "./Users";
 import { useSelector } from "react-redux";
 import { getIsAuthenticated } from "../redux/auth/auth.selectors";
 import SignUp from "./SignUp";
-
-const pages = [
-  { url: "/admin", component: Admin, isPrivate: true },
-  { url: "/login", component: Login, isPrivate: false },
-  { url: "/signup", component: SignUp, isPrivate: false },
-  { url: "/", component: MediaPlayer, isPrivate: true }
-];
+import PageNotFount from "../PageNotFound";
 
 const PrivateRoute = ({ isAuthenticated, children, ...otherProps }) => {
   if (isAuthenticated) {
@@ -24,6 +18,14 @@ const PrivateRoute = ({ isAuthenticated, children, ...otherProps }) => {
 
 const Routing = () => {
   const isAuthenticated = useSelector(getIsAuthenticated);
+
+  const pages = [
+    { url: "/users", component: Users, isPrivate: true },
+    { url: "/login", component: Login, isPrivate: false },
+    { url: "/signup", component: SignUp, isPrivate: false },
+    { url: "/", component: MediaPlayer, isPrivate: true },
+    { url: "*", components: PageNotFount, isPrivate: false}
+  ];
 
   return (
     <BrowserRouter>

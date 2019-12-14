@@ -4,6 +4,7 @@ import axios from "axios";
 const host = "http://localhost:8080";
 const api = "/api";
 const authServiceUrl = `${host}${api}`;
+export const axiosMessageToStatusCode = message => message && typeof message === "string"  && message.length > 3 && Number(message.slice(message.length - 3, message.length));
 
 class AuthService {
   async login(username, password) {
@@ -13,6 +14,7 @@ class AuthService {
       return result;
     } catch (e) {
       axios.defaults.headers.common["Authorization"] = null;
+      e.statusCode = axiosMessageToStatusCode(e.message);
       throw e;
     }
   }
@@ -24,6 +26,7 @@ class AuthService {
       return result;
     } catch (e) {
       axios.defaults.headers.common["Authorization"] = null;
+      e.statusCode = axiosMessageToStatusCode(e.message);
       throw e;
     }
   }
@@ -31,6 +34,7 @@ class AuthService {
   getPersistToken() {
     return localStorage.getItem("authSnapshot");
   }
+
 }
 
 const instance = new AuthService();

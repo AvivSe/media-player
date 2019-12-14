@@ -19,7 +19,9 @@ const AgGridWrapper = styled.div`
   .ag-cell-focus {
     border: none !important;
   }
- 
+   .ag-icon {
+    color: ${({ theme }) => theme.palette.secondary.main};
+  }
 `;
 
 const Listing = ({ onGridReady, onDialogOpen }) => {

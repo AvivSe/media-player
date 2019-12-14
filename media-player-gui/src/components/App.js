@@ -5,8 +5,9 @@ import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
 import { StylesProvider } from "@material-ui/styles";
 import Routing from "./Routing";
 import Snackbar from "@material-ui/core/Snackbar";
-import { connect } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { closeSnackbar } from "../redux/ui/ui.actions";
+import { getSnackbar } from "../redux/ui/ui.selectors";
 
 const Wrapper = styled.div`
   display: flex;
@@ -19,7 +20,7 @@ const Wrapper = styled.div`
     theme.palette.type === "dark"
       ? `
       background-color: #2d3436;
-      background-image: linear-gradient(315deg, #2d3436 0%, #000000 74%);
+      background-image: linear-gradient(315deg, #2d3436 25%, #000000 100%);
   `
       : null};
   color: ${({ theme }) => theme.palette.primary.text};
@@ -29,8 +30,13 @@ const MainContentViewport = styled.div`
   width: 80vw;
 `;
 
-const App = ({ snackbar, closeSnackbar }) => (
-  <StylesProvider injectFirst>
+const App = () => {
+  const dispatch = useDispatch();
+  const snackbar = useSelector(getSnackbar);
+
+  const handleCloseSnackbarClick = () => dispatch(closeSnackbar());
+
+  return <StylesProvider injectFirst>
     <MuiThemeProvider theme={darkMuiTheme}>
       <ScThemeProvider theme={darkMuiTheme}>
           <Wrapper>
@@ -44,7 +50,7 @@ const App = ({ snackbar, closeSnackbar }) => (
               }}
               open={!!snackbar.open}
               autoHideDuration={snackbar.duration}
-              onClose={closeSnackbar}
+              onClose={handleCloseSnackbarClick}
               ContentProps={{
                 "aria-describedby": "message-id"
               }}
@@ -54,15 +60,6 @@ const App = ({ snackbar, closeSnackbar }) => (
       </ScThemeProvider>
     </MuiThemeProvider>
   </StylesProvider>
-);
-
-const mapStateToProps = state => {
-  return {
-    snackbar: state.ui.snackbar,
-    auth: state.auth,
-  };
 };
 
-export default connect(mapStateToProps, {
-  closeSnackbar
-})(App);
+export default App;
