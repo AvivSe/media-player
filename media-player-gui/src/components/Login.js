@@ -22,13 +22,12 @@ const Login = () => {
   const isAuthenticated = useSelector(getIsAuthenticated);
 
   useEffect(() => {
-    console.log(isAuthenticated );
     if (isAuthenticated && location.pathname === "/login") {
       history.push("/");
     }
   }, [isAuthenticated, location.pathname, history]);
 
-  const handleLoginSubmit = ({ values, onSuccess, onError }) => {
+  const handleSubmit = ({ values, onSuccess, onError }) => {
     const { email: username, password } = values;
     dispatch(login(username, password));
   };
@@ -42,7 +41,7 @@ const Login = () => {
         <Wrapper>
           <Animation size={15}/>
           <Form
-            onSubmit={handleLoginSubmit}
+            onSubmit={handleSubmit}
             hidePreloader={true}
             secondaryButtonLabel={"Sign Up"}
             configuration={signInFormConfiguration}

@@ -13,12 +13,10 @@ export class SignUpDto {
   retypePassword: string;
 
   @MaxLength(35)
-  @MinLength(4)
   @IsOptional()
   readonly firstName: string;
 
   @MaxLength(35)
-  @MinLength(4)
   @IsOptional()
   readonly lastName: string;
 }

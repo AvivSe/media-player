@@ -1,4 +1,4 @@
-import { email, firstName, genericValidationSchema, lastName, password, retypePassword } from "./global-validations";
+import { email, firstName, lastName, password, retypePassword, signUpValidationSchema } from "./global-validations";
 import TextField from "../components/form-kit/TextField";
 
 export default {
@@ -10,9 +10,10 @@ export default {
     [retypePassword]: '123456',
 
   },
+  title: "Sign Up",
   hidePreloader: false,
   flexDirection: 'column',
-  validationSchema: genericValidationSchema,
+  validationSchema: signUpValidationSchema,
   sendForm: values =>
     new Promise(resolve => {
       setTimeout(() => {
@@ -39,12 +40,10 @@ export default {
         {
           name: firstName,
           component: TextField,
-          required: true
         },
         {
           name: lastName,
           component: TextField,
-          required: true
         }
       ]
     },

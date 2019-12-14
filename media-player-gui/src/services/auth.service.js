@@ -17,6 +17,17 @@ class AuthService {
     }
   }
 
+  async signUp(username, password, retypePassword, firstName, lastName) {
+    try {
+      const result = await axios.post(`${authServiceUrl}/signup`, { username, password, retypePassword, firstName, lastName });
+      axios.defaults.headers.common["Authorization"] = `Bearer ${result.data.token}`;
+      return result;
+    } catch (e) {
+      axios.defaults.headers.common["Authorization"] = null;
+      throw e;
+    }
+  }
+
   getPersistToken() {
     return localStorage.getItem("authSnapshot");
   }

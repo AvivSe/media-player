@@ -13,13 +13,11 @@ export class UpdateUserDto {
 
   @IsOptional()
   @MaxLength(35)
-  @MinLength(4)
   @IsOptional()
   readonly firstName: string;
 
   @IsOptional()
   @MaxLength(35)
-  @MinLength(4)
   @IsOptional()
   readonly lastName: string;
 

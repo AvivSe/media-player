@@ -85,7 +85,6 @@ const Form = ({ successContent, onSecondaryButtonClick,secondaryButtonLabel, con
 
   const extractLabel = ({ label, name, required }) => {
     const optionalHelperText = !required ? " (Optional)" : "";
-
     if (Boolean(label)) {
       return `${label}${optionalHelperText}`;
     }
@@ -118,7 +117,7 @@ const Form = ({ successContent, onSecondaryButtonClick,secondaryButtonLabel, con
                 <Group key={index} direction={direction}>
                   {inputs.map(({ name, component, required, options, label, hide, ...props }) => {
                     const Input = component;
-                    label = extractLabel({ label, name, required });
+                    label = extractLabel({ label: fieldToLabelMap[label], name, required });
                     return (
                       !hide && (
                         <Input
@@ -131,7 +130,7 @@ const Form = ({ successContent, onSecondaryButtonClick,secondaryButtonLabel, con
                           onChange={handleChange}
                           onBlur={handleBlur}
                           options={options}
-                          label={fieldToLabelMap[label]}
+                          label={label}
                           fullWidth={inputs.length === 1}
                           style={{ margin: "0.5rem" }}
                           disabled={disabled}

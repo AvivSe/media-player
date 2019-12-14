@@ -15,7 +15,6 @@ const pages = [
 ];
 
 const PrivateRoute = ({ isAuthenticated, children, ...otherProps }) => {
-  console.log('isAuthenticated:', isAuthenticated);
   if (isAuthenticated) {
     return <Route {...otherProps}/>;
   } else {
