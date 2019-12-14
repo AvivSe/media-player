@@ -2,8 +2,6 @@ import React from "react";
 import SpeedDial from "@material-ui/lab/SpeedDial";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import { KeyboardOutlined, TuneOutlined } from "@material-ui/icons";
-
-import Checkbox from "./form-kit/Checkbox";
 import styled from "styled-components";
 
 export const SEARCH_AS_YOU_TYPE_OPT = "Search as you type";

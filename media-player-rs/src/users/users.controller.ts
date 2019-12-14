@@ -11,7 +11,7 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
+import { UserService } from './users.service';
 import { CreateUserDto } from '../dto/CreateUserDto';
 import { UpdateUserDto } from '../dto/UpdateUserDto';
 import { AuthGuard } from '@nestjs/passport';
@@ -21,7 +21,7 @@ import * as bcrypt from 'bcrypt';
 //@UseGuards(AuthGuard('jwt'))
 @Controller('api/user')
 export class UsersController {
-  constructor(private readonly userService: UsersService) {}
+  constructor(private readonly userService: UserService) {}
 
   handleNoSuchEntity(res) {
     if (!res) {

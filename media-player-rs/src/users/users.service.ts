@@ -7,7 +7,7 @@ import { UpdateUserDto } from '../dto/UpdateUserDto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -23,7 +23,7 @@ export class UsersService {
   }
 
   async findOne(username: string) {
-    return this.userModel.findOne({ username });
+    return this.userModel.findOne({ username }) as User;
   }
 
   async findOneAllowPassword(username: string) {

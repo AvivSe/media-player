@@ -4,7 +4,7 @@ export default createMuiTheme({
   palette: {
     type: "dark",
     primary: {
-      light: "#838f98",
+      light: "#1d2124",
       main: "#ffffff",
       dark: "#fff",
       text: "#fff",
@@ -12,10 +12,10 @@ export default createMuiTheme({
     },
     secondary: {
       light: "#0C0C0C",
-      main: "#fff",
+      main: "#141414",
       dark: "#141414",
       text: "#fff",
-      contrastText: "#090909"
+      contrastText: "#ffffff"
     }
   }
 });

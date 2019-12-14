@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import React, { useEffect, useState } from "react";
 import Animation from "./Preloader";
-import { useContextPreloader } from "../contexts";
 import Form from "./form-kit/Form";
 import signInFormConfiguration from "../configurations/sign-in-form.configuration";
 import signUpFormConfiguration from "../configurations/sign-up-form.configuration";
@@ -16,8 +15,7 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const Start = () => {
-  const { visible, drag: playing } = useContextPreloader();
+const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const history = useHistory();
   const location = useLocation();
@@ -25,6 +23,7 @@ const Start = () => {
   const isAuthenticated = useSelector(getIsAuthenticated);
 
   useEffect(() => {
+    console.log(isAuthenticated );
     if (isAuthenticated && location.pathname === "/login") {
       history.push("/");
     }
@@ -49,9 +48,9 @@ const Start = () => {
             onSubmit={handleLoginSubmit}
             hidePreloader={true}
             configuration={signInFormConfiguration}
-            submitLabel={playing ? "Stop playing.." : "Login"}
+            submitLabel={"Login"}
           />
-          <button onClick={() => setIsSignUp(true)}>{isSignUp ? "Back to Login" : "Sign Up"}</button>
+          <button onClick={() => setIsSignUp(true)}>{isSignUp ? "Back to login" : "Sign Up"}</button>
         </Wrapper>
       )}
       {isSignUp && <Form configuration={signUpFormConfiguration} onCancel={handleSignUpCancel}/>}
@@ -59,4 +58,4 @@ const Start = () => {
   );
 };
 
-export default Start;
+export default Login;

@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { ReactComponent as Hellyeah } from "../assets/hellyeah.svg";
 import Draggable from "react-draggable";
-import { useContextPreloader } from "../contexts";
 
 const Wrapper = styled.div`
   .box {
@@ -13,7 +12,6 @@ const Wrapper = styled.div`
     margin: 0 auto 0 auto;
     transform-origin: bottom;
     fill: ${({ theme }) => theme.palette.secondary.main};
-    cursor: move;
   }
   .bounce-7 {
     animation-name: bounce-7;
@@ -45,21 +43,11 @@ const Wrapper = styled.div`
 `;
 
 const Preloader = ({ size }) => {
-  const { onDragChange } = useContextPreloader();
-
-  const handleStart = () => onDragChange(true);
-
-  const handleStop = () => onDragChange(false);
-
   return (
     <Draggable
       handle=".handle"
-      onStop={handleStop}
-      onStart={handleStart}
       defaultPosition={{ x: 0, y: 0 }}
-      grid={null}
-      enableUserSelectHack={true}
-      scale={2}
+      scale={4}
     >
       <Wrapper className="handle" size={size}>
         <Hellyeah className="box bounce-7" />

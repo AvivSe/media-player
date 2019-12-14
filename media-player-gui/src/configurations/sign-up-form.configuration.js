@@ -1,4 +1,4 @@
-import { email, password, genericValidationSchema, firstName, lastName } from "./global-validations";
+import { email, firstName, genericValidationSchema, lastName, password } from "./global-validations";
 import TextField from "../components/form-kit/TextField";
 
 export default {

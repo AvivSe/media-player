@@ -7,7 +7,11 @@ const UserSchema = new mongoose.Schema({
   firstName: { type: String, maxlength: 35 },
   lastName: { type: String, maxlength: 35 },
   lastLogin: { type: Date },
-  topSearches: Array,
+  searchHistory: {
+    type: Map,
+    of: Number,
+    default: {},
+  },
 });
 
 export default UserSchema;

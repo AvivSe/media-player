@@ -1,18 +1,19 @@
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import React from "react";
 import MediaPlayer from "./MediaPlayer";
-import Start from "./Start";
+import Login from "./Login";
 import Admin from "./Admin";
 import { useSelector } from "react-redux";
 import { getIsAuthenticated } from "../redux/auth/auth.selectors";
 
 const pages = [
   { url: "/admin", component: Admin, isPrivate: true },
-  { url: "/login", component: Start, isPrivate: false },
+  { url: "/login", component: Login, isPrivate: false },
   { url: "/", component: MediaPlayer, isPrivate: true }
 ];
 
-const PrivateRoute = ({ isAuthenticated, ...otherProps }) => {
+const PrivateRoute = ({ isAuthenticated, children, ...otherProps }) => {
+  console.log('isAuthenticated:', isAuthenticated);
   if (isAuthenticated) {
     return <Route {...otherProps}/>;
   } else {
@@ -27,7 +28,7 @@ const Routing = () => {
     <BrowserRouter>
       <Switch>
         {pages.map(({ url, component, isPrivate }) => (
-          isPrivate ?
+          isPrivate  ?
             <PrivateRoute key={url} isAuthenticated={isAuthenticated} path={url} component={component}/>
             : <Route key={url} path={url} component={component}/>
         ))}

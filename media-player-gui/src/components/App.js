@@ -4,8 +4,6 @@ import darkMuiTheme from "../theme";
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
 import { StylesProvider } from "@material-ui/styles";
 import Routing from "./Routing";
-import usePreloader from "../hooks/usePreloder";
-import { PreloaderContextProvider } from "../contexts";
 import Snackbar from "@material-ui/core/Snackbar";
 import { connect } from "react-redux";
 import { closeSnackbar } from "../redux/ui/ui.actions";
@@ -35,7 +33,6 @@ const App = ({ snackbar, closeSnackbar }) => (
   <StylesProvider injectFirst>
     <MuiThemeProvider theme={darkMuiTheme}>
       <ScThemeProvider theme={darkMuiTheme}>
-        <PreloaderContextProvider value={usePreloader()}>
           <Wrapper>
             <MainContentViewport>
               <Routing />
@@ -54,7 +51,6 @@ const App = ({ snackbar, closeSnackbar }) => (
               message={snackbar.message}
             />
           </Wrapper>
-        </PreloaderContextProvider>
       </ScThemeProvider>
     </MuiThemeProvider>
   </StylesProvider>
@@ -62,7 +58,8 @@ const App = ({ snackbar, closeSnackbar }) => (
 
 const mapStateToProps = state => {
   return {
-    snackbar: state.ui.snackbar
+    snackbar: state.ui.snackbar,
+    auth: state.auth,
   };
 };
 

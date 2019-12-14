@@ -1,7 +1,7 @@
-import React, { createContext, useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import Listing from "./Listing";
-import OptionsSpeedDial, { GRID_MODE_OPT, SEARCH_AS_YOU_TYPE_OPT } from "./OptionsSpeedDial";
+import OptionsSpeedDial, { SEARCH_AS_YOU_TYPE_OPT } from "./OptionsSpeedDial";
 import SearchBox from "./SearchBox";
 import Dialog from "./Dialog";
 import MediaSearchAgGridAdapter from "../services/ag-grid-adapters/media-search.ag-grid.adapter";
@@ -10,13 +10,27 @@ import HTML5Player from "./HTML5Player";
 import { useMediaPlayer } from "../hooks/useMediaPlayer";
 import { MediaPlayerContextProvider } from "../contexts";
 import { PeopleOutline } from "@material-ui/icons";
+import Draggable from "react-draggable";
 
 import LinkFab from "../LinkFab";
-import { useWidth } from "../hooks/useWidth";
+import { useWindowSize } from "../hooks/useWindowSize";
+import SearchHistory from "./SearchHistory";
 
 const Row = styled.div`
   display: flex;
   margin-bottom: 1rem;
+`;
+
+const Controls = styled.div`
+  button {
+    margin-top: -5rem;
+    margin-right: 0.5rem;
+  }
+`;
+
+const DraggableHelper = styled.div`
+  position: fixed;
+  z-index: 100;
 `;
 
 const MediaPlayer = () => {
@@ -26,7 +40,7 @@ const MediaPlayer = () => {
   const [dialog, setDialog] = useState(null);
   const [options, setOptions] = useState({ [SEARCH_AS_YOU_TYPE_OPT]: true });
   const searchAsYouType = options[SEARCH_AS_YOU_TYPE_OPT];
-  const width = useWidth();
+  const { width } = useWindowSize();
 
   const fetchSearchResults = useCallback(() => {
     !!gridApi &&
@@ -61,18 +75,35 @@ const MediaPlayer = () => {
   return (
     <div>
       <MediaPlayerContextProvider value={_useMediaPlayer}>
-        <LinkFab to={"/admin"} icon={PeopleOutline} />
-        <HTML5Player />
-        <Row>
-          <SearchBox
-            onKeywordsChange={handleKeywordsChange}
-            keywords={keywords}
-            onSubmit={fetchSearchResults}
-            options={options}
-          />
-          <OptionsSpeedDial options={options} onOptionsChange={handleOptionsChange} />
-        </Row>
-        <Listing onGridReady={handleGridReady} onDialogOpen={handleOpenDialog} />
+        <Draggable handle=".handle" defaultPosition={{ x: 0, y: 0 }}>
+          <Controls className="handle">
+            <LinkFab to={"/admin"} icon={<PeopleOutline />} />
+            <SearchHistory onKeywordsChange={handleKeywordsChange} />
+          </Controls>
+        </Draggable>
+        <DraggableHelper>
+          <Draggable handle=".handle" defaultPosition={{ x: width - 1400, y: -40 }}>
+            <div className={"handle"}>
+              <HTML5Player />
+            </div>
+          </Draggable>
+        </DraggableHelper>
+        <Draggable handle=".handle" defaultPosition={{ x: 0, y: 0 }}>
+          <Row className="handle">
+            <SearchBox
+              onKeywordsChange={handleKeywordsChange}
+              keywords={keywords}
+              onSubmit={fetchSearchResults}
+              options={options}
+            />
+            <OptionsSpeedDial options={options} onOptionsChange={handleOptionsChange} />
+          </Row>
+        </Draggable>
+        <Draggable handle=".handle" defaultPosition={{ x: 0, y: 0 }}>
+          <div className="handle">
+            <Listing onGridReady={handleGridReady} onDialogOpen={handleOpenDialog} />
+          </div>
+        </Draggable>
         <Dialog dialog={dialog} onDialogClose={handleCloseDialog}>
           {dialog && dialog.content}
         </Dialog>

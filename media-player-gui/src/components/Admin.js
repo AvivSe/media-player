@@ -1,13 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AgGridReact } from "@ag-grid-community/react";
 import { AllModules } from "@ag-grid-enterprise/all-modules";
 import styled from "styled-components";
-import UserDatasourceAgGridAdapter from "../services/ag-grid-adapters/user.ag-grid-adapter";
 import userService from "../services/user.service";
-import Fab from "@material-ui/core/Fab";
 import { CloseOutlined } from "@material-ui/icons";
 import LinkFab from "../LinkFab";
-import { useWidth } from "../hooks/useWidth";
+import { useWindowSize } from "../hooks/useWindowSize";
 import DeleteCellRenderer from "./cell-renderers/DeleteCellRenderer";
 import { connect } from "react-redux";
 import { openSnackbar } from "../redux/ui/ui.actions";
@@ -22,16 +20,13 @@ const AgGridWrapper = styled.div`
   .ag-cell-focus {
     border: none !important;
   }
-  // .ag-root-wrapper, .ag-header, .ag-header-row {
-  //     color: ${({ theme }) => theme.palette.primary.text};
-  //     background-color: ${({ theme }) => theme.palette.primary.contrastText};
-  // }
+
 `;
 
 const Admin = ({ openSnackbar }) => {
   const [rowData, setRowData] = useState([]);
   const [gridApi, setGridApi] = useState(null);
-  const width = useWidth();
+  const {width} = useWindowSize();
 
   useEffect(() => {
     userService
@@ -65,7 +60,7 @@ const Admin = ({ openSnackbar }) => {
     { headerName: "Username", field: "username", editable: false },
     { headerName: "First Name", field: "firstName" },
     { headerName: "Last Name", field: "lastName" },
-    { headerName: "Password", field: "password", cellRenderer: "PasswordCellFormatter"},
+    { headerName: "Password", field: "password", cellRenderer: "PasswordCellFormatter" },
     { headerName: "Last Login", field: "lastLogin", editable: false, cellRenderer: "DateCellFormatter" },
     { headerName: "Top Searches", field: "topSearches" }, // todo: cell renderer
     {
@@ -101,12 +96,12 @@ const Admin = ({ openSnackbar }) => {
 
   return (
     <Wrapper>
-      <LinkFab to={"/listing"} icon={CloseOutlined} />
+      <LinkFab to={"/listing"} icon={<CloseOutlined />} />
       <AgGridWrapper className={"ag-theme-material"}>
         <AgGridReact
           onGridReady={onGridReady}
           rowData={rowData}
-          //suppressRowClickSelection={true}
+          suppressRowClickSelection={true}
           columnDefs={defaultColumnDefs}
           defaultColDef={{
             resizable: true,
@@ -115,11 +110,6 @@ const Admin = ({ openSnackbar }) => {
             editable: true
           }}
           frameworkComponents={{ DeleteCellRenderer, PasswordCellFormatter, DateCellFormatter }}
-          // gridOptions={{ rowModelType: "serverSide" }}
-          // cacheBlockSize={200}
-          // cacheOverflowSize={2}
-          // maxConcurrentDatasourceRequests={1}
-          // maxBlocksInCache={10}
           modules={AllModules}
           onCellEditingStopped={handleEditingStop}
         />

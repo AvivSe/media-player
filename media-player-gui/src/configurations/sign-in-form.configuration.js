@@ -1,6 +1,7 @@
-import { email, password, genericValidationSchema } from "./global-validations";
+import { email, genericValidationSchema, password } from "./global-validations";
 import TextField from "../components/form-kit/TextField";
 import authService from "../services/auth.service";
+
 export default {
   initialValues: {
     [email]: "avivsegal@gmail.com",

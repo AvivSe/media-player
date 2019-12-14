@@ -1,6 +1,5 @@
 import React from "react";
 import TextField from "./form-kit/TextField";
-import Button from "./form-kit/Button";
 import styled from "styled-components";
 import { SEARCH_AS_YOU_TYPE_OPT } from "./OptionsSpeedDial";
 import Fab from "@material-ui/core/Fab";

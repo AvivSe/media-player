@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import { useVideo } from "react-use";
 import { MediaPlayerContext } from "./../contexts";
 import styled from "styled-components";
-import Draggable from "react-draggable";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Fab from "@material-ui/core/Fab";
 import {
@@ -30,15 +29,8 @@ const VideoContainer = styled.div`
   display: ${({ isMinimized }) => (isMinimized ? "none" : "block")};
 `;
 
-const Wrapper = styled.div`
-  position: fixed;
-  z-index: 100;
-  height: 500px;
-  width: 500px;
-`;
-
 const Controls = styled.div`
-  margin-bottom: -35px;
+  margin-top: -35px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -50,9 +42,7 @@ const StyledFab = styled(Fab)`
   background-color: ${({ transparent }) => (transparent ? "transparent" : null)};
 `;
 
-const VideoProgress = styled;
-
-const HTML5Player = ({ initialUrl }) => {
+const HTML5Player = ({ initialUrl, position }) => {
   const { selected, onSelectedChange } = useContext(MediaPlayerContext) || {};
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(true);
@@ -102,42 +92,36 @@ const HTML5Player = ({ initialUrl }) => {
   };
 
   return (
-    <Wrapper>
-      <Draggable handle=".handle" defaultPosition={{ x: 515, y: -75 }}>
-        <div className={"handle"}>
-          <Container isFullScreen={isFullScreen}>
-            <VideoContainer isMinimized={isMinimized}>
-              <LinearProgress variant="determinate" value={progress} color={"secondary"}/>
-              {video}
-            </VideoContainer>
+    <Container isFullScreen={isFullScreen}>
+      <VideoContainer isMinimized={isMinimized}>
+        <LinearProgress variant="determinate" value={progress} color={"secondary"} />
+        {video}
+      </VideoContainer>
 
-            <Controls>
-              <StyledFab color="primary" size="small" onClick={handleClickMinimize}>
-                {isMinimized ? <ExpandLess/> : <ExpandMore/>}
-              </StyledFab>
-              <StyledFab size="small" color="primary" onClick={handleClickSkip}>
-                {<SkipPreviousOutlined/>}
-              </StyledFab>
-              <StyledFab size="medium" color="primary" onClick={handleClickFastRewind}>
-                {<FastRewindOutlined/>}
-              </StyledFab>
-              <StyledFab color="primary" onClick={paused ? handleClickPlay : handleClickPause}>
-                {paused ? <PlayArrowOutlined/> : <PauseOutlined/>}
-              </StyledFab>
-              <StyledFab size="medium" color="primary" onClick={handleClickFastForward}>
-                {<FastForwardOutlined/>}
-              </StyledFab>
-              <StyledFab size="small" color="primary" onClick={handleClickSkip}>
-                {<SkipNextOutlined/>}
-              </StyledFab>
-              <StyledFab color="primary" size="small" onClick={handleClickFullScreen}>
-                {isFullScreen ? <FullscreenExit/> : <Fullscreen/>}
-              </StyledFab>
-            </Controls>
-          </Container>
-        </div>
-      </Draggable>
-    </Wrapper>
+      <Controls>
+        <StyledFab color="primary" size="small" onClick={handleClickMinimize}>
+          {isMinimized ? <ExpandLess /> : <ExpandMore />}
+        </StyledFab>
+        <StyledFab size="small" color="primary" onClick={handleClickSkip}>
+          {<SkipPreviousOutlined />}
+        </StyledFab>
+        <StyledFab size="medium" color="primary" onClick={handleClickFastRewind}>
+          {<FastRewindOutlined />}
+        </StyledFab>
+        <StyledFab color="primary" onClick={paused ? handleClickPlay : handleClickPause}>
+          {paused ? <PlayArrowOutlined /> : <PauseOutlined />}
+        </StyledFab>
+        <StyledFab size="medium" color="primary" onClick={handleClickFastForward}>
+          {<FastForwardOutlined />}
+        </StyledFab>
+        <StyledFab size="small" color="primary" onClick={handleClickSkip}>
+          {<SkipNextOutlined />}
+        </StyledFab>
+        <StyledFab color="primary" size="small" onClick={handleClickFullScreen}>
+          {isFullScreen ? <FullscreenExit /> : <Fullscreen />}
+        </StyledFab>
+      </Controls>
+    </Container>
   );
 };
 

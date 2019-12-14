@@ -1,5 +1,5 @@
-import { FormControl, InputLabel, MenuItem, Select as MuiSelect } from '@material-ui/core';
-import React from 'react';
+import { FormControl, InputLabel, MenuItem, Select as MuiSelect } from "@material-ui/core";
+import React from "react";
 
 
 export default ({ name, id, options, fullWidth, optional, label, disabled, ...props }) => (

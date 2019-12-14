@@ -8,11 +8,17 @@ import {
   Request,
   Post,
   UseGuards,
-  BadRequestException, HttpCode, Body, Res,
+  BadRequestException,
+  HttpCode,
+  Body,
+  Res,
+  Req,
 } from '@nestjs/common';
 import MediaSearchService, { Response as MediaSearchResponse } from '../media-search/media-search.service';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from '../auth/auth.service';
+import { UserService } from '../users/users.service';
+
 import { SignInDto } from '../dto/SignInDto';
 import { SignUpDto } from '../dto/SignUpDto';
 
@@ -21,6 +27,7 @@ export class AppController {
   constructor(
     @Inject('MediaSearchService') private searchService: MediaSearchService,
     private readonly authService: AuthService,
+    private readonly userService: UserService,
   ) {}
 
   @Get()
@@ -28,16 +35,24 @@ export class AppController {
     return true;
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Get('search')
   search(
     @Query('keywords') term: string,
     @Query('offset') offset: number,
     @Query('limit') limit: number,
+    @Req() request,
   ): Promise<MediaSearchResponse> {
     if (!term) {
       throw new BadRequestException('Keywords params is required');
     }
     try {
+      this.userService.findOne(request.user.username).then(user => {
+        user.searchHistory.set(term, (user.searchHistory.get(term) || 0) + 1);
+        this.userService.put(request.user.username, user).catch(err => {
+          throw err;
+        });
+      });
       return this.searchService.search({ offset, limit, term });
     } catch (e) {
       throw new HttpException(
