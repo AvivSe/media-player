@@ -17,6 +17,8 @@ export const DELETE_USERS_REQUEST = "DELETE_USERS_REQUEST";
 export const DELETE_USERS_SUCCESS = "DELETE_USERS_SUCCESS";
 export const DELETE_USERS_ERROR = "DELETE_USERS_ERROR";
 
+export const UPDATE_TOP_SEARCHES_FOR_SPECIFIC_USER = "UPDATE_TOP_SEARCHES_FOR_SPECIFIC_USER";
+
 export const fetchUsers = params => async dispatch => {
   dispatch({ type: FETCH_USERS_REQUEST });
   try {

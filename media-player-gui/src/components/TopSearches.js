@@ -28,13 +28,7 @@ const TopSearches = ({ onKeywordsChange }) => {
   const handleDeleteClick = keywords => {
     const { [keywords]: _keywords, ...rest } = topSearches;
     setTopSearches(rest);
-    searchService
-      .deleteOneOfMyTopSearches(keywords)
-      .then(({data}) => {
-        setTopSearches(data);
-        dispatch(openSnackbar({ message: `${keywords} removed from your history` }));
-      })
-      .catch(() => dispatch(openSnackbar({ message: "Deletion actually failed in remote" })));
+
   };
 
   return (
