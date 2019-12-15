@@ -3,11 +3,11 @@ import TextField from "../components/form-kit/TextField";
 
 export default {
   initialValues: {
-    [email]: 'avivsegal@gmail.com',
-    [firstName]: 'Aviv',
-    [lastName]: 'Segal',
-    [password]: '123456',
-    [retypePassword]: '123456',
+    [email]: '',
+    [firstName]: '',
+    [lastName]: '',
+    [password]: '',
+    [retypePassword]: '',
 
   },
   title: "Sign Up",

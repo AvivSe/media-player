@@ -24,7 +24,7 @@ function userReducer(state = INITIAL_STATE, { type, payload }) {
       state.map[payload.username].topSearches = payload.topSearches;
       return { ...state };
     case FETCH_ONE_USER:
-      if (state.ids.indexOf(user => user.username === payload.username) === -1) {
+      if (state.ids.indexOf(username => username === payload.username) === -1) {
         state.ids.push(payload.username);
       }
       state.map[payload.username] = payload;
@@ -45,7 +45,10 @@ function userReducer(state = INITIAL_STATE, { type, payload }) {
       return { ...state, pending: false};
     case DELETE_USERS_SUCCESS:
       const ids = state.ids.filter(id => payload.findIndex(otherId => id === otherId) === -1);
-      const map = state.ids.map(id => state.map[id]);
+      const map = ids.reduce((prev, current) => {
+        prev[current] = state.map[current];
+        return prev;
+      }, {});
       return { ...state, ids, map };
     case DELETE_ONE_USER_SUCCESS:
       delete state.map[payload];

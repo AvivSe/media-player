@@ -4,8 +4,8 @@ import authService from "../services/auth.service";
 
 export default {
   initialValues: {
-    [email]: "avivsegal@gmail.com",
-    [password]: "123456",
+    [email]: "",
+    [password]: "",
   },
   flexDirection: 'column',
   hidePreloader: false,
