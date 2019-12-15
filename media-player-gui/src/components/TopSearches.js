@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getMyTopSearches, getProfile } from "../redux/auth/auth.selectors";
 import Draggable from "react-draggable";
 import { deleteOneTopSearch, fetchOneUser } from "../redux/user/user.actions";
+import { openSnackbar } from "../redux/ui/ui.actions";
 
 const StyledPopperContent = styled.div`
   display: flex;
@@ -22,9 +23,7 @@ const TopSearches = ({ onKeywordsChange }) => {
   const topSearches = useSelector(getMyTopSearches);
   const dispatch = useDispatch();
   const handleTopSearchesClick = () => {
-    if(!isTopSearchesOpen) {
-      dispatch(fetchOneUser(profile.username))
-    }
+    dispatch(fetchOneUser(profile.username));
     setTopSearchesOpen(!isTopSearchesOpen);
   };
 
