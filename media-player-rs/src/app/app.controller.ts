@@ -22,6 +22,8 @@ import { SignUpDto } from '../auth/SignUpDto';
 import { MediaSearchResponseDto } from '../media-search-service/MediaSearchResponseDto';
 import { MediaSearchService } from '../media-search-service/media-search.service';
 import { ReportService } from '../reports/report.service';
+import { IsNotEmpty } from 'class-validator';
+import { DeleteTopSearchRequest } from '../media-search-service/DeleteTopSearchRequest';
 
 @Controller('api')
 export class AppController {
@@ -33,7 +35,7 @@ export class AppController {
 
   @UseGuards(AuthGuard('jwt'))
   @Delete('top')
-  deleteOneOfMyTopSearches(@Param('keywords') keywords: string, @Req() request): Promise<Record<string, string>> {
+  deleteOneOfMyTopSearches(@Query() { keywords }: DeleteTopSearchRequest, @Req() request): Promise<Record<string, string>> {
     return this.reportService.deleteOneOfMyTopSearches(request.user.username, keywords);
   }
 

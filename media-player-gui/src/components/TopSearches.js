@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { getProfile } from "../redux/auth/auth.selectors";
 import Draggable from "react-draggable";
 import searchService from "../services/media-search.service";
-import { useDispatch } from "react-redux/src";
+import { useDispatch } from "react-redux";
 import { openSnackbar } from "../redux/ui/ui.actions";
 const StyledPopperContent = styled.div`
   display: flex;
@@ -17,53 +17,56 @@ const StyledPopperContent = styled.div`
   max-width: 350px;
 `;
 const TopSearches = ({ onKeywordsChange }) => {
-  // const topSearchButtonRef = useRef();
-  // const [isTopSearchesOpen, setTopSearchesOpen] = React.useState(false);
-  // const [topSearches, setTopSearches] = useState(null);
-  // const dispatch = useDispatch();
-  // const handleTopSearchesClick = () => {
-  //   setTopSearchesOpen(!isTopSearchesOpen);
-  // };
+  const topSearchButtonRef = useRef();
+  const [isTopSearchesOpen, setTopSearchesOpen] = React.useState(false);
+  const [topSearches, setTopSearches] = useState(useSelector(getProfile)["topSearches"]);
+  const dispatch = useDispatch();
+  const handleTopSearchesClick = () => {
+    setTopSearchesOpen(!isTopSearchesOpen);
+  };
 
-  // const handleDeleteClick = keywords => {
-  //   const { [keywords]: _keywords, ...rest } = topSearches;
-  //   setTopSearches(rest);
-  //   searchService
-  //     .deleteOneOfMyTopSearches(keywords)
-  //     .then()
-  //     .catch(() => dispatch(openSnackbar({ message: "Deletion actually failed in remote" })));
-  // };
+  const handleDeleteClick = keywords => {
+    const { [keywords]: _keywords, ...rest } = topSearches;
+    setTopSearches(rest);
+    searchService
+      .deleteOneOfMyTopSearches(keywords)
+      .then(({data}) => {
+        setTopSearches(data);
+        dispatch(openSnackbar({ message: `${keywords} removed from your history` }));
+      })
+      .catch(() => dispatch(openSnackbar({ message: "Deletion actually failed in remote" })));
+  };
 
   return (
     <>
-      {/*<Fab onClick={handleTopSearchesClick} buttonRef={topSearchButtonRef}>*/}
-      {/*  <HistoryOutlined />*/}
-      {/*</Fab>*/}
-      {/*<Popper*/}
-      {/*  open={isTopSearchesOpen}*/}
-      {/*  onClick={handleTopSearchesClick}*/}
-      {/*  anchorEl={topSearchButtonRef.current}*/}
-      {/*  placement="right-end"*/}
-      {/*>*/}
-      {/*  <Draggable handle=".handle" defaultPosition={{ x: 0, y: 0 }}>*/}
-      {/*    <StyledPopperContent className="handle">*/}
-      {/*      {Object.entries(topSearches).map(([keywords, value]) => {*/}
-      {/*        return (*/}
-      {/*          <Badge badgeContent={value || "0"} color={"secondary"}>*/}
-      {/*            <Chip*/}
-      {/*              onClick={() => {*/}
-      {/*                onKeywordsChange(keywords);*/}
-      {/*                setTopSearchesOpen(true);*/}
-      {/*              }}*/}
-      {/*              label={keywords}*/}
-      {/*              onDelete={() => handleDeleteClick(keywords)}*/}
-      {/*            />*/}
-      {/*          </Badge>*/}
-      {/*        );*/}
-      {/*      })}*/}
-      {/*    </StyledPopperContent>*/}
-      {/*  </Draggable>*/}
-      {/*</Popper>*/}
+      <Fab onClick={handleTopSearchesClick} buttonRef={topSearchButtonRef}>
+        <HistoryOutlined />
+      </Fab>
+      <Popper
+        open={isTopSearchesOpen}
+        onClick={handleTopSearchesClick}
+        anchorEl={topSearchButtonRef.current}
+        placement="right-end"
+      >
+        <Draggable handle=".handle" defaultPosition={{ x: 0, y: 0 }}>
+          <StyledPopperContent className="handle">
+            {topSearches && Object.entries(topSearches).map(([keywords, value]) => {
+              return (
+                <Badge badgeContent={value || "0"} color={"secondary"}>
+                  <Chip
+                    onClick={() => {
+                      onKeywordsChange(keywords);
+                      setTopSearchesOpen(true);
+                    }}
+                    label={keywords}
+                    onDelete={() => handleDeleteClick(keywords)}
+                  />
+                </Badge>
+              );
+            })}
+          </StyledPopperContent>
+        </Draggable>
+      </Popper>
     </>
   );
 };
