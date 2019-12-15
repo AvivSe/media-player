@@ -16,7 +16,6 @@ function userReducer(state = INITIAL_STATE, { type, payload }) {
       state[payload.username] = payload;
       return { ...state };
     case DELETE_USERS_SUCCESS:
-      console.log("123", payload);
       const ids = state.ids.filter(id => payload.findIndex(otherId => id === otherId) === -1);
       const map = state.ids.map(id => state.map[id]);
       return { ...state, ids, map };
