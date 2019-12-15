@@ -8,6 +8,8 @@ import { ReportModule } from '../reports/report.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 
+console.log("aviv",process.env.MONGO_CONNECTION_STRING);
+
 @Module({
   imports: [
     AuthModule,
