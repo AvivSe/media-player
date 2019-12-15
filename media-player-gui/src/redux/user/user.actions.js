@@ -1,4 +1,6 @@
 import userService from "../../services/user.service";
+import searchService from "../../services/media-search.service";
+
 import { openSnackbar } from "../ui/ui.actions";
 
 export const FETCH_USERS_REQUEST = "FETCH_USERS_REQUEST";
@@ -17,7 +19,8 @@ export const DELETE_USERS_REQUEST = "DELETE_USERS_REQUEST";
 export const DELETE_USERS_SUCCESS = "DELETE_USERS_SUCCESS";
 export const DELETE_USERS_ERROR = "DELETE_USERS_ERROR";
 
-export const UPDATE_TOP_SEARCHES_FOR_SPECIFIC_USER = "UPDATE_TOP_SEARCHES_FOR_SPECIFIC_USER";
+export const FETCH_ONE_USER = "FETCH_ONE_USER";
+export const DELETE_ONE_TOP_SEARCH = "DELETE_ONE_TOP_SEARCH";
 
 export const fetchUsers = params => async dispatch => {
   dispatch({ type: FETCH_USERS_REQUEST });
@@ -36,7 +39,7 @@ export const updateUser = (username, user) => async dispatch => {
   try {
     const result = await userService.update(username, user);
     dispatch({ type: UPDATE_USER_SUCCESS, payload: result.data });
-    dispatch(openSnackbar({ message: `${username} is updated successfully`}));
+    dispatch(openSnackbar({ message: `${username} is updated successfully` }));
   } catch (e) {
     dispatch({ type: UPDATE_USER_ERROR });
     dispatch(openSnackbar(e));
@@ -48,7 +51,7 @@ export const deleteOneUser = username => async dispatch => {
   try {
     await userService.deleteOne(username);
     dispatch({ type: DELETE_ONE_USER_SUCCESS, payload: username });
-    dispatch(openSnackbar({ message: `${username} is deleted successfully`}));
+    dispatch(openSnackbar({ message: `${username} is deleted successfully` }));
   } catch (e) {
     dispatch({ type: DELETE_ONE_USER_ERROR });
     dispatch(openSnackbar(e));
@@ -60,9 +63,30 @@ export const deleteUsers = usernameList => async dispatch => {
   try {
     const result = await userService.delete(usernameList);
     dispatch({ type: DELETE_USERS_SUCCESS, payload: usernameList });
-    dispatch(openSnackbar({ message: `${result.data["deletedCount"]} deleted users successfully`}));
+    dispatch(openSnackbar({ message: `${result.data["deletedCount"]} deleted users successfully` }));
   } catch (e) {
     dispatch({ type: FETCH_USERS_ERROR });
+    dispatch(openSnackbar(e));
+  }
+};
+
+export const fetchOneUser = username => async dispatch => {
+  try {
+    const result = await userService.findOne(username);
+    dispatch({ type: FETCH_ONE_USER, payload: result.data });
+  } catch (e) {
+    dispatch(openSnackbar(e));
+  }
+};
+
+export const deleteOneTopSearch = (username, keywords) => async dispatch => {
+  try {
+    const result = await searchService.deleteOneOfMyTopSearches(keywords);
+    dispatch({ type: DELETE_ONE_TOP_SEARCH, payload: { topSearches: result.data, username } });
+    dispatch(fetchOneUser(username));
+    dispatch(openSnackbar({message: `${keywords} removed`}));
+
+  } catch (e) {
     dispatch(openSnackbar(e));
   }
 };

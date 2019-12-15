@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/auth/auth.actions";
 import { getSelectedMedia } from "../redux/player/player.selectors";
 import { openSnackbar } from "../redux/ui/ui.actions";
+import { fetchUsers } from "../redux/user/user.actions";
 
 const Row = styled.div`
   display: flex;
@@ -58,6 +59,10 @@ const MediaPlayer = () => {
   }, [fetchSearchResults, searchAsYouType]);
 
   useEffect(() => {
+    dispatch(fetchUsers());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (!!gridApi) {
       gridApi.sizeColumnsToFit();
       // TODO The timeout is only for fix the first time loading table margin bottom issue, have to handle without timeout
@@ -81,7 +86,7 @@ const MediaPlayer = () => {
 
   const handleLogoutClick = () => {
     dispatch(logout());
-    dispatch(openSnackbar({ message: "Don't forget to logout" }))
+    dispatch(openSnackbar({ message: "Don't forget to logout" }));
   };
 
   return (
@@ -95,7 +100,7 @@ const MediaPlayer = () => {
       <DraggableHelper>
         <Draggable handle=".handle" defaultPosition={{ x: width - 1400, y: -40 }}>
           <div className={"handle"}>
-            <HTML5Player isMute={isMute}/>
+            <HTML5Player isMute={isMute} />
           </div>
         </Draggable>
       </DraggableHelper>

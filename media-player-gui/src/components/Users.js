@@ -35,19 +35,20 @@ const Users = () => {
   const [gridApi, setGridApi] = useState(null);
   const dispatch = useDispatch();
   const { width } = useWindowSize();
-  const isEmptyUserList = useSelector(getIsEmptyUserList);
   const rowData = useSelector(getUserList);
 
-  useEffect(() => {
-    dispatch(openSnackbar({ message: "Pressing delete will affect selected rows" }));
-    return () => dispatch(openSnackbar({ message: "Don't forget to logout" }));
-  }, [dispatch]);
+  const isEmptyUserList = useSelector(getIsEmptyUserList);
 
   useEffect(() => {
     if (isEmptyUserList) {
       dispatch(fetchUsers());
     }
   }, [isEmptyUserList, dispatch]);
+
+  useEffect(() => {
+    dispatch(openSnackbar({ message: "Pressing delete will affect selected rows" }));
+    return () => dispatch(openSnackbar({ message: "Don't forget to logout" }));
+  }, [dispatch]);
 
   useEffect(() => {
     const keyDownEventHandler = ({ key }) => {

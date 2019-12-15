@@ -2,9 +2,12 @@ import {
   Body,
   Controller,
   Delete,
+  forwardRef,
   Get,
   HttpCode,
   HttpStatus,
+  Inject,
+  Injectable,
   NotFoundException,
   Param,
   Post,
@@ -17,11 +20,17 @@ import { UpdateUserDto } from './UpdateUserDto';
 import { AuthGuard } from '@nestjs/passport';
 import { ChangeUserParamDto } from './ChangeUserParamDto';
 import * as bcrypt from 'bcrypt';
+import { ReportService } from '../reports/report.service';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('api/user')
+@Injectable()
 export class UsersController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    @Inject(forwardRef(() => ReportService))
+    private readonly reportService: ReportService,
+  ) {}
 
   handleNoSuchEntity(res) {
     if (!res) {
@@ -62,11 +71,17 @@ export class UsersController {
 
   @Delete(':username')
   async deleteOne(@Param() { username }: ChangeUserParamDto) {
+    this.deleteReportsAllowExceptions([username]);
     return this.userService.deleteOne(username);
   }
 
   @Delete()
   async delete(@Body() userNames: string[]) {
+    this.deleteReportsAllowExceptions(userNames);
     return this.userService.delete(userNames);
+  }
+
+  deleteReportsAllowExceptions(usernames: string[]) {
+    this.reportService.deleteAllOfEachUserRecords(usernames).catch(error => console.warn(error));
   }
 }

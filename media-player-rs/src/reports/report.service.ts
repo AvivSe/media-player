@@ -34,7 +34,12 @@ export class ReportService {
           return prev;
         }, {});
       })
-      .then(topSearches => this.userService.update(username, { topSearches })).then(user => user.topSearches);
+      .then(topSearches => this.userService.update(username, { topSearches }))
+      .then(user => user.topSearches);
+  }
+
+  async deleteAllOfEachUserRecords(usernames: string[]): Promise<Record<string, string>> {
+    return this.searchEntry.remove({ username: usernames });
   }
 
   async deleteOneOfMyTopSearches(username: string, keywords: string): Promise<Record<string, string>> {

@@ -1,6 +1,8 @@
 import {
+  DELETE_ONE_TOP_SEARCH,
   DELETE_ONE_USER_SUCCESS,
   DELETE_USERS_SUCCESS,
+  FETCH_ONE_USER,
   FETCH_USERS_SUCCESS,
   UPDATE_USER_SUCCESS
 } from "./user.actions";
@@ -12,7 +14,21 @@ export const INITIAL_STATE = {
 
 function userReducer(state = INITIAL_STATE, { type, payload }) {
   switch (type) {
+    case DELETE_ONE_TOP_SEARCH:
+      console.log("Profile", state.map[payload.username]);
+      console.log("payload", payload);
+      state.map[payload.username].topSearches = payload.topSearches;
+      return { ...state };
+    case FETCH_ONE_USER:
+      if (state.ids.indexOf(user => user.username === payload.username) === -1) {
+        state.ids.push(payload.username);
+      }
+      state.map[payload.username] = payload;
+      return { ...state };
     case UPDATE_USER_SUCCESS:
+      if (state.ids.indexOf(user => user.username === payload.username) === -1) {
+        state.ids.push(payload.username);
+      }
       state[payload.username] = payload;
       return { ...state };
     case DELETE_USERS_SUCCESS:
@@ -25,7 +41,6 @@ function userReducer(state = INITIAL_STATE, { type, payload }) {
       return { ...state };
     case FETCH_USERS_SUCCESS:
       return {
-        ...state,
         ids: payload.rows.map(user => user.username),
         map: payload.rows.reduce((prev, curr) => {
           prev[curr.username] = curr;

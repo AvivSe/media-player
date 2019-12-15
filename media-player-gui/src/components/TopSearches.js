@@ -5,12 +5,11 @@ import Chip from "@material-ui/core/Chip";
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import Badge from "@material-ui/core/Badge";
-import { useSelector } from "react-redux";
-import { getProfile } from "../redux/auth/auth.selectors";
+import { useDispatch, useSelector } from "react-redux";
+import { getMyTopSearches, getProfile } from "../redux/auth/auth.selectors";
 import Draggable from "react-draggable";
-import searchService from "../services/media-search.service";
-import { useDispatch } from "react-redux";
-import { openSnackbar } from "../redux/ui/ui.actions";
+import { deleteOneTopSearch, fetchOneUser } from "../redux/user/user.actions";
+
 const StyledPopperContent = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -19,16 +18,18 @@ const StyledPopperContent = styled.div`
 const TopSearches = ({ onKeywordsChange }) => {
   const topSearchButtonRef = useRef();
   const [isTopSearchesOpen, setTopSearchesOpen] = React.useState(false);
-  const [topSearches, setTopSearches] = useState(useSelector(getProfile)["topSearches"]);
+  const profile = useSelector(getProfile);
+  const topSearches = useSelector(getMyTopSearches);
   const dispatch = useDispatch();
   const handleTopSearchesClick = () => {
+    if(!isTopSearchesOpen) {
+      dispatch(fetchOneUser(profile.username))
+    }
     setTopSearchesOpen(!isTopSearchesOpen);
   };
 
   const handleDeleteClick = keywords => {
-    const { [keywords]: _keywords, ...rest } = topSearches;
-    setTopSearches(rest);
-
+    dispatch(deleteOneTopSearch(profile.username, keywords));
   };
 
   return (
@@ -44,20 +45,21 @@ const TopSearches = ({ onKeywordsChange }) => {
       >
         <Draggable handle=".handle" defaultPosition={{ x: 0, y: 0 }}>
           <StyledPopperContent className="handle">
-            {topSearches && Object.entries(topSearches).map(([keywords, value]) => {
-              return (
-                <Badge badgeContent={value || "0"} color={"secondary"}>
-                  <Chip
-                    onClick={() => {
-                      onKeywordsChange(keywords);
-                      setTopSearchesOpen(true);
-                    }}
-                    label={keywords}
-                    onDelete={() => handleDeleteClick(keywords)}
-                  />
-                </Badge>
-              );
-            })}
+            {topSearches &&
+              Object.entries(topSearches).map(([keywords, value]) => {
+                return (
+                  <Badge badgeContent={value || "0"} color={"secondary"}>
+                    <Chip
+                      onClick={() => {
+                        onKeywordsChange(keywords);
+                        setTopSearchesOpen(true);
+                      }}
+                      label={keywords}
+                      onDelete={() => handleDeleteClick(keywords)}
+                    />
+                  </Badge>
+                );
+              })}
           </StyledPopperContent>
         </Draggable>
       </Popper>

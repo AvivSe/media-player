@@ -10,6 +10,10 @@ class UserService {
     return axios.get(userServiceUrl, { params });
   }
 
+  async findOne(username) {
+    return axios.get(`${userServiceUrl}/${username}`);
+  }
+
   async update(username, payload) {
     return axios.put(`${userServiceUrl}/${username}`, payload);
   }

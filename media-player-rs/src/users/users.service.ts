@@ -45,6 +45,10 @@ export class UserService {
     return this.userModel.findOneAndUpdate({ username }, updateUserDto, { new: true });
   }
 
+  async updateMany(usernames: string[], updateUserDto: any): Promise<User> {
+    return this.userModel.updateMany({ username: usernames}, updateUserDto, { new: true });
+  }
+
   async deleteOne(username): Promise<any> {
     return this.userModel.deleteOne({ username }).then(res => {
       if (res.ok !== 1 || res.deletedCount === 0) {
