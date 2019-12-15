@@ -27,7 +27,7 @@ class UserService {
   }
 
   async create(user) {
-    return axios.put(userServiceUrl, user);
+    return axios.post(userServiceUrl, user);
   }
 
 }

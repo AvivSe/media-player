@@ -11,6 +11,10 @@ export const UPDATE_USER_REQUEST = "UPDATE_USER_REQUEST";
 export const UPDATE_USER_SUCCESS = "UPDATE_USER_SUCCESS";
 export const UPDATE_USER_ERROR = "UPDATE_USER_ERROR";
 
+export const CREATE_USER_REQUEST = "CREATE_USER_REQUEST";
+export const CREATE_USER_SUCCESS = "CREATE_USER_SUCCESS";
+export const CREATE_USER_ERROR = "CREATE_USER_ERROR";
+
 export const DELETE_ONE_USER_REQUEST = "DELETE_ONE_USER_REQUEST";
 export const DELETE_ONE_USER_SUCCESS = "DELETE_ONE_USER_SUCCESS";
 export const DELETE_ONE_USER_ERROR = "DELETE_ONE_USER_ERROR";
@@ -42,6 +46,21 @@ export const updateUser = (username, user) => async dispatch => {
     dispatch(openSnackbar({ message: `${username} is updated successfully` }));
   } catch (e) {
     dispatch({ type: UPDATE_USER_ERROR });
+    dispatch(openSnackbar(e));
+  }
+};
+
+export const createUser = (user, onSuccess) => async dispatch => {
+  dispatch({ type: CREATE_USER_REQUEST });
+  try {
+    const result = await userService.create(user);
+    dispatch({ type: CREATE_USER_SUCCESS, payload: result.data });
+    dispatch(openSnackbar({ message: `${result.data.username} is created successfully` }));
+    if(onSuccess) {
+      onSuccess();
+    }
+  } catch (e) {
+    dispatch({ type: CREATE_USER_ERROR });
     dispatch(openSnackbar(e));
   }
 };
@@ -85,7 +104,6 @@ export const deleteOneTopSearch = (username, keywords) => async dispatch => {
     dispatch({ type: DELETE_ONE_TOP_SEARCH, payload: { topSearches: result.data, username } });
     dispatch(fetchOneUser(username));
     dispatch(openSnackbar({message: `${keywords} removed`}));
-
   } catch (e) {
     dispatch(openSnackbar(e));
   }

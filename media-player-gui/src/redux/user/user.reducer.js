@@ -1,4 +1,7 @@
 import {
+  CREATE_USER_ERROR,
+  CREATE_USER_REQUEST,
+  CREATE_USER_SUCCESS,
   DELETE_ONE_TOP_SEARCH,
   DELETE_ONE_USER_SUCCESS,
   DELETE_USERS_SUCCESS,
@@ -9,7 +12,8 @@ import {
 
 export const INITIAL_STATE = {
   ids: [],
-  map: {}
+  map: {},
+  pending: false,
 };
 
 function userReducer(state = INITIAL_STATE, { type, payload }) {
@@ -31,6 +35,14 @@ function userReducer(state = INITIAL_STATE, { type, payload }) {
       }
       state[payload.username] = payload;
       return { ...state };
+    case CREATE_USER_SUCCESS:
+      state.ids.push(payload.username);
+      state[payload.username] = payload;
+      return { ...state , pending: false};
+    case CREATE_USER_REQUEST:
+      return { ...state, pending: true};
+    case CREATE_USER_ERROR:
+      return { ...state, pending: false};
     case DELETE_USERS_SUCCESS:
       const ids = state.ids.filter(id => payload.findIndex(otherId => id === otherId) === -1);
       const map = state.ids.map(id => state.map[id]);

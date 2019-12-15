@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AgGridReact } from "@ag-grid-community/react";
 import { AllModules } from "@ag-grid-enterprise/all-modules";
 import styled from "styled-components";
-import { CloseOutlined } from "@material-ui/icons";
+import { CloseOutlined, PersonAddOutlined } from "@material-ui/icons";
 import LinkFab from "../LinkFab";
 import { useWindowSize } from "../hooks/useWindowSize";
 import DeleteCellRenderer from "./cell-renderers/DeleteCellRenderer";
@@ -13,6 +13,8 @@ import { deleteOneUser, deleteUsers, fetchUsers, updateUser } from "../redux/use
 import { getIsEmptyUserList, getUserList } from "../redux/user/user.selectors";
 import { openSnackbar } from "../redux/ui/ui.actions";
 import Fab from "@material-ui/core/Fab";
+import Dialog from "./Dialog";
+import SignUp from "./SignUp";
 
 const Wrapper = styled.div``;
 
@@ -24,10 +26,17 @@ const AgGridWrapper = styled.div`
     border: none !important;
   }
   .ag-icon {
-    color: ${({ theme }) => theme.palette.secondary.main} !important;;
+    color: ${({ theme }) => theme.palette.secondary.main} !important;
   }
   .ag-theme-material {
     color: ${({ theme }) => theme.palette.secondary.main} !important;
+  }
+`;
+
+const Controls = styled.div`
+  button {
+    margin-top: -5rem;
+    margin-right: 0.5rem;
   }
 `;
 
@@ -36,7 +45,7 @@ const Users = () => {
   const dispatch = useDispatch();
   const { width } = useWindowSize();
   const rowData = useSelector(getUserList);
-
+  const [isCreateUserDialogOpen, setIsCreateUserDialogOpen] = useState(false);
   const isEmptyUserList = useSelector(getIsEmptyUserList);
 
   useEffect(() => {
@@ -124,6 +133,14 @@ const Users = () => {
     dispatch(updateUser(data.username, { [column.colId]: data[column.colId] }));
   };
 
+  const handleAddNewUserClick = () => {
+    setIsCreateUserDialogOpen(true);
+  };
+
+  const handleAddNewUserClose = () => {
+    setIsCreateUserDialogOpen(false);
+  };
+
   useEffect(() => {
     if (!!gridApi) {
       gridApi.sizeColumnsToFit();
@@ -132,7 +149,10 @@ const Users = () => {
 
   return (
     <Wrapper>
-      <LinkFab to={"/listing"} icon={<CloseOutlined />} />
+      <Controls>
+        <LinkFab to={"/listing"} icon={<CloseOutlined />} />
+        <LinkFab style={{ marginLeft: "10px" }} icon={<PersonAddOutlined />} onClick={handleAddNewUserClick} />
+      </Controls>
       <AgGridWrapper className={"ag-theme-material"}>
         <AgGridReact
           onGridReady={onGridReady}
@@ -152,6 +172,9 @@ const Users = () => {
           onCellEditingStopped={handleEditingStop}
         />
       </AgGridWrapper>
+      <Dialog open={isCreateUserDialogOpen} onDialogClose={handleAddNewUserClose}>
+        <SignUp mode={"onBehave"} onCancel={handleAddNewUserClose}/>
+      </Dialog>
     </Wrapper>
   );
 };

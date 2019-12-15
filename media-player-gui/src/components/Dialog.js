@@ -1,5 +1,5 @@
 import React from "react";
-import { AppBar, Dialog as MuiDialog, IconButton, makeStyles, Slide, Toolbar } from "@material-ui/core";
+import { Dialog as MuiDialog, IconButton, makeStyles, Slide, Toolbar } from "@material-ui/core";
 import { FaTimesCircle as CloseIcon } from "react-icons/fa";
 import styled from "styled-components";
 
@@ -22,26 +22,14 @@ const StyledDialog = styled(MuiDialog)`
 `;
 
 
-const Dialog = ({ children, dialog, onDialogClose }) => {
-  const classes = makeStyles(theme => ({
-    appBar: {
-      position: "relative"
-    },
-    title: {
-      marginLeft: theme.spacing(2),
-      flex: 1
-    }
-  }));
-
+const Dialog = ({ children, open, onDialogClose }) => {
   return (
-    <StyledDialog fullScreen open={!!dialog} onClose={onDialogClose} TransitionComponent={Transition}>
-      <AppBar className={classes["appBar"]}>
+    <StyledDialog fullScreen open={open} onClose={onDialogClose}>
         <Toolbar>
           <IconButton edge="start" onClick={onDialogClose} aria-label="close">
             <CloseIcon style={{ fill: "white" }} />
           </IconButton>
         </Toolbar>
-      </AppBar>
       <MainContent>{children}</MainContent>
     </StyledDialog>
   );

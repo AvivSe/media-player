@@ -4,6 +4,9 @@ import Animation from "./Preloader";
 import Form from "./form-kit/Form";
 import signInFormConfiguration from "../configurations/sign-in-form.configuration";
 import { login } from "../redux/auth/auth.actions";
+import { useHistory, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getIsAuthenticated, getLoginOrSignUpRequestIsPending } from "../redux/auth/auth.selectors";
 
 const Wrapper = styled.div`
   display: flex;
@@ -11,8 +14,12 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const Login = ({ location, history, dispatch, isAuthenticated, isLoading}) => {
-
+const Login = () => {
+  const location = useLocation();
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector(getIsAuthenticated);
+  const isLoading= useSelector(getLoginOrSignUpRequestIsPending);
   useEffect(() => {
     if (isAuthenticated && location.pathname === "/login") {
       history.push("/");
