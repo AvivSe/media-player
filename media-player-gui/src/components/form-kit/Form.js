@@ -1,9 +1,9 @@
 import Button from "./Button";
 import { Formik } from "formik";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import Preloader from "../Preloader";
 import { fieldToLabelMap } from "../../configurations/global-validations";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 const Group = styled.div`
   display: flex;
@@ -34,32 +34,22 @@ const Cover = styled.div`
   position: absolute;
   align-items: center;
   justify-content: center;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(0, 0, 0, 0.3);
+  
 `;
 
 const StyledHtmlForm = styled.form`
   margin: auto;
+  padding: 1rem;
   width: fit-content;
   display: flex;
   flex-direction: ${({flexDirection})=> flexDirection || 'row'};
 `;
 
-const StyledPreloader = styled(Preloader)`
-  z-index: 20;
-  margin: auto;
-`;
-const Form = ({ successContent, onSecondaryButtonClick,secondaryButtonLabel, configuration, submitLabel, hidePreloader, onSubmit, ...otherProps }) => {
+const Form = ({ successContent, onSecondaryButtonClick,secondaryButtonLabel, configuration, loading, submitLabel, hidePreloader, onSubmit, ...otherProps }) => {
   const { title, initialValues, direction, groups, validationSchema } = configuration;
   const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [disabled, setDisabled] = useState(false);
-  const [error, setError] = useState(null);
-
   const secondaryButtonEnabled = !!onSecondaryButtonClick && typeof onSecondaryButtonClick === "function";
-
-  useEffect(() => {
-    setDisabled(loading);
-  }, [loading]);
 
   const handleSuccess = () => {
     setSubmitted(true);
@@ -67,7 +57,6 @@ const Form = ({ successContent, onSecondaryButtonClick,secondaryButtonLabel, con
 
   const handleError = err => {
     setSubmitted(false);
-    setError(err);
   };
 
   const handleSubmit = (values) => {
@@ -101,10 +90,14 @@ const Form = ({ successContent, onSecondaryButtonClick,secondaryButtonLabel, con
     <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
       {({ handleSubmit, handleChange, handleBlur, values, errors, touched }) => (
         <Wrapper>
+
           {loading && !configuration.hidePreloader && (
-            <Cover>
-              <StyledPreloader />
+            <>
+              <LinearProgress color={"secondary"} />
+              <Cover>
+              {/*<StyledPreloader />*/}
             </Cover>
+            </>
           )}
           <StyledHtmlForm flexDirection={configuration.flexDirection} onSubmit={handleSubmit} {...otherProps}>
             {Boolean(title) && (
@@ -133,7 +126,7 @@ const Form = ({ successContent, onSecondaryButtonClick,secondaryButtonLabel, con
                           label={label}
                           fullWidth={inputs.length === 1}
                           style={{ margin: "0.5rem" }}
-                          disabled={disabled}
+                          disabled={loading}
                           {...props}
                         />
                       )
@@ -143,9 +136,9 @@ const Form = ({ successContent, onSecondaryButtonClick,secondaryButtonLabel, con
               ))}
             </FieldsWrapper>
             <Group style={{ padding: "0.5rem" }}>
-              <Button type="submit"  disabled={disabled}> {submitLabel || "Submit"}</Button>
+              <Button type="submit"  disabled={loading}> {submitLabel || "Submit"}</Button>
               {secondaryButtonEnabled && (
-                <Button onClick={handleSecondaryButtonClick} disabled={disabled}>
+                <Button onClick={handleSecondaryButtonClick} disabled={loading}>
                   {secondaryButtonLabel || "Cancel"}
                 </Button>
               )}

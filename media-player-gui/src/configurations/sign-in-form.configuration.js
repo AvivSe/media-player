@@ -1,4 +1,4 @@
-import { email, genericValidationSchema, loginValidationSchema, password } from "./global-validations";
+import { email, loginValidationSchema, password } from "./global-validations";
 import TextField from "../components/form-kit/TextField";
 import authService from "../services/auth.service";
 
@@ -8,7 +8,7 @@ export default {
     [password]: "123456",
   },
   flexDirection: 'column',
-  hidePreloader: true,
+  hidePreloader: false,
   validationSchema: loginValidationSchema,
   sendForm: ({ [email]: username, [password]: _password }) => {
     return authService.login({ username, password: _password });

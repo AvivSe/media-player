@@ -5,7 +5,6 @@ import { SignInDto } from './SignInDto';
 import { SignUpDto } from './SignUpDto';
 import { CreateUserDto } from '../users/CreateUserDto';
 import * as bcrypt from 'bcrypt';
-import { UpdateUserDto } from '../users/UpdateUserDto';
 
 @Injectable()
 export class AuthService {

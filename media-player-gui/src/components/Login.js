@@ -1,12 +1,8 @@
 import styled from "styled-components";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Animation from "./Preloader";
 import Form from "./form-kit/Form";
 import signInFormConfiguration from "../configurations/sign-in-form.configuration";
-import signUpFormConfiguration from "../configurations/sign-up-form.configuration";
-import { useHistory, useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { getIsAuthenticated } from "../redux/auth/auth.selectors";
 import { login } from "../redux/auth/auth.actions";
 
 const Wrapper = styled.div`
@@ -15,11 +11,7 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const Login = () => {
-  const location = useLocation();
-  const history = useHistory();
-  const dispatch = useDispatch();
-  const isAuthenticated = useSelector(getIsAuthenticated);
+const Login = ({ location, history, dispatch, isAuthenticated, isLoading}) => {
 
   useEffect(() => {
     if (isAuthenticated && location.pathname === "/login") {
@@ -42,10 +34,10 @@ const Login = () => {
           <Animation size={15}/>
           <Form
             onSubmit={handleSubmit}
-            hidePreloader={true}
             secondaryButtonLabel={"Sign Up"}
             configuration={signInFormConfiguration}
             submitLabel={"Login"}
+            loading={isLoading}
             onSecondaryButtonClick={handleSignUpClick}
           />
         </Wrapper>

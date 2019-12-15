@@ -5,6 +5,8 @@ import { AuthModule } from '../auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersModule } from '../users/users.module';
 import { ReportModule } from '../reports/report.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -16,6 +18,10 @@ import { ReportModule } from '../reports/report.module';
       useCreateIndex: true,
       useFindAndModify: false,
       useUnifiedTopology: true,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public'),
+      renderPath: '*',
     }),
   ],
   controllers: [AppController],

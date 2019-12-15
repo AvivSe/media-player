@@ -2,10 +2,12 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpException,
   HttpStatus,
+  Param,
   Post,
   Query,
   Req,
@@ -14,14 +16,12 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from '../auth/auth.service';
-import { UserService } from '../users/users.service';
 
 import { SignInDto } from '../auth/SignInDto';
 import { SignUpDto } from '../auth/SignUpDto';
 import { MediaSearchResponseDto } from '../media-search-service/MediaSearchResponseDto';
 import { MediaSearchService } from '../media-search-service/media-search.service';
 import { ReportService } from '../reports/report.service';
-import { GetMyTopSearchesRequest } from '../reports/GetMyTopSearchesRequest';
 
 @Controller('api')
 export class AppController {
@@ -29,16 +29,18 @@ export class AppController {
     private readonly mediaSearchService: MediaSearchService,
     private readonly authService: AuthService,
     private readonly reportService: ReportService,
-    private readonly userService: UserService,
   ) {}
 
   @UseGuards(AuthGuard('jwt'))
+  @Delete('top')
+  deleteOneOfMyTopSearches(@Param('keywords') keywords: string, @Req() request): Promise<Record<string, string>> {
+    return this.reportService.deleteOneOfMyTopSearches(request.user.username, keywords);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
   @Get('top')
-  getMyTopSearches(
-    @Query() {limit}: GetMyTopSearchesRequest,
-    @Req() request,
-  ): Promise<any> {
-    return this.reportService.getUserTopSearches(request.user.username, limit);
+  getMyTopSearches(@Req() request): Promise<Record<string, string>> {
+    return this.reportService.getUserTopSearches(request.user.username);
   }
 
   @UseGuards(AuthGuard('jwt'))
@@ -52,14 +54,8 @@ export class AppController {
     if (!term) {
       throw new BadRequestException('Keywords params is required');
     }
-    this.reportService.report(request.user.username, term)
-      .then(() => this.userService.findOne(request.user.username)
-        .then(async user => {
-          user.topSearches = await this.reportService.getUserTopSearches(request.user.username, 10);
-          user.save();
-        })).catch(e => {
-          console.warn(e);
-    });
+    this.reportService
+      .report(request.user.username, term).catch(e => console.warn(e));
     try {
       return this.mediaSearchService.search({ offset, limit, term });
     } catch (e) {

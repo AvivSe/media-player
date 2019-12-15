@@ -7,15 +7,15 @@ import Dialog from "./Dialog";
 import MediaSearchAgGridAdapter from "../services/ag-grid-adapters/media-search.ag-grid.adapter";
 import mediaSearchService from "../services/media-search.service";
 import HTML5Player from "./HTML5Player";
-import { ExitToAppOutlined, PeopleOutline } from "@material-ui/icons";
+import { ExitToAppOutlined, PeopleOutline, VolumeOffOutlined, VolumeUpOutlined } from "@material-ui/icons";
 import Draggable from "react-draggable";
-
 import LinkFab from "../LinkFab";
 import { useWindowSize } from "../hooks/useWindowSize";
-import SearchHistory from "./SearchHistory";
+import TopSearches from "./TopSearches";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/auth/auth.actions";
 import { getSelectedMedia } from "../redux/player/player.selectors";
+import { openSnackbar } from "../redux/ui/ui.actions";
 
 const Row = styled.div`
   display: flex;
@@ -36,7 +36,7 @@ const DraggableHelper = styled.div`
 
 const MediaPlayer = () => {
   const selectedMedia = useSelector(getSelectedMedia);
-
+  const [isMute, setIsMute] = useState(false);
   const [keywords, setKeywords] = useState("Metallica");
   const [gridApi, setGridApi] = useState(null);
   const [dialog, setDialog] = useState(null);
@@ -75,20 +75,27 @@ const MediaPlayer = () => {
 
   const handleGridReady = ({ api }) => setGridApi(api);
 
+  const handleMuteButtonClick = () => {
+    setIsMute(!isMute);
+  };
+
   const handleLogoutClick = () => {
     dispatch(logout());
+    dispatch(openSnackbar({ message: "Don't forget to logout" }))
   };
+
   return (
     <div>
       <Controls>
         <LinkFab to={"/users"} icon={<PeopleOutline />} />
         <LinkFab icon={<ExitToAppOutlined />} onClick={handleLogoutClick} />
-        <SearchHistory onKeywordsChange={handleKeywordsChange} />
+        <LinkFab icon={isMute ? <VolumeOffOutlined /> : <VolumeUpOutlined />} onClick={handleMuteButtonClick} />
+        <TopSearches onKeywordsChange={handleKeywordsChange} />
       </Controls>
       <DraggableHelper>
         <Draggable handle=".handle" defaultPosition={{ x: width - 1400, y: -40 }}>
           <div className={"handle"}>
-            <HTML5Player />
+            <HTML5Player isMute={isMute}/>
           </div>
         </Draggable>
       </DraggableHelper>

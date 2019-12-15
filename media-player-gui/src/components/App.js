@@ -5,7 +5,7 @@ import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
 import { StylesProvider } from "@material-ui/styles";
 import Routing from "./Routing";
 import Snackbar from "@material-ui/core/Snackbar";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { closeSnackbar } from "../redux/ui/ui.actions";
 import { getSnackbar } from "../redux/ui/ui.selectors";
 

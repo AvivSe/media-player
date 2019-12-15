@@ -16,7 +16,6 @@ export const fieldToLabelMap = {
 
 const tooShort = "Too short";
 const tooLong = "Too long";
-const notValid = "Not valid";
 const required = "Required";
 const emailNotValid = "Email not valid";
 

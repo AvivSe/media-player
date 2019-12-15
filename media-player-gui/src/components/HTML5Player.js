@@ -11,13 +11,12 @@ import {
   PauseOutlined,
   PlayArrowOutlined,
   SkipNextOutlined,
-  SkipPreviousOutlined,
-  VolumeOffOutlined,
-  VolumeUpOutlined
+  SkipPreviousOutlined
 } from "@material-ui/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { getSelectedMedia } from "../redux/player/player.selectors";
 import { setSelectedMedia } from "../redux/player/player.actions";
+import { openSnackbar } from "../redux/ui/ui.actions";
 
 const StyledVideo = styled.video`
   width: 100%;
@@ -25,6 +24,7 @@ const StyledVideo = styled.video`
 
 const Container = styled.div`
   width: ${({ isFullScreen }) => (isFullScreen ? "70vw" : "500px")};
+  height: 0;
 `;
 
 const VideoContainer = styled.div`
@@ -34,8 +34,9 @@ const VideoContainer = styled.div`
 const Controls = styled.div`
   margin-top: -35px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  align-content: center;
   z-index: 101;
 `;
 
@@ -44,18 +45,24 @@ const StyledFab = styled(Fab)`
   background-color: ${({ transparent }) => (transparent ? "transparent" : null)};
 `;
 
-const HTML5Player = () => {
+const ControlsHelper = styled.div`
+  display: flex;
+  margin-inline-end: -1.5rem;
+  align-items: center;
+`;
+
+const HTML5Player = ({ isMute }) => {
   const selectedMedia = useSelector(getSelectedMedia);
   const isVideo = !!selectedMedia && selectedMedia.kind === "feature-movie";
-  const [isMute, setIsMute] = useState(false);
+  const dispatch = useDispatch();
   const [isFullScreen, setIsFullScreen] = useState(false);
 
   const [video, state, controls] = useVideo(
     <StyledVideo src={selectedMedia && selectedMedia["previewUrl"]} autoPlay />
   );
 
-  useEffect(()=> {
-    if(isMute) {
+  useEffect(() => {
+    if (isMute) {
       controls.mute();
     } else {
       controls.unmute();
@@ -73,7 +80,7 @@ const HTML5Player = () => {
   const progress = (time / duration) * 100;
 
   const handleClickSkip = () => {
-    alert("todo");
+    dispatch(openSnackbar({message: "This feature will be available soon"}))
   };
 
   const handleClickPlay = () => {
@@ -89,15 +96,11 @@ const HTML5Player = () => {
   };
 
   const handleClickFastForward = () => {
-    controls.seek(state.time - 5);
+    controls.seek(state.time + 5);
   };
 
   const handleClickFullScreen = () => {
     setIsFullScreen(!isFullScreen);
-  };
-
-  const handleMuteButtonClick = () => {
-    setIsMute(!isMute);
   };
 
   return (
@@ -107,26 +110,26 @@ const HTML5Player = () => {
         {video}
       </VideoContainer>
       <Controls>
-          <StyledFab color="primary" size="small" onClick={handleMuteButtonClick}>
-            {isMute ? <VolumeOffOutlined /> : <VolumeUpOutlined />}
+        <div />
+        <ControlsHelper>
+          <StyledFab size="small" color="primary" onClick={handleClickSkip}>
+            {<SkipPreviousOutlined />}
           </StyledFab>
-        <StyledFab size="small" color="primary" onClick={handleClickSkip}>
-          {<SkipPreviousOutlined />}
-        </StyledFab>
-        <StyledFab size="medium" color="primary" onClick={handleClickFastRewind}>
-          {<FastRewindOutlined />}
-        </StyledFab>
-        <StyledFab color="primary" onClick={paused ? handleClickPlay : handleClickPause}>
-          {paused ? <PlayArrowOutlined /> : <PauseOutlined />}
-        </StyledFab>
-        <StyledFab size="medium" color="primary" onClick={handleClickFastForward}>
-          {<FastForwardOutlined />}
-        </StyledFab>
-        <StyledFab size="small" color="primary" onClick={handleClickSkip}>
-          {<SkipNextOutlined />}
-        </StyledFab>
+          <StyledFab size="medium" color="primary" onClick={handleClickFastRewind}>
+            {<FastRewindOutlined />}
+          </StyledFab>
+          <StyledFab color="primary" onClick={paused ? handleClickPlay : handleClickPause}>
+            {paused ? <PlayArrowOutlined /> : <PauseOutlined />}
+          </StyledFab>
+          <StyledFab size="medium" color="primary" onClick={handleClickFastForward}>
+            {<FastForwardOutlined />}
+          </StyledFab>
+          <StyledFab size="small" color="primary" onClick={handleClickSkip}>
+            {<SkipNextOutlined />}
+          </StyledFab>
+        </ControlsHelper>
         {isVideo && (
-          <StyledFab color="primary" size="small" onClick={handleClickFullScreen}>
+          <StyledFab color="primary" size="small" style={{ alignSelf: "end" }} onClick={handleClickFullScreen}>
             {isFullScreen ? <FullscreenExit /> : <Fullscreen />}
           </StyledFab>
         )}

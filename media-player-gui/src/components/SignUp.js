@@ -2,10 +2,7 @@ import styled from "styled-components";
 import React, { useEffect } from "react";
 import Form from "./form-kit/Form";
 import signUpFormConfiguration from "../configurations/sign-up-form.configuration";
-import { useHistory, useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { getIsAuthenticated } from "../redux/auth/auth.selectors";
-import { login , signUp } from "../redux/auth/auth.actions";
+import { signUp } from "../redux/auth/auth.actions";
 
 const Wrapper = styled.div`
   display: flex;
@@ -13,11 +10,7 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const SignUp = () => {
-  const location = useLocation();
-  const history = useHistory();
-  const dispatch = useDispatch();
-  const isAuthenticated = useSelector(getIsAuthenticated);
+const SignUp = ({location, history, isAuthenticated, isLoading, dispatch}) => {
 
   useEffect(() => {
     if (isAuthenticated && location.pathname === "/signup") {
@@ -30,14 +23,13 @@ const SignUp = () => {
     dispatch(signUp(username, password, retypePassword, firstName, lastName));
   };
 
-
   const handleSignUpCancel = () => {
     history.push("/");
   };
 
   return (
     <Wrapper>
-      <Form configuration={signUpFormConfiguration} onSubmit={handleSubmit} onSecondaryButtonClick={handleSignUpCancel}/>
+      <Form configuration={signUpFormConfiguration} loading={isLoading} onSubmit={handleSubmit} onSecondaryButtonClick={handleSignUpCancel}/>
     </Wrapper>
   );
 };

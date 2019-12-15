@@ -36,25 +36,29 @@ const Users = () => {
   const rowData = useSelector(getUserList);
 
   useEffect(() => {
+    dispatch(openSnackbar({ message: "Pressing delete will affect selected rows" }));
+    return () => dispatch(openSnackbar({ message: "Don't forget to logout" }));
+  }, [dispatch]);
+
+  useEffect(() => {
     if (isEmptyUserList) {
       dispatch(fetchUsers());
     }
   }, [isEmptyUserList, dispatch]);
 
   useEffect(() => {
-    const keyDownEventHandler = ({key}) => {
-      console.log(key);
-      if(!!gridApi && key === "Delete") {
+    const keyDownEventHandler = ({ key }) => {
+      if (!!gridApi && key === "Delete") {
         const selectedRows = gridApi.getSelectedRows();
-        if(selectedRows.length === 0) {
-          dispatch(openSnackbar({ message: "Pressing delete will affect selected rows"}))
+        if (selectedRows.length === 0) {
+          dispatch(openSnackbar({ message: "Pressing delete will affect selected rows" }));
         } else {
-          dispatch(deleteUsers(selectedRows.map(user => user.username)))
+          dispatch(deleteUsers(selectedRows.map(user => user.username)));
         }
       }
     };
-      document.addEventListener('keydown', keyDownEventHandler);
-    return () => document.removeEventListener('keydown', keyDownEventHandler);
+    document.addEventListener("keydown", keyDownEventHandler);
+    return () => document.removeEventListener("keydown", keyDownEventHandler);
   }, [gridApi, dispatch]);
 
   useEffect(() => {
@@ -84,7 +88,15 @@ const Users = () => {
   };
 
   const defaultColumnDefs = [
-    { headerName: "#", width: 45, checkboxSelection: true, editable: false, sortable: false, filter: false, pinned: true },
+    {
+      headerName: "#",
+      width: 45,
+      checkboxSelection: true,
+      editable: false,
+      sortable: false,
+      filter: false,
+      pinned: true
+    },
     { headerName: "Id", field: "_id", hide: true, sortable: false, editable: false },
     { headerName: "Username", field: "username", editable: false },
     { headerName: "First Name", field: "firstName" },

@@ -2,10 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { SearchEntry } from './SearchEntry';
 import { Model } from 'mongoose';
+import { UserService } from '../users/users.service';
 
 @Injectable()
 export class ReportService {
-  constructor(@InjectModel('SearchEntry') private readonly searchEntry: Model<SearchEntry>) {}
+  constructor(
+    private readonly userService: UserService,
+    @InjectModel('SearchEntry') private readonly searchEntry: Model<SearchEntry>,
+  ) {}
 
   async report(username: string, keywords: string) {
     return this.searchEntry.findOne({ username, keywords }).then(async res => {
@@ -14,17 +18,26 @@ export class ReportService {
       }
       res.count += 1;
       res.save();
+      return this.getUserTopSearches(username);
     });
   }
 
-  async getUserTopSearches(username: string, limit: number): Promise<Record<string, string>> {
-    return this.searchEntry.find({ username }, null, {
-      sort: { count: 1 }, limit: Number(limit),
-    }).then(searchReports => {
-      return searchReports.reduce((prev, curr) => {
-        prev[curr.keywords] = curr.count;
-        return prev;
-      }, {});
-    });
+  async getUserTopSearches(username: string): Promise<Record<string, string>> {
+    return this.searchEntry
+      .find({ username }, null, {
+        sort: { count: -1 },
+        limit: 10,
+      })
+      .then(searchReports => {
+        return searchReports.reduce((prev, curr) => {
+          prev[curr.keywords] = curr.count;
+          return prev;
+        }, {});
+      })
+      .then(topSearches => this.userService.update(username, { topSearches })).then(user => user.topSearches);
+  }
+
+  async deleteOneOfMyTopSearches(username: string, keywords: string): Promise<Record<string, string>> {
+    return this.searchEntry.deleteOne({ username, keywords }).then(() => this.getUserTopSearches(username));
   }
 }
