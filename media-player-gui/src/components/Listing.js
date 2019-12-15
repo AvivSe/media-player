@@ -19,7 +19,11 @@ const AgGridWrapper = styled.div`
     border: none !important;
   }
   .ag-icon {
-    color: ${({ theme }) => theme.palette.secondary.main};
+    color: ${({ theme }) => theme.palette.secondary.main} !important;;
+  }
+
+  .ag-theme-material {
+    color: ${({ theme }) => theme.palette.secondary.main} !important;
   }
 `;
 

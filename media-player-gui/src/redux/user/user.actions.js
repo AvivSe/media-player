@@ -37,7 +37,6 @@ export const updateUser = (username, user) => async dispatch => {
     const result = await userService.update(username, user);
     dispatch({ type: UPDATE_USER_SUCCESS, payload: result.data });
     dispatch(openSnackbar({ message: `${username} is updated successfully`}));
-    dispatch(fetchUsers());
   } catch (e) {
     dispatch({ type: UPDATE_USER_ERROR });
     dispatch(openSnackbar(e));
@@ -47,10 +46,9 @@ export const updateUser = (username, user) => async dispatch => {
 export const deleteOneUser = username => async dispatch => {
   dispatch({ type: DELETE_ONE_USER_REQUEST });
   try {
-    const result = await userService.deleteOne(username);
-    dispatch({ type: DELETE_ONE_USER_SUCCESS, payload: result.data });
+    await userService.deleteOne(username);
+    dispatch({ type: DELETE_ONE_USER_SUCCESS, payload: username });
     dispatch(openSnackbar({ message: `${username} is deleted successfully`}));
-    dispatch(fetchUsers());
   } catch (e) {
     dispatch({ type: DELETE_ONE_USER_ERROR });
     dispatch(openSnackbar(e));
@@ -60,12 +58,9 @@ export const deleteOneUser = username => async dispatch => {
 export const deleteUsers = usernameList => async dispatch => {
   dispatch({ type: DELETE_USERS_REQUEST });
   try {
-    console.log(usernameList);
     const result = await userService.delete(usernameList);
-    console.log(result);
-    dispatch({ type: DELETE_USERS_SUCCESS, payload: result.data });
+    dispatch({ type: DELETE_USERS_SUCCESS, payload: usernameList });
     dispatch(openSnackbar({ message: `${result.data["deletedCount"]} deleted users successfully`}));
-    dispatch(fetchUsers());
   } catch (e) {
     dispatch({ type: FETCH_USERS_ERROR });
     dispatch(openSnackbar(e));

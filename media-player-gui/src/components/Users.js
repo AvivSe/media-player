@@ -24,7 +24,10 @@ const AgGridWrapper = styled.div`
     border: none !important;
   }
   .ag-icon {
-    color: ${({ theme }) => theme.palette.secondary.main};
+    color: ${({ theme }) => theme.palette.secondary.main} !important;;
+  }
+  .ag-theme-material {
+    color: ${({ theme }) => theme.palette.secondary.main} !important;
   }
 `;
 
@@ -117,7 +120,7 @@ const Users = () => {
   };
 
   const handleEditingStop = ({ column, data }) => {
-    dispatch(updateUser(data.username, data[column.colId]));
+    dispatch(updateUser(data.username, { [column.colId]: data[column.colId] }));
   };
 
   useEffect(() => {
