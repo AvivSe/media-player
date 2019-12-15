@@ -1,9 +1,5 @@
 import axios from "axios";
-
-// defaults
-const host = "http://localhost:8080";
-const api = "/api";
-const authServiceUrl = `${host}${api}`;
+const authServiceUrl = process.env.REACT_APP_API_URL;
 export const axiosMessageToStatusCode = message => message && typeof message === "string"  && message.length > 3 && Number(message.slice(message.length - 3, message.length));
 
 class AuthService {

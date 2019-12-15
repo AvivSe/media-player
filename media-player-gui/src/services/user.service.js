@@ -1,9 +1,6 @@
 import axios from "axios";
 
-// defaults
-const host = "http://localhost:8080";
-const api = "/api";
-const userServiceUrl = `${host}${api}/user`;
+const userServiceUrl = `${process.env.REACT_APP_API_URL}/user`;
 
 class UserService {
   async find(params) {

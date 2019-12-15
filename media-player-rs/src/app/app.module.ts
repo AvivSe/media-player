@@ -13,14 +13,14 @@ import { join } from 'path';
     AuthModule,
     UsersModule,
     ReportModule,
-    MongooseModule.forRoot('mongodb://localhost/media-search-service', {
+    MongooseModule.forRoot(process.env.MONGO_CONNECTION_STRING, {
       useNewUrlParser: true,
       useCreateIndex: true,
       useFindAndModify: false,
       useUnifiedTopology: true,
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
+      rootPath: join(__dirname, '..', 'client'),
       renderPath: '*',
     }),
   ],
