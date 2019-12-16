@@ -1,10 +1,6 @@
 import axios from "axios";
 
-// defaults
-const host = "http://localhost:8080";
-const api = "/api";
-const version = "";
-const mediaServiceUrl = `${host}${version}${api}`;
+const mediaServiceUrl = process.env.REACT_APP_API_URL;
 
 class MediaSearchService {
   search(params) {
