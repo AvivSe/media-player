@@ -15,8 +15,8 @@ import TopSearches from "./TopSearches";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/auth/auth.actions";
 import { getSelectedMedia } from "../redux/player/player.selectors";
-import { openSnackbar } from "../redux/ui/ui.actions";
 import { fetchUsers } from "../redux/user/user.actions";
+import { useDebounce } from "../hooks/useDebounce";
 
 const Row = styled.div`
   display: flex;
@@ -39,6 +39,7 @@ const MediaPlayer = () => {
   const selectedMedia = useSelector(getSelectedMedia);
   const [isMute, setIsMute] = useState(false);
   const [keywords, setKeywords] = useState("Metallica");
+  const debouncedSearchTerm = useDebounce(keywords, 500);
   const [gridApi, setGridApi] = useState(null);
   const [dialog, setDialog] = useState(null);
   const [options, setOptions] = useState({ [SEARCH_AS_YOU_TYPE_OPT]: true });
@@ -47,16 +48,15 @@ const MediaPlayer = () => {
   const { width } = useWindowSize();
 
   const fetchSearchResults = useCallback(() => {
-    !!gridApi &&
-      !!keywords &&
-      gridApi.setServerSideDatasource(new MediaSearchAgGridAdapter(mediaSearchService, keywords));
-  }, [keywords, gridApi]);
+    !!gridApi && !!debouncedSearchTerm &&
+      gridApi.setServerSideDatasource(new MediaSearchAgGridAdapter(mediaSearchService, debouncedSearchTerm));
+  }, [debouncedSearchTerm, gridApi]);
 
   useEffect(() => {
     if (searchAsYouType) {
-      fetchSearchResults();
-    }
-  }, [fetchSearchResults, searchAsYouType]);
+        fetchSearchResults();
+      }
+  }, [debouncedSearchTerm, fetchSearchResults, searchAsYouType]);
 
   useEffect(() => {
     dispatch(fetchUsers());
@@ -86,7 +86,6 @@ const MediaPlayer = () => {
 
   const handleLogoutClick = () => {
     dispatch(logout());
-    dispatch(openSnackbar({ message: "Don't forget to logout" }));
   };
 
   return (

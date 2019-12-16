@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { SEARCH_AS_YOU_TYPE_OPT } from "./OptionsSpeedDial";
 import Fab from "@material-ui/core/Fab";
 import { SearchOutlined } from "@material-ui/icons";
+import { useDebounce } from "react-use";
 
 const Row = styled.div`
   display: flex;
