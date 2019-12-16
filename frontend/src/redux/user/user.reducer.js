@@ -24,13 +24,13 @@ function userReducer(state = INITIAL_STATE, { type, payload }) {
       map[payload.username].topSearches = payload.topSearches;
       return {...state, map, ids };
     case FETCH_ONE_USER:
-      if (ids.find(payload.username) === -1) {
+      if (ids.findIndex(username=>username===payload.username) === -1) {
         ids.push(payload.username);
       }
       map[payload.username] = payload;
       return { ...state, ids, map };
     case UPDATE_USER_SUCCESS:
-      if (ids.find(payload.username) === -1) {
+      if (ids.findIndex(username=>username===payload.username) === -1) {
         ids.push(payload.username);
       }
       console.log(payload);
@@ -45,7 +45,7 @@ function userReducer(state = INITIAL_STATE, { type, payload }) {
     case CREATE_USER_ERROR:
       return { ...state, pending: false};
     case DELETE_USERS_SUCCESS:
-      ids = ids.filter(id => payload.find(id) === -1);
+      ids = ids.filter(username => payload.findIndex(_username=>username===_username) === -1);
       map = ids.reduce((prev, current) => {
         prev[current] = map[current];
         return prev;
