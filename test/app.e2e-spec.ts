@@ -16,6 +16,8 @@ describe('AppController (e2e)', () => {
     }).compile();
     app = moduleFixture.createNestApplication();
     await app.init();
+    jest.setTimeout(30000);
+
     // try to login first, then to sign up. fail on getting token will lead to rest of the test fail anyway.
     const loginResponse = await request(app.getHttpServer())
       .post('/api/login')
@@ -41,29 +43,11 @@ describe('AppController (e2e)', () => {
     }
   });
 
-  const signUpUserHelper = fakeEmail => {
-    return request(app.getHttpServer())
-      .post('/api/signup')
-      .send({
-        fakeEmail,
-        password,
-        retypePassword: password,
-        firstName: 'Test',
-        lastName: 'Segal',
-      });
-  };
   afterAll(() => {
     return request(app.getHttpServer())
       .delete(`/api/user/${username}`)
       .set('Authorization', token)
       .expect(HttpStatus.OK);
-  });
-
-  it('/api (GET) : Health test', () => {
-    return request(app.getHttpServer())
-      .get('/api')
-      .expect(HttpStatus.OK)
-      .expect('true');
   });
 
   it('/api/search (GET) : Should throw bad request on missing keywords field', () => {
@@ -87,6 +71,7 @@ describe('AppController (e2e)', () => {
   });
 
   it('/api/top (GET) : Should return with at least one top search', async () => {
+    jest.setTimeout(300000);
     await request(app.getHttpServer())
       .get('/api/search?keywords=aviv')
       .set('Authorization', token)
