@@ -20,7 +20,7 @@ import { join } from 'path';
       useUnifiedTopology: true,
     }),
     ServeStaticModule.forRoot({
-      rootPath: "/dist/client",
+      rootPath: join(__dirname, '..', 'client'),
       renderPath: '*',
     }),
   ],

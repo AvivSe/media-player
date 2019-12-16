@@ -15,7 +15,6 @@ const users_module_1 = require("../users/users.module");
 const report_module_1 = require("../reports/report.module");
 const serve_static_1 = require("@nestjs/serve-static");
 const path_1 = require("path");
-console.log(process.env.MONGO_CONNECTION_STRING);
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
