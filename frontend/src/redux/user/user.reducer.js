@@ -17,20 +17,20 @@ export const INITIAL_STATE = {
 };
 
 function userReducer(state = INITIAL_STATE, { type, payload }) {
-  let ids = [...state.ids], map = { ...state.map};
+  let ids = state.ids, map = state.map;
 
   switch (type) {
     case DELETE_ONE_TOP_SEARCH:
       map[payload.username].topSearches = payload.topSearches;
       return {...state, map, ids };
     case FETCH_ONE_USER:
-      if (ids.indexOf(username => username === payload.username) === -1) {
+      if (ids.findIndex(username => username === payload.username) === -1) {
         ids.push(payload.username);
       }
       map[payload.username] = payload;
       return { ...state, ids, map };
     case UPDATE_USER_SUCCESS:
-      if (ids.indexOf(user => user.username === payload.username) === -1) {
+      if (ids.findIndex(user => user.username === payload.username) === -1) {
         ids.push(payload.username);
       }
       map[payload.username] = payload;

@@ -36,7 +36,7 @@ let AppController = class AppController {
         if (!term) {
             throw new common_1.BadRequestException('Keywords params is required');
         }
-        if (offset === 0) {
+        if (Number(offset) === 0) {
             this.reportService
                 .report(request.user.username, term).catch(e => console.warn(e));
         }

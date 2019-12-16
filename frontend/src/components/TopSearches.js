@@ -25,6 +25,9 @@ const TopSearches = ({ onKeywordsChange }) => {
   const handleTopSearchesClick = () => {
     dispatch(fetchOneUser(profile.username));
     setTopSearchesOpen(!isTopSearchesOpen);
+    if(!topSearches || Object.entries(topSearches).length === 0) {
+      dispatch(openSnackbar({ message: "No search history"}))
+    }
   };
 
   const handleDeleteClick = keywords => {

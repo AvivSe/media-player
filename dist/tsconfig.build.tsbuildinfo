@@ -1458,7 +1458,7 @@
         "signature": "5dfb610fb73a145ee28f0bb9ae5a462b4dd52a236205300e8bdeae5ea3d8d7f3"
       },
       "../src/app/app.controller.ts": {
-        "version": "e8878c79767f7b48f369b591ff846b5e0f3d0f2aa979f4dd707acbe7a7a31c4b",
+        "version": "f0bf8fd6aeb88e3a2fc809a8baf958aa152f51ed5bf0a651388eff46c2f0d556",
         "signature": "6cd6e8488ffa6aac5ea5fcc72a0dff60a119423068edc1164b0659c84af96cc6"
       },
       "../node_modules/@types/range-parser/index.d.ts": {
