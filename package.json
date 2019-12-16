@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist && mkdir -p dist/clinet",
-    "build": "cd frontend && npm run build && cp -R build ../dist/client && cd .. && nest build",
+    "build": "cd frontend && npm install --only=dev && npm install && npm run build && cp -R build ../dist/client && cd .. && nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
