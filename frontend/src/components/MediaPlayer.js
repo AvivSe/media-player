@@ -38,7 +38,7 @@ const DraggableHelper = styled.div`
 const MediaPlayer = () => {
   const selectedMedia = useSelector(getSelectedMedia);
   const [isMute, setIsMute] = useState(false);
-  const [keywords, setKeywords] = useState("Metallica");
+  const [keywords, setKeywords] = useState("Lion's King");
   const debouncedSearchTerm = useDebounce(keywords, 500);
   const [gridApi, setGridApi] = useState(null);
   const [dialog, setDialog] = useState(null);
@@ -110,7 +110,7 @@ const MediaPlayer = () => {
           onSubmit={fetchSearchResults}
           options={options}
         />
-        <OptionsSpeedDial options={options} onOptionsChange={handleOptionsChange} />
+        {/*<OptionsSpeedDial options={options} onOptionsChange={handleOptionsChange} />*/}
       </Row>
       <Listing onGridReady={handleGridReady} onDialogOpen={handleOpenDialog} />
       <Dialog dialog={dialog} onDialogClose={handleCloseDialog}>

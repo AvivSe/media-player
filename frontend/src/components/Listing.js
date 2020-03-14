@@ -36,14 +36,14 @@ const Listing = ({ onGridReady, onDialogOpen }) => {
   };
 
   const defaultColumnDefs = [
-    { field: "artworkUrl100", cellRenderer: "ImageCellRenderer", width: 60 },
-    { headerName: "Artist", field: "artistName", width: 140 },
-    { headerName: "Collection", field: "collectionName", width: 140 },
-    { headerName: "Track", field: "trackName", width: 140,
+    { headerName: "", field: "artworkUrl100", cellRenderer: "ImageCellRenderer", width: 25 },
+    { headerName: "Artist", field: "artistName", width: 80 },
+    { headerName: "Collection", field: "collectionName", width: 80 },
+    { headerName: "Track", field: "trackName", width: 80,
     },
-    { headerName: "Price", field: "trackPrice", width: 80 },
-    { headerName: "Genre", field: "primaryGenreName", width: 80 },
-    { headerName: "Duration", field: "trackTimeMillis", cellRenderer: "DurationFormatter", width: 80 },
+    //{ headerName: "Price", field: "trackPrice", width: 80 },
+    { headerName: "Genre", field: "primaryGenreName", width: 40 },
+    { headerName: "Duration", field: "trackTimeMillis", cellRenderer: "DurationFormatter", width: 40 },
     {
       cellRenderer: "PlayCellRenderer",
       cellRendererParams: { selectedMedia, onSelectedMediaChange: handleSelectedMediaChange },
